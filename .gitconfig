@@ -1,0 +1,17 @@
+# This is Git's per-user configuration file.
+[user]
+	name = Felix
+	email = f.dumbeck@campus.tu-berlin.de
+[color]
+	diff = auto
+	status = auto
+	branch = auto
+	interactive = auto
+	ui = true
+	pager = true
+[core]
+	editor = vim
+
+
+[push]
+	autoSetupRemote = true
