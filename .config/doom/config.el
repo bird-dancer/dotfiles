@@ -50,8 +50,6 @@
 ;;
 ;;   (after! PACKAGE
 ;;     (setq x y))
-alias ssd='ssh '
-alias ssd='ssh '
 ;;
 ;; The exceptions to this rule:
 ;;
