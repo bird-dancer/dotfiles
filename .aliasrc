@@ -14,7 +14,7 @@ alias comp='gcc -std=c17 -Wall -fstack-protector -g3 -lm'
 
 eval $(ssh-agent) > /dev/null
 
-alias update='sudo pacman -Syu'
+alias update='yay && doom sync -u && doom purge'
 alias pac='sudo pacman -Syu'
 alias pacr='sudo pacman -Rs'
 
