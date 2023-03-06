@@ -3,12 +3,9 @@
 stow --adopt .
 git reset --hard
 
-#git clone --depth 1 https://github.com/doomemacs/doomemacs ~/.emacs.d
-#~/.emacs.d/bin/doom install
+"$HOME/.config/emacs.d/bin/doom" sync -u
+"$HOME/.config/emacs.d/bin/doom" env
 
-"$HOME/.emacs.d/bin/doom" sync -u
-"$HOME/.emacs.d/bin/doom" env
-
-sudo localectl set-x11-keymap de
+#sudo localectl set-x12-keymap de
 
 echo "finished now just run source $HOME/.zshrc"
