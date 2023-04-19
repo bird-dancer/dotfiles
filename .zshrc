@@ -23,8 +23,8 @@ function cd {
 	builtin cd "$@" && ls
 }
 ls
-export PATH=$HOME/.config/emacs/bin:$PATH
-
+path+=("$HOME/.config/emacs/bin")
+export path
 # plugins
 source /usr/share/zsh/plugins/zsh-autosuggestions/zsh-autosuggestions.zsh 2>/dev/null
 source /usr/share/zsh/plugins/zsh-syntax-highlighting/zsh-syntax-highlighting.zsh 2>/dev/null
