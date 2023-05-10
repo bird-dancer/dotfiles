@@ -24,6 +24,7 @@ function cd {
 }
 ls
 path+=("$HOME/.config/emacs/bin")
+path+=("$HOME/.local/bin")
 export path
 # plugins
 source /usr/share/zsh/plugins/zsh-autosuggestions/zsh-autosuggestions.zsh 2>/dev/null
