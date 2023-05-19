@@ -1,0 +1,6 @@
+#+OPTIONS: toc:nil creator:nil timestamp:nil num:t validate:nil
+#+LATEX_CLASS: article
+#+LATEX_CLASS_OPTIONS: [a4paper,onecolumn,oneside,12pt,ngerman]
+#+LATEX_HEADER: \usepackage{\string~/.config/doom/org/common}
+#+LATEX_HEADER: \usepackage[margin=25mm,left=30mm,top=20mm]{geometry}
+# #+AUTHOR: Felix Dumbeck

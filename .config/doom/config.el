@@ -44,41 +44,71 @@
 ;; change `org-directory'. It must be set before org loads!
 (setq org-directory "~/org/")
 
-;; sagemath
-(require 'sage-shell-mode)
-(sage-shell:define-alias)
-;;Ob-sagemath supports only evaluating with a session.
-(setq org-babel-default-header-args:sage '((:session . t)
-                                           (:results . "output")))
+;; Set brain directory
+(setq brain-directory "~/brain")
 
-;; C-c c for asynchronous evaluating (only for SageMath code blocks).
-(with-eval-after-load "org"
-  (define-key org-mode-map (kbd "C-c c") 'ob-sagemath-execute-async))
+;; Improve org mode looks
+(setq org-startup-indented t
+          org-pretty-entities t
+          org-hide-emphasis-markers t
+          org-startup-with-inline-images t
+          org-image-actual-width '(300))
 
-;; Do not confirm before evaluation
-(setq org-confirm-babel-evaluate nil)
+  ;; Nice bullets
+  (use-package org-superstar
+      :config
+      (setq org-superstar-special-todo-items t)
+      (add-hook 'org-mode-hook (lambda ()
+                                 (org-superstar-mode))))
 
-;; Do not evaluate code blocks when exporting.
-(setq org-export-babel-evaluate nil)
+;; Increase size of LaTeX fragment previews
+(plist-put org-format-latex-options :scale 2)
 
-;; Show images when opening a file.
-(setq org-startup-with-inline-images t)
+;;Edit header size and color
+(custom-set-faces!
+  '(org-document-title :weight bold :height 1.4))
 
-;; Show images after evaluating code blocks.
-(add-hook 'org-babel-after-execute-hook 'org-display-inline-images)
+;; enable sage math in org to pdf
+(after! org
+  (add-to-list 'org-babel-load-languages '(sagemath . t)))
+(after! org
+  (setq org-latex-pdf-process '("latexmk -pdf -output-directory=%o %f")))
 
-(defun compile-sagetex-command ()
-  "return the command needed to compile sagetex"
-  (interactive)
-  (setq first-pdflatex-command (concat "(pdflatex --synctex=1 -output-directory=" (get-latex-cache-dir-path) " " (buffer-file-name) ";"))
-  (setq last-pdflatex-command (concat (concat (concat "pdflatex --synctex=1 -output-directory=" (concat (get-latex-cache-dir-path) " ")) (buffer-file-name)) ")"))
-  (concat first-pdflatex-command (concat (concat "(cd " (concat (get-latex-cache-dir-path) (concat "; sage " (concat (current-filename) ".sagetex.sage);")))) last-pdflatex-command)))
-(defun compile-sagetex ()
-  "compile the current latex document with support for sagetex"
-  (interactive)
-  (start-process-shell-command "latex" "latex" (compile-sagetex-command)))
+;; from mahmood
+(after! ob-sagemath
+  :config
+  ;; Ob-sagemath supports only evaluating with a session.
+  (setq org-babel-default-header-args:sage '((:session . t)
+                                             (:results . "drawer")))
+  (setq sage-shell:input-history-cache-file (concat brain-directory "/sage_history"))
+  (add-hook 'sage-shell-after-prompt-hook #'sage-shell-view-mode))
 
+;; preview latex content in org mode
+(after! org
+  (setq org-preview-latex-default-process 'dvipng) ;; Use dvipng for image creation
+  (setq org-startup-with-latex-preview t) ;; Enable LaTeX previews on startup
+  (setq org-latex-preview t))
 
+;; orgmode path completion
+(defun insert-setup-org ()
+  (goto-char (point-min)) ; Move the cursor to the beginning of the buffer
+  (unless (looking-at-p "Your line here") ; Check if the line already exists
+    (insert "#+include ~/.config/doom/org/setup.org\n"))) ; Insert the line if it doesn't exist
+
+(add-hook 'org-mode-hook 'insert-setup-org)
+
+;; best latex preview functionality
+(after! xenops
+  :config
+  (setq xenops-reveal-on-entry t
+        xenops-math-latex-max-tasks-in-flight 3
+        xenops-math-latex-process 'dvisvgm)
+  ;; (add-hook 'LaTeX-mode-hook #'xenops-mode)
+  (add-hook 'org-mode-hook #'xenops-mode)
+  (add-hook 'xenops-mode-hook 'xenops-render)
+  (add-hook 'org-babel-after-execute-hook (lambda ()
+                                            (interactive)
+                                            (ignore-errors (xenops-render)))))
 ;; Whenever you reconfigure a package, make sure to wrap your config in an
 ;; `after!' block, otherwise Doom's defaults may override your settings. E.g.
 ;;
