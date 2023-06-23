@@ -8,6 +8,9 @@ let-env EDITOR = "emacs"
 # load aliases
 source ~/.config/nushell/aliases.nu
 
+# add to path
+let-env PATH = ($env.PATH | append ".config/emacs/bin")
+
 # set starship promt
 let-env STARSHIP_SHELL = "nu"
 let-env PROMPT_MULTILINE_INDICATOR = (starship prompt --continuation)
