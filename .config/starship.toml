@@ -1,4 +1,22 @@
+# Get editor completions based on the config schema
+"$schema" = 'https://starship.rs/config-schema.json'
+
+# right side of prompt
+right_format = """$time"""
+
 add_newline = false
+
+[time]
+disabled = false
+format = '🕙[$time]($style) '
+#format = '🕙[\[ $time \]]($style) '
+time_format = '%T'
+
+
+# Replace the '❯' symbol in the prompt with '➜'
+[character] # The name of the module we are configuring is 'character'
+success_symbol = '[➜](bold green)' # The 'success_symbol' segment is being set to '➜' with the color 'bold green'
+
 
 [memory_usage]
 disabled = false
@@ -9,3 +27,4 @@ disabled = true
 
 [cmd_duration]
 disabled = true
+
