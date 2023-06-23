@@ -1,6 +1,5 @@
-alias la = ls
-alias ls = exa --icons -a
-alias ll = ls -al
+alias la = exa --icons -a
+alias ll = exa --icons -la
 alias tree = exa --tree --icons
 alias ssr = ssh pi@raspberrypi
 alias cat = bat
