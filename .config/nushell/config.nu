@@ -11,6 +11,9 @@ source ~/.config/nushell/aliases.nu
 # add to path
 let-env PATH = ($env.PATH | append ".config/emacs/bin")
 
+# make ssh key last
+ssh-agent -c | lines | first 2 | parse "setenv {name} {value};" | transpose -i -r -d | load-env
+
 # set starship promt
 let-env STARSHIP_SHELL = "nu"
 let-env PROMPT_MULTILINE_INDICATOR = (starship prompt --continuation)
