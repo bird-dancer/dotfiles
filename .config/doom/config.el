@@ -38,77 +38,64 @@
 
 ;; This determines the style of line numbers in effect. If set to `nil', line
 ;; numbers are disabled. For relative line numbers, set this to `relative'.
-(setq display-line-numbers-type t)
+(setq display-line-numbers-type 'relative)
 
 ;; If you use `org' and don't want your org files in the default location below,
 ;; change `org-directory'. It must be set before org loads!
-(setq org-directory "~/org/")
+(setq org-directory "~/org")
 
-;; Set brain directory
-(setq brain-directory "~/brain")
+(require 'bind-key)
+(bind-key* "C-c n f" 'org-roam-node-find)
+
+;; configure org-roam
+(use-package org-roam
+  :ensure t
+  :init
+  :custom
+  (org-roam-directory "~/Desktop/Notes")
+  (org-roam-completion-everywhere t)
+  (org-roam-capture-templates
+   '(("d" "default" plain
+      "* Reference\n%?\n\n"
+      :if-new (file+head "%<%Y%m%d%H%M%S>-${slug}.org" "${title}\n#+date: %U\n")
+      :unnarrowed t)
+     ("b" "book notes" plain
+      "* Source\nAuthor: %^{Author}\nTitle: ${title}\nYear: %^{Year}\n\n* Summary\n%?\n\n* References\n\n"
+      :if-new (file+head "%<%Y%m%d%H%M%S>-${slug}.org" "${title}\n#+date: %U\n")
+      :unnarrowed t)))
+  :bind (("C-c n l" . org-roam-buffer-toggle)
+         ("C-c n f" . org-roam-node-find)
+         ("C-c n i" . org-roam-node-insert)
+         :map org-mode-map
+         ("C-M-i" . completion-at-point))
+  :config)
+
 
 ;; Improve org mode looks
 (setq org-startup-indented t
-          org-pretty-entities t
-          org-hide-emphasis-markers t
-          org-startup-with-inline-images t
-          org-image-actual-width '(300))
+      org-pretty-entities t
+      org-hide-emphasis-markers t
+      org-startup-with-inline-images t
+      org-image-actual-width '(300))
 
-  ;; Nice bullets
-  (use-package org-superstar
-      :config
-      (setq org-superstar-special-todo-items t)
-      (add-hook 'org-mode-hook (lambda ()
-                                 (org-superstar-mode))))
-
-;; Increase size of LaTeX fragment previews
-(plist-put org-format-latex-options :scale 2)
+;; Nice bullets
+(use-package org-superstar
+  :config
+  (setq org-superstar-special-todo-items t)
+  (add-hook 'org-mode-hook (lambda ()
+                             (org-superstar-mode 1))))
 
 ;;Edit header size and color
 (custom-set-faces!
   '(org-document-title :weight bold :height 1.4))
 
-;; enable sage math in org to pdf
-(after! org
-  (add-to-list 'org-babel-load-languages '(sagemath . t)))
-(after! org
-  (setq org-latex-pdf-process '("latexmk -pdf -output-directory=%o %f")))
-
-;; from mahmood
-(after! ob-sagemath
-  :config
-  ;; Ob-sagemath supports only evaluating with a session.
-  (setq org-babel-default-header-args:sage '((:session . t)
-                                             (:results . "drawer")))
-  (setq sage-shell:input-history-cache-file (concat brain-directory "/sage_history"))
-  (add-hook 'sage-shell-after-prompt-hook #'sage-shell-view-mode))
-
-;; preview latex content in org mode
-(after! org
-  (setq org-preview-latex-default-process 'dvipng) ;; Use dvipng for image creation
-  (setq org-startup-with-latex-preview t) ;; Enable LaTeX previews on startup
-  (setq org-latex-preview t))
-
 ;; orgmode path completion
-(defun insert-setup-org ()
-  (goto-char (point-min)) ; Move the cursor to the beginning of the buffer
-  (unless (looking-at-p "Your line here") ; Check if the line already exists
-    (insert "#+include ~/.config/doom/org/setup.org\n"))) ; Insert the line if it doesn't exist
+;; (defun insert-setup-org ()
+;;   (goto-char (point-min)) ; Move the cursor to the beginning of the buffer
+;;   (unless (looking-at-p "Your line here") ; Check if the line already exists
+;;     (insert "#+include ~/.config/doom/org/setup.org\n"))) ; Insert the line if it doesn't exist
 
-(add-hook 'org-mode-hook 'insert-setup-org)
 
-;; best latex preview functionality
-(after! xenops
-  :config
-  (setq xenops-reveal-on-entry t
-        xenops-math-latex-max-tasks-in-flight 3
-        xenops-math-latex-process 'dvisvgm)
-  ;; (add-hook 'LaTeX-mode-hook #'xenops-mode)
-  (add-hook 'org-mode-hook #'xenops-mode)
-  (add-hook 'xenops-mode-hook 'xenops-render)
-  (add-hook 'org-babel-after-execute-hook (lambda ()
-                                            (interactive)
-                                            (ignore-errors (xenops-render)))))
 ;; Whenever you reconfigure a package, make sure to wrap your config in an
 ;; `after!' block, otherwise Doom's defaults may override your settings. E.g.
 ;;

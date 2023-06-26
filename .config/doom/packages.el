@@ -21,10 +21,10 @@
 ;(package! this-package
 ;  :recipe (:host github :repo "username/repo"
 ;           :files ("some-file.el" "src/lisp/*.el")))
-(package! sage-shell-mode)
-(package! ob-sagemath)
-(package! org-superstar)        ;; icons
-(package! xenops)
+;;(package! sage-shell-mode)
+;;(package! ob-sagemath)
+;;(package! org-superstar)        ;; icons
+;;(package! xenops)
 ;;(package! org-bullets)
 ;; If you'd like to disable a package included with Doom, you can do so here
 ;; with the `:disable' property:

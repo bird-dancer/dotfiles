@@ -1,3 +1,4 @@
+alias ls = ls -a
 alias la = exa --icons -a
 alias ll = exa --icons -la
 alias tree = exa --tree --icons

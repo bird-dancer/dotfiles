@@ -1,7 +1,0 @@
-# -*- mode: snippet -*-
-# name: inline sagemath code
-# uuid: inline_sagemath_code
-# key: C-ü
-# condition: t
-# --
-src_sage{fm(r'$0')}
