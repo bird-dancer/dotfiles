@@ -5,4 +5,4 @@ git reset --hard
 
 #sudo localectl set-x11-keymap de
 
-echo "finished now just run source $HOME/.zshrc"
+echo "finished now just run source your new config"
