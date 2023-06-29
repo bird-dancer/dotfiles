@@ -44,6 +44,10 @@
 ;; change `org-directory'. It must be set before org loads!
 (setq org-directory "~/org")
 
+
+;; shortcut for terminal
+(map! "M-RET" #'vterm)
+
 (require 'bind-key)
 (bind-key* "C-c n f" 'org-roam-node-find)
 
