@@ -1,12 +1,14 @@
 if status is-interactive
     # Commands to run in interactive sessions can go here
 end
-
+set fish_greeting
 # load aliases
 source ~/.config/fish/functions/aliases.fish
 
 # editor
 export EDITOR="which emacs"
+
+export RUSTC_WRAPPER=sccache
 
 # add to path
 fish_add_path $HOME/.config/emacs/bin
