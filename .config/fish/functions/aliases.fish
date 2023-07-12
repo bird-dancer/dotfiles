@@ -4,6 +4,7 @@ alias tree="exa --tree --icons"
 alias ssr="ssh pi@raspberrypi"
 alias b="cd .."
 alias cat="bat"
+#alias grep="rg"
 alias speed="wget --output-document=/dev/null https://speed.hetzner.de/1GB.bin"
 
 # building compiling
