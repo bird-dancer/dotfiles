@@ -48,6 +48,14 @@
 ;; shortcut for terminal
 (map! "M-RET" #'vterm)
 
+;; java-lsp
+(require 'lsp-java-boot)
+;; to enable the lenses
+(add-hook 'lsp-mode-hook #'lsp-lens-mode)
+(add-hook 'java-mode-hook #'lsp-java-boot-lens-mode)
+
+
+
 (require 'bind-key)
 (bind-key* "C-c n f" 'org-roam-node-find)
 
