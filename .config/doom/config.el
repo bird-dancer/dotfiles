@@ -44,23 +44,36 @@
 ;; change `org-directory'. It must be set before org loads!
 (setq org-directory "~/org")
 
+;; start of custom
 
 ;; shortcut for terminal
 (map! "M-RET" #'vterm)
 
-;; java-lsp
-;;(require 'lsp-java-boot)
-;; to enable the lenses
-;;(add-hook 'lsp-mode-hook #'lsp-lens-mode)
-;;(add-hook 'java-mode-hook #'lsp-java-boot-lens-mode)
+;; configure org
+;;
+;; Improve org mode looks
+(setq org-startup-indented t
+      org-pretty-entities t
+      org-hide-emphasis-markers t
+      org-startup-with-inline-images t
+      org-image-actual-width '(300))
 
+;; Nice bullets
+(use-package org-superstar
+  :config
+  (setq org-superstar-special-todo-items t)
+  (add-hook 'org-mode-hook (lambda ()
+                             (org-superstar-mode 1))))
 
+;;Edit header size and color
+(custom-set-faces!
+  '(org-document-title :weight bold :height 1.4))
 
+;; configure org-roam
+;;
 (require 'bind-key)
 (bind-key* "C-c n f" 'org-roam-node-find)
 
-
-;; configure org-roam
 (use-package org-roam
   :ensure t
   :init
@@ -95,25 +108,6 @@
         org-roam-ui-follow t
         org-roam-ui-update-on-save t
         org-roam-ui-open-on-start t))
-
-
-;; Improve org mode looks
-(setq org-startup-indented t
-      org-pretty-entities t
-      org-hide-emphasis-markers t
-      org-startup-with-inline-images t
-      org-image-actual-width '(300))
-
-;; Nice bullets
-(use-package org-superstar
-  :config
-  (setq org-superstar-special-todo-items t)
-  (add-hook 'org-mode-hook (lambda ()
-                             (org-superstar-mode 1))))
-
-;;Edit header size and color
-(custom-set-faces!
-  '(org-document-title :weight bold :height 1.4))
 
 ;; orgmode path completion
 ;; (defun insert-setup-org ()
