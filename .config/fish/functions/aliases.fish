@@ -17,7 +17,7 @@ alias comp="gcc -std=c17 -Wall -fstack-protector -g3 -lm"
 # updates
 alias pac="sudo pacman -Syu"
 alias pacr="sudo pacman -Rs"
-alias paci="sudo pacman -Si"
+alias paci="pacman -Si"
 # typing errors
 alias celar="clear"
 alias lcear="clear"
