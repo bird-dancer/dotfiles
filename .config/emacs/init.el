@@ -113,13 +113,12 @@
 (global-set-key (kbd "C-x p i") 'org-cliplink)
 ;; idk
 (use-package org-contrib)
-
+(use-package ox-hugo)
 ;; languages in org-mode
-(use-package ob-rust)
+(use-package ob-rust) ; rust
 
 ;; Edit header size and color
-;; (custom-set-faces!
-;;   '(org-document-title :weight bold :height 1.4))
+(custom-set-faces! (org-document-title :weight bold :height 1.4))
 ;; org-roam
 (use-package org-roam
   :custom
@@ -145,6 +144,12 @@
   ;; If you're using a vertical completion framework, you might want a more informative completion interface
   (setq org-roam-node-display-template (concat "${title:*} " (propertize "${tags:10}" 'face 'org-tag)))
   (org-roam-db-autosync-mode))
+
+;; vterm
+;;(use-package vterm
+;;  :bind ("M-RET" . vterm))
+
+(use-package magit)
 
 
 
@@ -175,3 +180,16 @@
 ;;   (add-to-list 'exec-path "/usr/bin/cargo")
 ;;   (setenv "PATH" (concat (getenv "PATH") ":/usr/bin/cargo"))
 ;;  )
+(custom-set-variables
+ ;; custom-set-variables was added by Custom.
+ ;; If you edit it by hand, you could mess it up, so be careful.
+ ;; Your init file should contain only one such instance.
+ ;; If there is more than one, they won't work right.
+ '(package-selected-packages
+   '(magit ox-hugo vterm vertico treesit-auto toc-org rust-mode org-superstar org-roam org-contrib org-cliplink org-appear orderless ob-rust marginalia julia-mode htmlize eglot company circadian)))
+(custom-set-faces
+ ;; custom-set-faces was added by Custom.
+ ;; If you edit it by hand, you could mess it up, so be careful.
+ ;; Your init file should contain only one such instance.
+ ;; If there is more than one, they won't work right.
+ '(org-document-title :weight nil :height))
