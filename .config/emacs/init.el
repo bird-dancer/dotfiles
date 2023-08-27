@@ -7,10 +7,17 @@
   (interactive)
   (find-file "~/.config/emacs/init.el")))
 
-;; load auto-ts-mode
-;;(load-file "~/Desktop/treesit-auto/treesit-auto.el")
-;;(add-to-list 'auto-mode-alist '("\\.rs'" . rust-ts-mode))
-;;(add-to-list 'auto-mode-alist '("\\.hs'" . haskell-ts-mode))
+;; show recently opened files
+(recentf-mode t)
+;; save location in file
+(save-place-mode t)
+;; Revert buffers when the underlying file has changed
+(global-auto-revert-mode t)
+
+;; Move customization variables to a sepereate file and load it
+(setq custom-file (locate-user-emacs-file "custom-vars.el"))
+(load custom-file 'noerror 'nomessage)
+      
 
 ;; improve looks
 ;;
@@ -51,9 +58,7 @@
 (require 'use-package-ensure)
 (setq use-package-always-ensure t)
 
-
-;; autocompletion
-;;
+;;; autocompletion
 ;; buffer autocompletion with vertico
 (use-package vertico
   :custom
@@ -66,9 +71,8 @@
   :init
   (marginalia-mode))
 ;; make vertico completions save history
-(use-package savehist
-  :init
-  (savehist-mode))
+(setq history-length 30)
+(savehist-mode t)
 ;; improve vertico completions
 (use-package orderless
   :after vertico
@@ -108,17 +112,27 @@
   (setq org-superstar-special-todo-items t)
   (add-hook 'org-mode-hook (lambda ()
                              (org-superstar-mode 1))))
+;; change headings
+(custom-set-faces
+ '(org-level-1 ((t (:height 1.75))))
+ '(org-level-2 ((t (:height 1.5))))
+ '(org-level-3 ((t (:height 1.25))))
+ '(org-level-4 ((t (:height 1.1))))
+ '(org-document-title ((t (:height 1.5)))))
+;; quickly insert structual blocks
+(require 'org-tempo)
 ;; give pasted links the title provided by the website
 (use-package org-cliplink)
 (global-set-key (kbd "C-x p i") 'org-cliplink)
 ;; idk
 (use-package org-contrib)
 (use-package ox-hugo)
+(setq org-imenu-depth 7)
 ;; languages in org-mode
 (use-package ob-rust) ; rust
 
 ;; Edit header size and color
-(custom-set-faces! (org-document-title :weight bold :height 1.4))
+;;(custom-set-faces (org-document-title :weight bold :height 1.4))
 ;; org-roam
 (use-package org-roam
   :custom
@@ -180,16 +194,3 @@
 ;;   (add-to-list 'exec-path "/usr/bin/cargo")
 ;;   (setenv "PATH" (concat (getenv "PATH") ":/usr/bin/cargo"))
 ;;  )
-(custom-set-variables
- ;; custom-set-variables was added by Custom.
- ;; If you edit it by hand, you could mess it up, so be careful.
- ;; Your init file should contain only one such instance.
- ;; If there is more than one, they won't work right.
- '(package-selected-packages
-   '(magit ox-hugo vterm vertico treesit-auto toc-org rust-mode org-superstar org-roam org-contrib org-cliplink org-appear orderless ob-rust marginalia julia-mode htmlize eglot company circadian)))
-(custom-set-faces
- ;; custom-set-faces was added by Custom.
- ;; If you edit it by hand, you could mess it up, so be careful.
- ;; Your init file should contain only one such instance.
- ;; If there is more than one, they won't work right.
- '(org-document-title :weight nil :height))
