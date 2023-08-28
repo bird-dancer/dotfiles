@@ -46,8 +46,6 @@
 ;; display current buffer as html
 (use-package htmlize)
 
-
-
 ;; set repos
 ;;
 (require 'package)
@@ -91,8 +89,6 @@
   (global-treesit-auto-mode))
 (setq treesit-auto-install 'prompt)
 ;; TODO add extensions for programming languages that don't have built in major-modes for auto-ts-mode
-
-;; 
 
 ;;
 ;; org config
@@ -160,12 +156,10 @@
   (org-roam-db-autosync-mode))
 
 ;; vterm
-;;(use-package vterm
-;;  :bind ("M-RET" . vterm))
+(use-package vterm
+ :bind ("M-RET" . vterm))
 
 (use-package magit)
-
-
 
 ;;
 ;; to install
