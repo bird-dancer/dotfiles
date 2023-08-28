@@ -4,8 +4,17 @@
 
 ;; open config with C-c f P
 (global-set-key (kbd "C-c f P") (lambda ()
+ (interactive)
+ (find-file "~/.config/emacs/init.el")))
+
+;; kill buffer and close window simultaniously
+(defun kill-buffer-and-close-window ()
+  "Kill the current buffer and close its window."
   (interactive)
-  (find-file "~/.config/emacs/init.el")))
+  (kill-buffer)
+  (delete-window))
+(global-set-key (kbd "C-x k") 'kill-buffer-and-close-window)			  
+			  
 
 ;; show recently opened files
 (recentf-mode t)
