@@ -2,6 +2,17 @@
 (setq user-full-name "Felix"
       user-mail-address "f.dumbeck@campus.tu-berlin.de")
 
+;; set repos
+;;
+(require 'package)
+(add-to-list 'package-archives '("melpa" . "https://melpa.org/packages/") t)
+(add-to-list 'package-archives '("melpa-stable" . "https://stable.melpa.org/packages/") t)
+(package-initialize)
+;; make all use-package :ensure t
+(require 'use-package-ensure)
+(setq use-package-always-ensure t)
+
+
 ;; open config with C-c f P
 (global-set-key (kbd "C-c f P") (lambda ()
  (interactive)
@@ -49,22 +60,30 @@
   :config
   (setq calendar-latitude 52.5)
   (setq calendar-longitude 13.4)
-  (setq circadian-themes '((:sunrise . modus-operandi)
+  (setq circadian-themes '((:sunrise . default)
                            (:sunset  . modus-vivendi)))
   (circadian-setup))
 ;; display current buffer as html
 (use-package htmlize)
+;; cursor flashes after big jumps
+(use-package beacon
+  :init (beacon-mode 1))
+;; emoji stuff
+;; enable emojis
+(use-package emojify
+  :init (emojify-mode))
 
-;; set repos
-;;
-(require 'package)
-(add-to-list 'package-archives '("melpa" . "https://melpa.org/packages/") t)
-(add-to-list 'package-archives '("melpa-stable" . "https://stable.melpa.org/packages/") t)
-(package-initialize)
-;; make all use-package :ensure t
-(require 'use-package-ensure)
-(setq use-package-always-ensure t)
-
+;; enable autocompletion for emoji
+(use-package company-emoji
+  :init (company-emoji-init))
+;; various icon fonts
+(use-package all-the-icons
+  :if (display-graphic-p))
+;; neotree
+(use-package neotree
+  :bind (([f8] . neotree-toggle)))
+(setq neo-theme (if (display-graphic-p) 'icons 'arrow))
+;  	 ("RET" . neotree-change-root)))
 ;;; autocompletion
 ;; buffer autocompletion with vertico
 (use-package vertico
@@ -91,6 +110,9 @@
 (use-package company
   :config
   (global-company-mode t))
+
+;; multiple cursors
+(use-package multiple-cursors)
 
 ;; treesit-auto
 (use-package treesit-auto
