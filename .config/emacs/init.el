@@ -24,7 +24,7 @@
   (interactive)
   (kill-buffer)
   (delete-window))
-(global-set-key (kbd "C-x k") 'kill-buffer-and-close-window)			  
+(global-set-key (kbd "C-x C-k") 'kill-buffer-and-close-window)			  
 			  
 
 ;; show recently opened files
@@ -38,6 +38,14 @@
 (setq custom-file (locate-user-emacs-file "custom-vars.el"))
 (load custom-file 'noerror 'nomessage)
       
+;; keep folders clean from ...
+;; backup files
+(setq backup-directory-alist `(("." . ,(expand-file-name "tmp/backups/" user-emacs-directory))))
+;; auto-save files
+(make-directory (expand-file-name "tmp/auto-saves/" user-emacs-directory) t)
+(setq auto-save-list-file-prefix (expand-file-name "tmp/auto-saves/sessions/" user-emacs-directory)
+      auto-save-file-name-transforms `((".*", (expand-file-name "tmp/auto-saves/" user-emacs-directory) t)))
+
 
 ;; improve looks
 ;;
@@ -79,11 +87,17 @@
 ;; various icon fonts
 (use-package all-the-icons
   :if (display-graphic-p))
-;; neotree
-(use-package neotree
-  :bind (([f8] . neotree-toggle)))
-(setq neo-theme (if (display-graphic-p) 'icons 'arrow))
-;  	 ("RET" . neotree-change-root)))
+
+;; projectile
+(use-package projectile
+  :config (projectile-mode)
+  :bind-keymap ("C-c p" . projectile-command-map))
+;; treemacs
+(use-package treemacs)
+(use-package treemacs-projectile)
+
+
+
 ;;; autocompletion
 ;; buffer autocompletion with vertico
 (use-package vertico
@@ -105,6 +119,16 @@
   :custom
   (completion-styles '(orderless basic))
   (completion-category-overrides '((file (styles basic partial-completion)))))
+;; icons for completion
+(use-package all-the-icons-completion
+  :after all-the-icons
+  :after marginalia
+  :init (all-the-icons-completion-mode))
+(add-hook 'marginalia-mode-hook #'all-the-icons-completion-marginalia-setup)
+
+
+(use-package embark)
+;;(load-file "./counlt.el")
 
 ;; enable autocompletion in code with company
 (use-package company
@@ -199,9 +223,7 @@
 ;; highlighting for TODO etc.
 ;; ctlr + RET adds comments/indentation
 ;; make case insesetive for at least vertico
-;; vterm M+RET
 ;; pdf stuff
-;; emojies
 ;; look at my doom config
 
 
