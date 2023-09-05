@@ -25,7 +25,12 @@
   (kill-buffer)
   (delete-window))
 (global-set-key (kbd "C-x C-k") 'kill-buffer-and-close-window)			  
-			  
+
+(defun kill-line-backward ()
+  "Kill line backwards from the position of the pointer to the beginning of the line."
+  (interactive)
+  (kill-line 0))
+(global-set-key (kbd "C-S-k") 'kill-line-backward))
 
 ;; show recently opened files
 (recentf-mode t)
