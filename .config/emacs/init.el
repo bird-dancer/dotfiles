@@ -30,7 +30,7 @@
   "Kill line backwards from the position of the pointer to the beginning of the line."
   (interactive)
   (kill-line 0))
-(global-set-key (kbd "C-S-k") 'kill-line-backward))
+(global-set-key (kbd "C-S-k") 'kill-line-backward)
 
 ;; show recently opened files
 (recentf-mode t)
@@ -68,13 +68,13 @@
 (tool-bar-mode 0)
 (scroll-bar-mode 0)
 ;; make theme depend on sunrise/sunset
-;;(load-theme 'wombat) ;; TODO: load dark theme at night
+(use-package gruvbox-theme)
 (use-package circadian
   :config
   (setq calendar-latitude 52.5)
   (setq calendar-longitude 13.4)
-  (setq circadian-themes '((:sunrise . default)
-                           (:sunset  . modus-vivendi)))
+  (setq circadian-themes '((:sunrise . gruvbox-light-soft)
+                           (:sunset  . gruvbox-dark-soft)))
   (circadian-setup))
 ;; display current buffer as html
 (use-package htmlize)
