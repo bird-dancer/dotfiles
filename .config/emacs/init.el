@@ -12,11 +12,15 @@
 (require 'use-package-ensure)
 (setq use-package-always-ensure t)
 
+(setq use-package-verbose t)
 
 ;; open config with C-c f P
-(global-set-key (kbd "C-c f P") (lambda ()
- (interactive)
- (find-file "~/.config/emacs/init.el")))
+(defun open-config ()
+  "Opens emacs config file"
+  (interactive)
+  (setq find-file-visit-truename t)
+  (find-file (locate-user-emacs-file "init.el")))
+(global-set-key (kbd "C-c f P") 'open-config)
 
 ;; kill buffer and close window simultaniously
 (defun kill-buffer-and-close-window ()
@@ -50,7 +54,7 @@
 (make-directory (expand-file-name "tmp/auto-saves/" user-emacs-directory) t)
 (setq auto-save-list-file-prefix (expand-file-name "tmp/auto-saves/sessions/" user-emacs-directory)
       auto-save-file-name-transforms `((".*", (expand-file-name "tmp/auto-saves/" user-emacs-directory) t)))
-
+(use-package no-littering)
 
 ;; improve looks
 ;;
@@ -68,16 +72,18 @@
 (tool-bar-mode 0)
 (scroll-bar-mode 0)
 ;; make theme depend on sunrise/sunset
-(use-package gruvbox-theme)
-(use-package circadian
-  :config
-  (setq calendar-latitude 52.5)
-  (setq calendar-longitude 13.4)
-  (setq circadian-themes '((:sunrise . gruvbox-light-soft)
-                           (:sunset  . gruvbox-dark-soft)))
-  (circadian-setup))
+(use-package gruvbox-theme
+  :init (load-theme 'gruvbox-dark-soft))
+;(use-package circadian
+;  :config
+;  (setq calendar-latitude 52.5)
+;  (setq calendar-longitude 13.4)
+;  (setq circadian-themes '((:sunrise . gruvbox-light-soft)
+;                           (:sunset  . gruvbox-dark-soft)))
+;  (circadian-setup))
 ;; display current buffer as html
-(use-package htmlize)
+(use-package htmlize
+  :defer t)
 ;; cursor flashes after big jumps
 (use-package beacon
   :init (beacon-mode 1))
@@ -93,13 +99,21 @@
 (use-package all-the-icons
   :if (display-graphic-p))
 
+;(use-package doom-modeline
+;  :init (doom-modeline-mode t))
+
+(use-package all-the-icons-dired
+  :after all-the-icons
+  :hook (dired-mode . all-the-icons-dired-mode))
+
+
 ;; projectile
-(use-package projectile
-  :config (projectile-mode)
-  :bind-keymap ("C-c p" . projectile-command-map))
-;; treemacs
-(use-package treemacs)
-(use-package treemacs-projectile)
+;(use-package projectile
+;  :config (projectile-mode)
+;  :bind-keymap ("C-c p" . projectile-command-map))
+;;; treemacs
+;(use-package treemacs)
+;(use-package treemacs-projectile)
 
 
 
@@ -126,13 +140,19 @@
   (completion-category-overrides '((file (styles basic partial-completion)))))
 ;; icons for completion
 (use-package all-the-icons-completion
-  :after all-the-icons
-  :after marginalia
-  :init (all-the-icons-completion-mode))
-(add-hook 'marginalia-mode-hook #'all-the-icons-completion-marginalia-setup)
+  :after (all-the-icons marginalia)
+  :init (all-the-icons-completion-mode)
+  :hook (marginalia-mode-hook . all-the-icons-completion-marginalia-setup))
 
+;; which-key is great for getting an overview of what keybindings are available based on the prefix keys you entered. Learned about this one from Spacemacs.
+(use-package which-key
+  :defer 0
+  :diminish which-key-mode
+  :config
+  (which-key-mode)
+  (setq which-key-idle-delay 1))
 
-(use-package embark)
+;(use-package embark)
 ;;(load-file "./counlt.el")
 
 ;; enable autocompletion in code with company
@@ -148,10 +168,14 @@
   :config
   (global-treesit-auto-mode))
 (setq treesit-auto-install 'prompt)
-;; TODO add extensions for programming languages that don't have built in major-modes for auto-ts-mode
+
 
 ;;
 ;; org config
+(use-package org
+  :defer t
+  :commands (org-mode)
+  )
 ;; make it pretty
 ;; Improve org mode looks
 (setq org-startup-indented t
@@ -164,10 +188,10 @@
   :hook (org-mode . org-appear-mode))
 ;; Nice bullets
 (use-package org-superstar
+  :hook (org-mode . org-superstar-mode)
   :config
-  (setq org-superstar-special-todo-items t)
-  (add-hook 'org-mode-hook (lambda ()
-                             (org-superstar-mode 1))))
+  (setq org-superstar-special-todo-items t))
+
 ;; change headings
 (custom-set-faces
  '(org-level-1 ((t (:height 1.75))))
@@ -176,19 +200,27 @@
  '(org-level-4 ((t (:height 1.1))))
  '(org-document-title ((t (:height 1.5)))))
 ;; quickly insert structual blocks
-(require 'org-tempo)
-;; give pasted links the title provided by the website
-(use-package org-cliplink)
-(global-set-key (kbd "C-x p i") 'org-cliplink)
-;; idk
-(use-package org-contrib)
-(use-package ox-hugo)
-(setq org-imenu-depth 7)
-;; languages in org-mode
-(use-package ob-rust) ; rust
+;(with-eval-after-load 'org
 
-;; Edit header size and color
-;;(custom-set-faces (org-document-title :weight bold :height 1.4))
+;; give pasted links the title provided by the website
+(use-package org-cliplink
+  :bind ("C-x p i" . org-cliplink)
+  :hook (org-mode . org-cliplink))
+
+;; idk
+(use-package org-contrib
+  :init (require 'org-tempo)
+  :after org
+)
+
+(use-package ox-hugo
+  :after org
+  :commands org-hugo-auto-export-mode)
+(setq org-imenu-depth 7)
+;; languages in org mode
+(use-package ob-rust
+  :after org)
+
 ;; org-roam
 (use-package org-roam
   :custom
@@ -219,7 +251,8 @@
 (use-package vterm
  :bind ("M-RET" . vterm))
 
-(use-package magit)
+(use-package magit
+  :commands magit)
 
 ;;
 ;; to install
