@@ -141,8 +141,8 @@
   (global-company-mode t))
 
 ;; multiple cursors
-(use-package multiple-cursors)
-
+(use-package multiple-cursors
+  :bind ("M-SPC" . set-rectangular-region-anchor))
 ;; treesit-auto
 (use-package treesit-auto
   :config
