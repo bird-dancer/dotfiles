@@ -18,10 +18,11 @@ alias comp="gcc -std=c17 -Wall -fstack-protector -g3 -lm"
 alias pac="sudo pacman -Syu"
 alias pacr="sudo pacman -Rs"
 alias paci="pacman -Si"
-# typing errors
+# correct typos
 alias celar="clear"
 alias lcear="clear"
 alias lcear="clear"
+alias clea="clear"
 
 # ex - archive extractor
 function ex -d "extract an archive"
