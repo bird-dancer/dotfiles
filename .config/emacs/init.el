@@ -1,3 +1,5 @@
+(setq gc-cons-threshold (* 50 1000 1000))
+
 ;; set user info
 (setq user-full-name "Felix"
       user-mail-address "f.dumbeck@campus.tu-berlin.de")
@@ -11,6 +13,7 @@
 ;; make all use-package :ensure t
 (require 'use-package-ensure)
 (setq use-package-always-ensure t)
+;(setq use-package-always-defer t)
 
 (setq use-package-verbose t)
 
@@ -54,7 +57,7 @@
 (make-directory (expand-file-name "tmp/auto-saves/" user-emacs-directory) t)
 (setq auto-save-list-file-prefix (expand-file-name "tmp/auto-saves/sessions/" user-emacs-directory)
       auto-save-file-name-transforms `((".*", (expand-file-name "tmp/auto-saves/" user-emacs-directory) t)))
-(use-package no-littering)
+;(use-package no-littering)
 
 ;; improve looks
 ;;
@@ -72,29 +75,28 @@
 (tool-bar-mode 0)
 (scroll-bar-mode 0)
 ;; make theme depend on sunrise/sunset
-(use-package gruvbox-theme
-  :init (load-theme 'gruvbox-dark-soft))
-;(use-package circadian
-;  :config
-;  (setq calendar-latitude 52.5)
-;  (setq calendar-longitude 13.4)
-;  (setq circadian-themes '((:sunrise . gruvbox-light-soft)
-;                           (:sunset  . gruvbox-dark-soft)))
-;  (circadian-setup))
+(use-package gruvbox-theme)
+;  :init (load-theme 'gruvbox-dark-soft))
+(use-package circadian
+  :config
+  (setq calendar-latitude 52.5)
+  (setq calendar-longitude 13.4)
+  (setq circadian-themes '((:sunrise . gruvbox-light-soft)
+                           (:sunset  . gruvbox-dark-soft)))
+  (circadian-setup))
 ;; display current buffer as html
 (use-package htmlize
   :defer t)
 ;; cursor flashes after big jumps
 (use-package beacon
   :init (beacon-mode 1))
-;; emoji stuff
-;; enable emojis
-(use-package emojify
-  :init (emojify-mode))
+;; match brackets by colour
+(use-package rainbow-delimiters
+  :hook (prog-mode . rainbow-delimiters-mode))
 
-;; enable autocompletion for emoji
-(use-package company-emoji
-  :init (company-emoji-init))
+(use-package term
+  :commands term)
+
 ;; various icon fonts
 (use-package all-the-icons
   :if (display-graphic-p))
@@ -155,10 +157,18 @@
 ;(use-package embark)
 ;;(load-file "./counlt.el")
 
+;; emoji stuff
+;; enable emojis
+(use-package emojify
+  :init (emojify-mode))
 ;; enable autocompletion in code with company
 (use-package company
   :config
   (global-company-mode t))
+;; enable autocompletion for emoji
+(use-package company-emoji
+  :after company
+  :init (company-emoji-init))
 
 ;; multiple cursors
 (use-package multiple-cursors
@@ -249,11 +259,13 @@
 
 ;; vterm
 (use-package vterm
- :bind ("M-RET" . vterm))
+  :commands vterm
+  :bind ("M-RET" . vterm))
 
 (use-package magit
   :commands magit)
-
+(use-package forge
+  :after magit)
 ;;
 ;; to install
 ;;
@@ -279,3 +291,7 @@
 ;;   (add-to-list 'exec-path "/usr/bin/cargo")
 ;;   (setenv "PATH" (concat (getenv "PATH") ":/usr/bin/cargo"))
 ;;  )
+
+
+;; Make gc pauses faster by decreasing the threshold.
+(setq gc-cons-threshold (* 2 1000 1000))
