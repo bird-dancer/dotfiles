@@ -15,3 +15,5 @@
 
 [push]
 	autoSetupRemote = true
+[github]
+	user = f-eliks

@@ -264,8 +264,7 @@
 
 (use-package magit
   :commands magit)
-(use-package forge
-  :after magit)
+
 ;;
 ;; to install
 ;;
