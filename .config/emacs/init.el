@@ -93,7 +93,19 @@
 ;; match brackets by colour
 (use-package rainbow-delimiters
   :hook (prog-mode . rainbow-delimiters-mode))
-
+;; hightlight todo fixme etc
+(use-package hl-todo
+  :config
+  (setq hl-todo-keyword-faces
+	'(("TODO"   . "#FF0000")
+          ("FIXME"  . "#FF0000")
+          ("DEBUG"  . "#A020F0")
+          ("GOTCHA" . "#FF4500")
+          ("STUB"   . "#1E90FF")))
+  (keymap-set hl-todo-mode-map "C-c p" #'hl-todo-previous)
+  (keymap-set hl-todo-mode-map "C-c P" #'hl-todo-next)
+  (keymap-set hl-todo-mode-map "C-c o" #'hl-todo-occur)
+  (keymap-set hl-todo-mode-map "C-c i" #'hl-todo-insert))
 (use-package term
   :commands term)
 
@@ -203,7 +215,7 @@
 
 ;; change headings
 (custom-set-faces
-p '(org-level-1 ((t (:height 1.75))))
+ '(org-level-1 ((t (:height 1.75))))
  '(org-level-2 ((t (:height 1.5))))
  '(org-level-3 ((t (:height 1.25))))
  '(org-level-4 ((t (:height 1.1))))
