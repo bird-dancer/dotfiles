@@ -13,9 +13,9 @@
 ;; make all use-package :ensure t
 (require 'use-package-ensure)
 (setq use-package-always-ensure t)
-;(setq use-package-always-defer t)
+					;(setq use-package-always-defer t)
 
-(setq use-package-verbose t)
+					;(setq use-package-verbose t)
 
 ;; open config with C-c f P
 (defun open-config ()
@@ -57,7 +57,7 @@
 (make-directory (expand-file-name "tmp/auto-saves/" user-emacs-directory) t)
 (setq auto-save-list-file-prefix (expand-file-name "tmp/auto-saves/sessions/" user-emacs-directory)
       auto-save-file-name-transforms `((".*", (expand-file-name "tmp/auto-saves/" user-emacs-directory) t)))
-;(use-package no-littering)
+					;(use-package no-littering)
 
 ;; improve looks
 ;;
@@ -76,7 +76,7 @@
 (scroll-bar-mode 0)
 ;; make theme depend on sunrise/sunset
 (use-package gruvbox-theme)
-;  :init (load-theme 'gruvbox-dark-soft))
+					;  :init (load-theme 'gruvbox-dark-soft))
 (use-package circadian
   :config
   (setq calendar-latitude 52.5)
@@ -101,8 +101,8 @@
 (use-package all-the-icons
   :if (display-graphic-p))
 
-;(use-package doom-modeline
-;  :init (doom-modeline-mode t))
+					;(use-package doom-modeline
+					;  :init (doom-modeline-mode t))
 
 (use-package all-the-icons-dired
   :after all-the-icons
@@ -110,12 +110,12 @@
 
 
 ;; projectile
-;(use-package projectile
-;  :config (projectile-mode)
-;  :bind-keymap ("C-c p" . projectile-command-map))
+					;(use-package projectile
+					;  :config (projectile-mode)
+					;  :bind-keymap ("C-c p" . projectile-command-map))
 ;;; treemacs
-;(use-package treemacs)
-;(use-package treemacs-projectile)
+					;(use-package treemacs)
+					;(use-package treemacs-projectile)
 
 
 
@@ -154,8 +154,7 @@
   (which-key-mode)
   (setq which-key-idle-delay 1))
 
-;(use-package embark)
-;;(load-file "./counlt.el")
+					;(use-package embark)
 
 ;; emoji stuff
 ;; enable emojis
@@ -204,13 +203,13 @@
 
 ;; change headings
 (custom-set-faces
- '(org-level-1 ((t (:height 1.75))))
+p '(org-level-1 ((t (:height 1.75))))
  '(org-level-2 ((t (:height 1.5))))
  '(org-level-3 ((t (:height 1.25))))
  '(org-level-4 ((t (:height 1.1))))
  '(org-document-title ((t (:height 1.5)))))
 ;; quickly insert structual blocks
-;(with-eval-after-load 'org
+					;(with-eval-after-load 'org
 
 ;; give pasted links the title provided by the website
 (use-package org-cliplink
@@ -221,7 +220,7 @@
 (use-package org-contrib
   :init (require 'org-tempo)
   :after org
-)
+  )
 
 (use-package ox-hugo
   :after org
@@ -245,14 +244,14 @@
       "\n* Source\nAuthor: %^{Author}\nTitle: ${title}\nYear: %^{Year}\n\n* Summary\n%?\n\n* See also\n\n* References\n\n"
       :if-new (file+head "%<%Y%m%d%H%M%S>-${slug}.org" "#+title: ${title}\n#+date: %U\n\n")
       :unnarrowed t)))
-   :bind (("C-c n l" . org-roam-buffer-toggle)
+  :bind (("C-c n l" . org-roam-buffer-toggle)
          ("C-c n f" . org-roam-node-find)
          ("C-c n g" . org-roam-graph)
          ("C-c n i" . org-roam-node-insert)
          ("C-c n c" . org-roam-capture)
          ;; Dailies
          ("C-c n j" . org-roam-dailies-capture-today))
-   :config
+  :config
   ;; If you're using a vertical completion framework, you might want a more informative completion interface
   (setq org-roam-node-display-template (concat "${title:*} " (propertize "${tags:10}" 'face 'org-tag)))
   (org-roam-db-autosync-mode))
@@ -269,7 +268,6 @@
 ;; to install
 ;;
 ;; flycheck
-;; highlighting for TODO etc.
 ;; ctlr + RET adds comments/indentation
 ;; make case insesetive for at least vertico
 ;; pdf stuff
