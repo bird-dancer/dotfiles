@@ -1,9 +1,13 @@
 :PROPERTIES:
-:TOC:      :include all :depth 5 :force ((ignore)) :ignore ((nothing)) :local (depth)
+:TOC:      :include all :depth 5 :force (depth) :ignore (nothing) :local (depth)
 :END:
 #+TITLE: Emacs config
 #+AUTHOR: Felix Dumbeck
 #+PROPERTY: header-args :emacs-lisp :tangle ./init.el :results silent :mkdirp yes
+
+:CONTENTS:
+
+:END:
 
 * preface
 simple "performant" GNU emacs 29.1+ config that uses as much built in stuff as possible
@@ -34,37 +38,42 @@ Start the Emacs server from this instance so that all =emacsclient= calls are ro
 #+end_src
 
 * keep .config/emacs clean
-
 stop transient files from being created in the emacs config folder
-
-- change the user-emacs-directory to keep unwanted things out of ~/.config/emacs *noeval*
+** change user-emacs-directory *noeval*
+change the user-emacs-directory to keep unwanted things out of ~/.config/emacs
   #+begin_src emacs-lisp :eval no :tangle no
     (setq user-emacs-directory (expand-file-name "~/.cache/emacs/")
           url-history-file (expand-file-name "url/history" user-emacs-directory))
   #+end_src
-- use no-littering to automatically set common paths to the new user-emacs-directory *noeval*
-  #+begin_src emacs-lisp :eval no :tangle no
-;    (setup (:pkg no-littering)
- ;          (require 'no-littering))
+** no-littering
+use no-littering to automatically set common paths to the new user-emacs-directory
+  #+begin_src emacs-lisp
+    (use-package no-littering
+      :init
+      (setq auto-save-file-name-transforms
+            `((".*" ,(no-littering-expand-var-file-name "auto-save/") t))))
   #+end_src
-- keep customization settings in a temporary file *noeval*
-  #+begin_src emacs-lisp :eval no :tangle no
-    (setq custom-file
-          (if (boundp 'server-socket-dir)
-              (expand-file-name "custom.el" server-socket-dir)
-            (expand-file-name (format "emacs-custom-%s.el" (user-uid)) temporary-file-directory)))
-    (load custom-file t)
+** custom settings in temp file *noeval*
+keep customization settings in a temporary file *noeval*
+      #+begin_src emacs-lisp :eval no :tangle no
+        (setq custom-file
+              (if (boundp 'server-socket-dir)
+                  (expand-file-name "custom.el" server-socket-dir)
+                (expand-file-name (format "emacs-custom-%s.el" (user-uid)) temporary-file-directory)))
+        (load custom-file t)
   #+end_src
-- move customization variables to a sepereate file and load it *noeval*
+      move customization variables to a sepereate file and load it *noeval*
   #+begin_src emacs-lisp :eval no :tangle no
     (setq custom-file (locate-user-emacs-file "custom-vars.el"))
     (load custom-file 'noerror 'nomessage)
   #+end_src
-- from backup files *noeval*
+** auto generated files in tmp directory *noeval*
+keep backup files in a temporary directory *noeval*
   #+begin_src emacs-lisp :eval no :tangle no
     (setq backup-directory-alist `(("." . ,(expand-file-name "tmp/backups/" user-emacs-directory))))
   #+end_src
-- auto-save files *noeval*
+  
+  keep  auto-save files in a temporary directory
   #+begin_src emacs-lisp :eval no :tangle no
     (make-directory (expand-file-name "tmp/auto-saves/" user-emacs-directory) t)
     (setq auto-save-list-file-prefix (expand-file-name "tmp/auto-saves/sessions/" user-emacs-directory)
@@ -439,8 +448,11 @@ display current buffer as html
   (use-package htmlize
     :defer t)
 #+end_src
-** emacs-everywhere
-#+begin_src emacs-lisp :tangle no
+** emacs-everywhere *not working!*
+use ~emacsclient --eval "(emacs-everywhere)"~ from another window when writing text to open this text in an Emacs buffer. Type =C-c C-c= to reinsert the edited text into the text field.
+
+*Warning!* this does currently not work under wayland
+#+begin_src emacs-lisp :eval no :tangle no
   (use-package emacs-everywhere)
 #+end_src
 * runtime performance
@@ -458,4 +470,13 @@ make gc pauses faster by decreasing the threshold, increasing the runtime perfor
 * look into
 + treemacs
 + projectile
-  
++ ibuffer
+* from doom
++ nav-flash vs. beacon
++ fold: universal code
++ format+ onsave
++ show git changes in a line to the side
++ grammar
++ =ctrl-a= should move to beginning of written line insead of actual line
++ org-mode drag and drop
++ word-wrap
