@@ -300,6 +300,7 @@ export org-mode files to html with hugo
     :commands org-hugo-auto-export-mode)
 #+end_src
 ** improve looks
+*** general
 #+begin_src emacs-lisp
   (setq org-startup-indented t
         org-pretty-entities t
@@ -308,7 +309,7 @@ export org-mode files to html with hugo
         org-image-actual-width '(300))
 #+end_src
 
-Show hidden emphasis markers
+*** Show hidden emphasis markers
 #+begin_src emacs-lisp
   (use-package org-appear
     :hook (org-mode . org-appear-mode))
@@ -366,6 +367,14 @@ rust
   (use-package ob-rust
     :after org)
 #+end_src
+** drag-and-drop
+# drag and drop images into an org-mode buffer downloading the image and displaying it in the org-mode buffer
+Enable drag-and-drop support for images and files; inserts inline previews for images and an icon+link for other media types.
+#+begin_src emacs-lisp
+  (use-package org-download
+    :hook ('dired-mode-hook . 'org-download-enable))
+#+end_src
+
 ** org-roam
 #+begin_src emacs-lisp
     (use-package org-roam
@@ -472,11 +481,9 @@ make gc pauses faster by decreasing the threshold, increasing the runtime perfor
 + projectile
 + ibuffer
 * from doom
-+ nav-flash vs. beacon
-+ fold: universal code
++ fold: universal code folding
 + format+ onsave
 + show git changes in a line to the side
 + grammar
 + =ctrl-a= should move to beginning of written line insead of actual line
-+ org-mode drag and drop
 + word-wrap
