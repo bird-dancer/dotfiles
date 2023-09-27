@@ -12,6 +12,7 @@
 
 * preface
 simple "performant" GNU emacs 29.1+ config that uses as much built in stuff as possible
+
 Werks for me
 * startup Performance
 make emacs startup faster
@@ -130,6 +131,17 @@ fold (collapse and expand) regions of text.
   (global-set-key (kbd "C-c f h") 'hs-hide-block)
   (global-set-key (kbd "C-c f s") 'hs-show-block)
   (global-set-key (kbd "C-c f t") 'hs-toggle-hiding)
+#+end_src
+** copy line
+FIXME: currently copies the complete line from beginning instead of from current cursor position
+copy the current line to the killring without deleting/killing it from the buffer
+#+begin_src emacs-lisp
+  (defun copy-line-to-kill-ring ()
+    "Copy the current line to the kill ring without killing it."
+    (interactive)
+    (let ((line-text (buffer-substring (line-beginning-position) (line-end-position))))
+      (kill-new line-text)))
+  (global-set-key (kbd "C-S-c") 'copy-line)
 #+end_src
 * general
 ** user info
@@ -427,18 +439,19 @@ fold (collapse and expand) regions of text.
 ** highlight todo
 hightlight todo fixme etc.
 #+begin_src emacs-lisp
-  (use-package hl-todo
-    :config
-    (setq hl-todo-keyword-faces
-          '(("TODO"   . "#FF0000")
-            ("FIXME"  . "#FF0000")
-            ("DEBUG"  . "#A020F0")
-            ("GOTCHA" . "#FF4500")
-            ("STUB"   . "#1E90FF")))
-    (keymap-set hl-todo-mode-map "C-c p" #'hl-todo-previous)
-    (keymap-set hl-todo-mode-map "C-c P" #'hl-todo-next)
-    (keymap-set hl-todo-mode-map "C-c o" #'hl-todo-occur)
-    (keymap-set hl-todo-mode-map "C-c i" #'hl-todo-insert))
+    (use-package hl-todo
+      :config
+      (setq hl-todo-keyword-faces
+            '(("TODO"   . "#FF0000")
+              ("FIXME"  . "#FF0000")
+              ("DEBUG"  . "#A020F0")
+              ("GOTCHA" . "#FF4500")
+              ("STUB"   . "#1E90FF")))
+      (keymap-set hl-todo-mode-map "C-c p" #'hl-todo-previous)
+      (keymap-set hl-todo-mode-map "C-c P" #'hl-todo-next)
+      (keymap-set hl-todo-mode-map "C-c o" #'hl-todo-occur)
+      (keymap-set hl-todo-mode-map "C-c i" #'hl-todo-insert)
+      (hl-todo-mode t))
 #+end_src
 ** rainbow delimiters
 match brackets and other delimiters by colour to see the current scope more easily
