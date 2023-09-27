@@ -3,7 +3,8 @@
 :END:
 #+TITLE: Emacs config
 #+AUTHOR: Felix Dumbeck
-#+PROPERTY: header-args :emacs-lisp :tangle ./init.el :results silent :mkdirp yes
+#+PROPERTY: header-args :emacs-lisp :tangle ~/.config/emacs/init.el :results silent :mkdirp yes
+#+auto_tangle: t
 
 :CONTENTS:
 
@@ -19,9 +20,9 @@ make gc less active by increasing its threshold during startup so emacs starts u
 #+begin_src emacs-lisp
   (setq gc-cons-threshold (* 50 1000 1000))
 #+end_src
-** server mode
+** use emacs server *disabled*
 Start the Emacs server from this instance so that all =emacsclient= calls are routed here.
-#+begin_src emacs-lisp
+#+begin_src emacs-lisp :eval no :tangle no
   (server-start)
 #+end_src
 
@@ -114,13 +115,21 @@ Kill line backwards from the position of the pointer to the beginning of the lin
 ** which-key
 which-key is great for getting an overview of what keybindings are available based on the prefix keys you entered.
 #+begin_src emacs-lisp
-
   (use-package which-key
     :defer 0
     :diminish which-key-mode
     :config
     (which-key-mode)
     (setq which-key-idle-delay 1))
+#+end_src
+** folding
+fold (collapse and expand) regions of text.
+#+begin_src emacs-lisp
+  (add-hook 'prog-mode-hook 'hs-minor-mode)
+  (add-hook 'rust-ts-mode 'hs-minor-mode)
+  (global-set-key (kbd "C-c f h") 'hs-hide-block)
+  (global-set-key (kbd "C-c f s") 'hs-show-block)
+  (global-set-key (kbd "C-c f t") 'hs-toggle-hiding)
 #+end_src
 * general
 ** user info
@@ -361,6 +370,13 @@ These templates enable you to type things like =<el= and then hit Tab to expand 
   (add-to-list 'org-structure-template-alist '("json" . "src json"))
   (add-to-list 'org-structure-template-alist '("rs" . "src rust"))
 #+end_src
+*** org-auto-tangle
+when ~#+auto_tangle: t~ is set in the beginning of an org-file tangle all code blocks that are set to tangle
+#+begin_src emacs-lisp
+  (use-package org-auto-tangle
+    :defer t
+    :hook (org-mode . org-auto-tangle-mode))
+#+end_src
 *** languages
 rust
 #+begin_src emacs-lisp :tangle no
@@ -400,20 +416,13 @@ Make gc pauses faster by decreasing the threshold
   (setq gc-cons-threshold (* 2 1000 1000))
 #+end_src
 
-* development
-** git
-*** Magit
-#+begin_src emacs-lisp
-  (use-package magit
-    :commands magit)
-#+end_src
-** treesitter
-automatically detect the approriate treesitter mode dependant on the language mode
-#+begin_src emacs-lisp
-  (use-package treesit-auto
-    :config
-    (global-treesit-auto-mode))
-  (setq treesit-auto-install 'prompt)
+* editing configuration
+** folding
+*** orgiami *disabled*
+fold (collapse and expand) regions of text.
+#+begin_src emacs-lisp :eval no :tangle no
+    (use-package origami
+      :hook (prog-mode . origami-mode)
 #+end_src
 ** highlight todo
 hightlight todo fixme etc.
@@ -436,6 +445,30 @@ match brackets and other delimiters by colour to see the current scope more easi
 #+begin_src emacs-lisp
   (use-package rainbow-delimiters
     :hook (prog-mode . rainbow-delimiters-mode))
+#+end_src
+* development
+** git
+*** Magit
+#+begin_src emacs-lisp
+  (use-package magit
+    :commands magit)
+#+end_src
+** treesitter
+automatically detect the approriate treesitter mode dependant on the language mode
+#+begin_src emacs-lisp
+  (use-package treesit-auto
+    :config
+    (global-treesit-auto-mode))
+  (setq treesit-auto-install 'prompt)
+#+end_src
+** format code
+#+begin_src emacs-lisp
+  (use-package format-all)
+#+end_src
+** languages
+*** guile scheme
+#+begin_src emacs-lisp
+  (use-package geiser-chicken)
 #+end_src
 * applications
 ** dired
@@ -470,9 +503,7 @@ make gc pauses faster by decreasing the threshold, increasing the runtime perfor
   (setq gc-cons-threshold (* 2 1000 1000))
 #+end_src
 * TODO
-+ org mode nice heading symbols
 + flycheck
-+ pdf stuff
 + make vertico case insensetive
 + look at my doom config
 + use tabs for indentation and make them "sticky"???
@@ -480,8 +511,8 @@ make gc pauses faster by decreasing the threshold, increasing the runtime perfor
 + treemacs
 + projectile
 + ibuffer
++ deft
 * from doom
-+ fold: universal code folding
 + format+ onsave
 + show git changes in a line to the side
 + grammar
