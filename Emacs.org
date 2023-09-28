@@ -372,6 +372,8 @@ These templates enable you to type things like =<el= and then hit Tab to expand 
 #+begin_src emacs-lisp
   (require 'org-tempo)
   (add-to-list 'org-structure-template-alist '("sh" . "src sh"))
+  (add-to-list 'org-structure-template-alist '("ba" . "src bash"))
+  (add-to-list 'org-structure-template-alist '("zs" . "src zsh"))
   (add-to-list 'org-structure-template-alist '("el" . "src emacs-lisp"))
   (add-to-list 'org-structure-template-alist '("li" . "src lisp"))
   (add-to-list 'org-structure-template-alist '("sc" . "src scheme"))
@@ -390,9 +392,20 @@ when ~#+auto_tangle: t~ is set in the beginning of an org-file tangle all code b
     :hook (org-mode . org-auto-tangle-mode))
 #+end_src
 *** languages
-rust
+**** rust
 #+begin_src emacs-lisp :tangle no
   (use-package ob-rust
+    :after org)
+#+end_src
+**** emacs-lisp
+#+begin_src emacs-lisp :eval no :tangle no
+  (use-package ob-doc-elisp
+    :after org)
+#+end_src
+**** shell
+support for sh, bash, zsh, fish, dash etc.
+#+begin_src emacs-lisp :eval no :tangle no
+  (use-package ob-doc-shell
     :after org)
 #+end_src
 ** drag-and-drop
@@ -439,19 +452,19 @@ fold (collapse and expand) regions of text.
 ** highlight todo
 hightlight todo fixme etc.
 #+begin_src emacs-lisp
-    (use-package hl-todo
-      :config
-      (setq hl-todo-keyword-faces
-            '(("TODO"   . "#FF0000")
-              ("FIXME"  . "#FF0000")
-              ("DEBUG"  . "#A020F0")
-              ("GOTCHA" . "#FF4500")
-              ("STUB"   . "#1E90FF")))
-      (keymap-set hl-todo-mode-map "C-c p" #'hl-todo-previous)
-      (keymap-set hl-todo-mode-map "C-c P" #'hl-todo-next)
-      (keymap-set hl-todo-mode-map "C-c o" #'hl-todo-occur)
-      (keymap-set hl-todo-mode-map "C-c i" #'hl-todo-insert)
-      (hl-todo-mode t))
+  (use-package hl-todo
+    :init (hl-todo-mode)
+    :config
+    (setq hl-todo-keyword-faces
+          '(("TODO"   . "#FF0000")
+            ("FIXME"  . "#FF0000")
+            ("DEBUG"  . "#A020F0")
+            ("GOTCHA" . "#FF4500")
+            ("STUB"   . "#1E90FF")))
+    (keymap-set hl-todo-mode-map "C-c p" #'hl-todo-previous)
+    (keymap-set hl-todo-mode-map "C-c P" #'hl-todo-next)
+    (keymap-set hl-todo-mode-map "C-c o" #'hl-todo-occur)
+    (keymap-set hl-todo-mode-map "C-c i" #'hl-todo-insert))
 #+end_src
 ** rainbow delimiters
 match brackets and other delimiters by colour to see the current scope more easily
