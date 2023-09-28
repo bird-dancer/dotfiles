@@ -1,0 +1,158 @@
+#+TITLE: zshrc
+#+DESCRIPTION: my zsh config
+#+AUTHOR: Felix Dumbeck
+#+PROPERTY: header-args :bash :tangle ~/.zshrc :results silent :mkdirp yes
+#+auto_tangle: t
+
+* preface
+this zsh config uses =zsh-autocomplete= and =zsh-syntax-highlighting= and has no further requirements. The contents of the code blocks will be tangled to =~/.zshrc=
+* general
+** history
+set saved history size and location
+#+begin_src bash
+  # Lines configured by zsh-newuser-install
+  HISTFILE=~/.histfile
+  HISTSIZE=1000
+  SAVEHIST=1000
+#+end_src
+** emacs keybindings
+enable emacs keybindings in zsh
+#+begin_src bash
+  bindkey -e
+#+end_src
+** auto generated
+#+begin_src bash
+  # End of lines configured by zsh-newuser-install
+  # The following lines were added by compinstall
+  zstyle :compinstall filename '/home/felix/.zshrc'
+  autoload -Uz compinit
+  compinit
+  # End of lines added by compinstall
+#+end_src
+** format
+set locale format to =en_us utf-8=
+
+#+begin_src bash
+  export LC_CTYPE=en_US.UTF-8
+#+end_src
+** ls after cd
+show contents of directory after changing into it
+
+runs =ls= after =cd=
+#+begin_src bash
+  function cd {
+          builtin cd "$@" && ls
+  }
+  ls
+#+end_src
+** prompt
+load the [[https://starship.rs/][starship]] prompt
+#+begin_src bash
+  eval "$(starship init zsh)"
+#+end_src
+
+* path
+add directories to the =$PATH= variable
+#+begin_src bash
+  path+=("$HOME/.config/emacs/bin")
+  path+=("$HOME/.local/bin")
+#+end_src
+
+* plugins
+** auto-suggestions
+#+begin_src bash
+  source /usr/share/zsh/plugins/zsh-autosuggestions/zsh-autosuggestions.zsh 2>/dev/null
+#+end_src
+** syntax-highlighting
+#+begin_src bash
+  source /usr/share/zsh/plugins/zsh-syntax-highlighting/zsh-syntax-highlighting.zsh 2>/dev/null
+#+end_src
+* aliases
+** replace default tools
+*** lsd
+use ls deluxe (lsd) instead of ls and tree because it looks prettier
+*** eza *
+use exa instead of ls and tree because it looks prettier
+
+#+begin_src bash
+  alias ls='exa --icons -a'
+  alias ll='exa --icons -la'
+  alias tree='exa --tree --icons'
+#+end_src
+*** bat
+use bat instead of cat and tree because it looks prettier
+
+#+begin_src bash
+  alias cat='bat'
+#+end_src
+** =b= for =cd ..=
+=b= to go back one directory
+
+#+begin_src bash
+  alias b='cd ..'
+#+end_src
+** build stuff
+*** cmake
+clear build directory and build with debug flags enabled
+
+#+begin_src bash
+  alias build='rm -rf build && cmake -B build -DCMAKE_BUILD_TYPE=Debug -DCMAKE_EXPORT_COMPILE_COMMANDS=1 && make -C'
+#+end_src
+*** gcc
+=comp= compiles gcc code for optimal debugging, bug recuction and security
+
+#+begin_src bash
+  alias comp='gcc -std=c17 -Wall -fstack-protector -g3 -lm'
+#+end_src
+** ssh
+
+remember my ssh-keys during a sessions
+
+#+begin_src bash
+  eval $(ssh-agent) > /dev/null
+#+end_src
+** pacman
+shorten my most used pacman commands
++ =pac= install and update
++ =parc= remove
++ =paci= info
+#+begin_src bash
+  alias pac='sudo pacman -Syu'
+  alias pacr='sudo pacman -Rs'
+  alias paci='pacman -Si'
+#+end_src
+** typos
+automatically correct common typos I make
+
+#+begin_src bash
+  alias celar='clear'
+  alias lcear='clear'
+  alias lcear='clear'
+  alias clea='clear'
+  alias cleat='clear'
+#+end_src
+** ex
+extract/decompress all sorts of archives/copressed files by just typing =ex= /archive_name/
+#+begin_src bash
+  ex (){
+          if [ -f $1 ] ; then
+                  case $1 in
+                          ,*.tar.bz2)   tar xjf $1   ;;
+                          ,*.tar.gz)    tar xzf $1   ;;
+                          ,*.tar.xz)    tar xJf $1   ;;
+                          ,*.bz2)       bunzip2 $1   ;;
+                          ,*.rar)       unrar x $1     ;;
+                          ,*.gz)        gunzip $1    ;;
+                          ,*.tar)       tar xf $1    ;;
+                          ,*.tbz2)      tar xjf $1   ;;
+                          ,*.tgz)       tar xzf $1   ;;
+                          ,*.zip)       unzip $1     ;;
+                          ,*.Z)         uncompress $1;;
+                          ,*.7z)        7z x $1      ;;
+                          ,*)      echo "'$1' cannot be extracted via ex()" ;;
+                  esac
+          else
+                  echo "'$1' is not a valid file"
+          fi
+  }
+#+end_src
