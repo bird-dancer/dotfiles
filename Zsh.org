@@ -73,7 +73,8 @@ add directories to the =$PATH= variable
 use ls deluxe (lsd) instead of ls and tree because it looks prettier
 
 #+begin_src bash
-  alias ls='lsd -a'
+  alias ls='lsd'
+  alias la='lsd -a'
   alias ll='lsd -la'
   alias tree='lsd --tree'
 #+end_src
