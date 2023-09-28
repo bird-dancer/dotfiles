@@ -65,16 +65,16 @@ move customization variables to a sepereate file and load it *noeval*
   (setq custom-file (locate-user-emacs-file "custom-vars.el"))
   (load custom-file 'noerror 'nomessage)
 #+end_src
-** auto generated files in tmp directory *noeval*
+** auto generated files in tmp directory
 keep backup files in a temporary directory *noeval*
 
-#+begin_src emacs-lisp :eval no :tangle no
+#+begin_src emacs-lisp
   (setq backup-directory-alist `(("." . ,(expand-file-name "tmp/backups/" user-emacs-directory))))
 #+end_src
   
 keep  auto-save files in a temporary directory
 
-#+begin_src emacs-lisp :eval no :tangle no
+#+begin_src emacs-lisp
   (make-directory (expand-file-name "tmp/auto-saves/" user-emacs-directory) t)
   (setq auto-save-list-file-prefix (expand-file-name "tmp/auto-saves/sessions/" user-emacs-directory)
         auto-save-file-name-transforms `((".*", (expand-file-name "tmp/auto-saves/" user-emacs-directory) t)))
