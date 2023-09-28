@@ -10,7 +10,7 @@
 	ui = true
 	pager = true
 [core]
-	editor = vim
+	editor = emacs
 
 
 [push]
