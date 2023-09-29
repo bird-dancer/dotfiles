@@ -50,9 +50,9 @@ use no-littering to automatically set common paths to the new user-emacs-directo
           `((".*" ,(no-littering-expand-var-file-name "auto-save/") t))))
 #+end_src
 ** custom settings in temp file *noeval*
-keep customization settings in a temporary file *noeval*
+keep customization settings in a temporary file
 
-#+begin_src emacs-lisp :eval no :tangle no
+#+begin_src emacs-lisp
   (setq custom-file
         (if (boundp 'server-socket-dir)
             (expand-file-name "custom.el" server-socket-dir)
@@ -66,7 +66,7 @@ move customization variables to a sepereate file and load it *noeval*
   (load custom-file 'noerror 'nomessage)
 #+end_src
 ** auto generated files in tmp directory
-keep backup files in a temporary directory *noeval*
+keep backup files in a temporary directory
 
 #+begin_src emacs-lisp
   (setq backup-directory-alist `(("." . ,(expand-file-name "tmp/backups/" user-emacs-directory))))
@@ -219,8 +219,8 @@ cursor flashes after big jumps
   (use-package multiple-cursors
     :bind ("M-SPC" . set-rectangular-region-anchor))
 #+end_src
-** modeline *noeval*
-#+begin_src emacs-lisp :tangle no
+** modeline
+#+begin_src emacs-lisp
   (use-package doom-modeline
     :init (doom-modeline-mode t))
 #+end_src
@@ -262,7 +262,7 @@ icons for completion options
   (use-package all-the-icons-completion
     :after (all-the-icons marginalia)
     :init (all-the-icons-completion-mode)
-    :hook (marginalia-mode-hook . all-the-icons-completion-marginalia-setup))
+    :hook (marginalia-mode . all-the-icons-completion-marginalia-setup))
 #+end_src
 *** save command history
 #+begin_src emacs-lisp
@@ -412,7 +412,7 @@ support for sh, bash, zsh, fish, dash etc.
 Enable drag-and-drop support for images and files; inserts inline previews for images and an icon+link for other media types.
 #+begin_src emacs-lisp
   (use-package org-download
-    :hook ('dired-mode-hook . 'org-download-enable))
+    :hook (dired-mode . org-download-enable))
 #+end_src
 
 ** org-roam
@@ -487,6 +487,7 @@ highlight uncommited, changed lines on the side of a buffer
 #+end_src
 ** treesitter
 automatically detect the approriate treesitter mode dependant on the language mode
+
 #+begin_src emacs-lisp
   (use-package treesit-auto
     :config
@@ -503,14 +504,57 @@ automatically detect the approriate treesitter mode dependant on the language mo
   (use-package geiser-chicken)
 #+end_src
 *** rust
+**** several hooks
 use =rust-ts-mode= automatically on rust files and start eglot
+
 #+begin_src emacs-lisp
   (add-to-list 'auto-mode-alist '("\\.rs\\'" . rust-ts-mode))
-  (add-hook 'rust-ts-mode-hook 'eglot)
-  ;(add-hook 'rust-ts-mode-hook 'rainbow-delimiters)
-  ;(add-hook 'rust-ts-mode-hook 'hs-minor-mode)
+  (add-hook 'rust-ts-mode-hook #'auto-fill-mode)
+  (add-hook 'rust-ts-mode-hook #'rainbow-delimiters-mode)
+  (add-hook 'rust-ts-mode-hook #'hs-minor-mode)
+  (add-hook 'rust-ts-mode-hook #'eglot)
+  (add-hook 'rust-ts-mode-hook #'hl-todo-mode)
 #+end_src
+**** rustic
+add rustic for a better rust development experience
 
+#+begin_src emacs-lisp
+  (use-package rustic
+    :defer t
+    :hook (rust-ts-mode . rustic-mode)
+    :config
+    (setq rustic-lsp-client 'eglot))
+#+end_src
+** eglot
+*** keybindings
+add keybindings for eglot-mode
+
+#+begin_src emacs-lisp
+  (use-package eglot
+    :defer t
+    :config
+    (define-key eglot-mode-map (kbd "C-c c r") 'eglot-rename)
+    (define-key eglot-mode-map (kbd "C-c c o") 'eglot-code-action-organize-imports)
+    (define-key eglot-mode-map (kbd "C-c c h") 'eldoc)
+    (define-key eglot-mode-map (kbd "C-c c a") 'eglot-code-actions)
+    (define-key eglot-mode-map (kbd "C-c c f") 'eglot-format-buffer)
+    (define-key eglot-mode-map (kbd "<f6>") 'xref-find-definitions))
+#+end_src
+lsp actions
+C-c c
+f format buffer
+a eglot-code-actions
+c compile
+C recompile
+
+rust specific
+C-c C-c
+c clean
+b bench
+d doc
+k clippy
+b build
+a add (dependancy)
 * applications
 ** dired
 #+begin_src emacs-lisp
@@ -549,6 +593,8 @@ make gc pauses faster by decreasing the threshold, increasing the runtime perfor
 + make vertico case insensetive
 + look at my doom config
 + use tabs for indentation and make them "sticky"???
++ when inserting a space at the end of a line in org, pressing enter will go to the new line and remove the space at the end
++ auto close brackets
 * look into
 + treemacs
 + projectile
