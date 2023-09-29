@@ -6,68 +6,8 @@
 
 * preface
 this zsh config uses =zsh-autocomplete= and =zsh-syntax-highlighting= and has no further requirements. The contents of the code blocks will be tangled to =~/.zshrc=
-* general
-** history
-set saved history size and location
-#+begin_src bash
-  # Lines configured by zsh-newuser-install
-  HISTFILE=~/.histfile
-  HISTSIZE=1000
-  SAVEHIST=1000
-#+end_src
-** emacs keybindings
-enable emacs keybindings in zsh
-#+begin_src bash
-  bindkey -e
-#+end_src
-** auto generated
-#+begin_src bash
-  # End of lines configured by zsh-newuser-install
-  # The following lines were added by compinstall
-  zstyle :compinstall filename '/home/felix/.zshrc'
-  autoload -Uz compinit
-  compinit
-  # End of lines added by compinstall
-#+end_src
-** format
-set locale format to =en_us utf-8=
-
-#+begin_src bash
-  export LC_CTYPE=en_US.UTF-8
-#+end_src
-** ls after cd
-show contents of directory after changing into it
-
-runs =ls= after =cd=
-#+begin_src bash
-  function cd {
-          builtin cd "$@" && ls
-  }
-  ls
-#+end_src
-** prompt
-load the [[https://starship.rs/][starship]] prompt
-#+begin_src bash
-  eval "$(starship init zsh)"
-#+end_src
-
-* path
-add directories to the =$PATH= variable
-#+begin_src bash
-  path+=("$HOME/.config/emacs/bin")
-  path+=("$HOME/.local/bin")
-#+end_src
-
-* plugins
-** auto-suggestions
-#+begin_src bash
-  source /usr/share/zsh/plugins/zsh-autosuggestions/zsh-autosuggestions.zsh 2>/dev/null
-#+end_src
-** syntax-highlighting
-#+begin_src bash
-  source /usr/share/zsh/plugins/zsh-syntax-highlighting/zsh-syntax-highlighting.zsh 2>/dev/null
-#+end_src
 * aliases
+because the aliases are used in the rest of the config they are first
 ** replace default tools
 *** lsd
 use ls deluxe (lsd) instead of ls and tree because it looks prettier
@@ -75,7 +15,7 @@ use ls deluxe (lsd) instead of ls and tree because it looks prettier
 #+begin_src bash
   alias ls='lsd'
   alias la='lsd -a'
-  alias ll='lsd -la'
+  alias ll='lsd -lag'
   alias tree='lsd --tree'
 #+end_src
 *** eza *noeval*
@@ -162,4 +102,78 @@ extract/decompress all sorts of archives/copressed files by just typing =ex= /ar
                   echo "'$1' is not a valid file"
           fi
   }
+#+end_src
+
+* general
+** history
+set saved history size and location
+#+begin_src bash
+  # Lines configured by zsh-newuser-install
+  HISTFILE=~/.histfile
+  HISTSIZE=1000
+  SAVEHIST=1000
+#+end_src
+** emacs keybindings
+enable emacs keybindings in zsh
+#+begin_src bash
+  bindkey -e
+#+end_src
+** auto generated
+#+begin_src bash
+  # End of lines configured by zsh-newuser-install
+  # The following lines were added by compinstall
+  zstyle :compinstall filename '/home/felix/.zshrc'
+  autoload -Uz compinit
+  compinit
+  # End of lines added by compinstall
+#+end_src
+** format
+set locale format to =en_us utf-8=
+
+#+begin_src bash
+  export LC_CTYPE=en_US.UTF-8
+#+end_src
+** ls after cd
+show contents of directory after changing into it
+
+runs =ls= after =cd=
+#+begin_src bash
+  function cd {
+          builtin cd "$@" && ls
+  }
+  ls
+#+end_src
+** prompt
+load the [[https://starship.rs/][starship]] prompt
+#+begin_src bash
+  eval "$(starship init zsh)"
+#+end_src
+
+* env variables
+** editor
+#+begin_src bash
+  export EDITOR="which emacs"
+#+end_src
+** programming
+#+begin_src bash
+  export RUSTC_WRAPPER=sccache
+  export JAVA_HOME=/usr/lib/jvm/default
+  export GEM_HOME=$HOME/.local/share/gem
+#+end_src
+* path
+add directories to the =$PATH= variable
+#+begin_src bash
+  path+=("$HOME/.config/emacs/bin")
+  path+=("$HOME/.local/bin")
+  path+=("$HOME/.local/share/gem/ruby/3.0.0/bin")
+#+end_src
+
+* plugins
+** auto-suggestions
+#+begin_src bash
+  source /usr/share/zsh/plugins/zsh-autosuggestions/zsh-autosuggestions.zsh 2>/dev/null
+#+end_src
+** syntax-highlighting
+#+begin_src bash
+  source /usr/share/zsh/plugins/zsh-syntax-highlighting/zsh-syntax-highlighting.zsh 2>/dev/null
 #+end_src
