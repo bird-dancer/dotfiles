@@ -219,7 +219,7 @@ cursor flashes after big jumps
   (use-package multiple-cursors
     :bind ("M-SPC" . set-rectangular-region-anchor))
 #+end_src
-** modeline
+** modeline *noeval*
 #+begin_src emacs-lisp :tangle no
   (use-package doom-modeline
     :init (doom-modeline-mode t))
@@ -473,10 +473,17 @@ match brackets and other delimiters by colour to see the current scope more easi
 #+end_src
 * development
 ** git
-*** Magit
+*** magit
 #+begin_src emacs-lisp
   (use-package magit
     :commands magit)
+#+end_src
+*** diff-hl
+highlight uncommited, changed lines on the side of a buffer
+
+#+begin_src emacs-lisp
+  (use-package diff-hl
+    :init (global-diff-hl-mode))
 #+end_src
 ** treesitter
 automatically detect the approriate treesitter mode dependant on the language mode
@@ -495,6 +502,15 @@ automatically detect the approriate treesitter mode dependant on the language mo
 #+begin_src emacs-lisp
   (use-package geiser-chicken)
 #+end_src
+*** rust
+use =rust-ts-mode= automatically on rust files and start eglot
+#+begin_src emacs-lisp
+  (add-to-list 'auto-mode-alist '("\\.rs\\'" . rust-ts-mode))
+  (add-hook 'rust-ts-mode-hook 'eglot)
+  ;(add-hook 'rust-ts-mode-hook 'rainbow-delimiters)
+  ;(add-hook 'rust-ts-mode-hook 'hs-minor-mode)
+#+end_src
+
 * applications
 ** dired
 #+begin_src emacs-lisp
@@ -524,6 +540,7 @@ use ~emacsclient --eval "(emacs-everywhere)"~ from another window when writing t
 #+end_src
 * runtime performance
 make gc pauses faster by decreasing the threshold, increasing the runtime performance
+
 #+begin_src emacs-lisp
   (setq gc-cons-threshold (* 2 1000 1000))
 #+end_src
