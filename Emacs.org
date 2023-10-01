@@ -509,11 +509,11 @@ use =rust-ts-mode= automatically on rust files and start eglot
 
 #+begin_src emacs-lisp
   (add-to-list 'auto-mode-alist '("\\.rs\\'" . rust-ts-mode))
-  (add-hook 'rust-ts-mode-hook #'auto-fill-mode)
   (add-hook 'rust-ts-mode-hook #'rainbow-delimiters-mode)
   (add-hook 'rust-ts-mode-hook #'hs-minor-mode)
-  (add-hook 'rust-ts-mode-hook #'eglot)
   (add-hook 'rust-ts-mode-hook #'hl-todo-mode)
+  ;; not needed beacause of rustic:
+  ;(add-hook 'rust-ts-mode-hook #'eglot) ; 
 #+end_src
 **** rustic
 add rustic for a better rust development experience
