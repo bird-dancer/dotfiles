@@ -68,7 +68,7 @@ ls
 
 eval "$(starship init zsh)"
 
-export EDITOR="which emacs"
+export EDITOR=$(which emacs)
 
 export RUSTC_WRAPPER=sccache
 export JAVA_HOME=/usr/lib/jvm/default

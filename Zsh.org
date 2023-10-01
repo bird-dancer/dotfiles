@@ -155,7 +155,7 @@ load the [[https://starship.rs/][starship]] prompt
 * env variables
 ** editor
 #+begin_src bash
-  export EDITOR="which emacs"
+  export EDITOR=$(which emacs)
 #+end_src
 ** programming
 #+begin_src bash
