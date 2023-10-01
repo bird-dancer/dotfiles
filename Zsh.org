@@ -107,6 +107,7 @@ extract/decompress all sorts of archives/copressed files by just typing =ex= /ar
 * general
 ** history
 set saved history size and location
+
 #+begin_src bash
   # Lines configured by zsh-newuser-install
   HISTFILE=~/.histfile
@@ -115,6 +116,7 @@ set saved history size and location
 #+end_src
 ** emacs keybindings
 enable emacs keybindings in zsh
+
 #+begin_src bash
   bindkey -e
 #+end_src
@@ -135,8 +137,8 @@ set locale format to =en_us utf-8=
 #+end_src
 ** ls after cd
 show contents of directory after changing into it
-
 runs =ls= after =cd=
+
 #+begin_src bash
   function cd {
           builtin cd "$@" && ls
@@ -145,6 +147,7 @@ runs =ls= after =cd=
 #+end_src
 ** prompt
 load the [[https://starship.rs/][starship]] prompt
+
 #+begin_src bash
   eval "$(starship init zsh)"
 #+end_src
@@ -162,6 +165,7 @@ load the [[https://starship.rs/][starship]] prompt
 #+end_src
 * path
 add directories to the =$PATH= variable
+
 #+begin_src bash
   path+=("$HOME/.config/emacs/bin")
   path+=("$HOME/.local/bin")
