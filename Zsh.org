@@ -9,20 +9,21 @@ this zsh config uses =zsh-autocomplete= and =zsh-syntax-highlighting= and has no
 * aliases
 because the aliases are used in the rest of the config they are first
 ** replace default tools
-*** lsd
+*** lsd *notangle*
 use ls deluxe (lsd) instead of ls and tree because it looks prettier
 
-#+begin_src bash
+#+begin_src bash :tangle no
   alias ls='lsd'
   alias la='lsd -a'
   alias ll='lsd -lag'
   alias tree='lsd --tree'
 #+end_src
-*** eza *noeval*
+*** eza
 use exa instead of ls and tree because it looks prettier
 
-#+begin_src bash :eval no :tangle no
-  alias ls='exa --icons -a'
+#+begin_src bash
+  alias ls='exa --icons'
+  alias la='exa -a --icons'
   alias ll='exa --icons -la'
   alias tree='exa --tree --icons'
 #+end_src

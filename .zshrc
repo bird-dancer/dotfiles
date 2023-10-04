@@ -1,7 +1,7 @@
-alias ls='lsd'
-alias la='lsd -a'
-alias ll='lsd -lag'
-alias tree='lsd --tree'
+alias ls='exa --icons'
+alias la='exa -a --icons'
+alias ll='exa --icons -la'
+alias tree='exa --tree --icons'
 
 alias cat='bat'
 
