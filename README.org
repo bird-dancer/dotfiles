@@ -1,0 +1,26 @@
+#+TITLE: README
+#+DESCRIPTION: readme for my .dotfiles
+
+* ~$HOME/.dotfiles~
+my configs aim to rely on as much as possible built in features to be as light-weight, future-proof and easy to understand as possible
+
+I use =gnu stow= to create symlinks from the =.dotfiles= repository/ folder to the locations where the config files are expected by their programs.
+
+More complex/ longer configs are available as ={Prograname}.org= files for better readability and are tangled to the acutal config file.
+
+
+* zsh
+** requirements
++ zsh
++ zsh-autocomplete
++ zsh-syntax-highlighting
++ starship prompt
++ exa
++ bat
+
+* emacs
+uses the built in =eglot= and =treesitter= support as much as possible.
+uses =use-package= as it is also built in
+** requirements
++ GNU Emacs 29.1+
+
