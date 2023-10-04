@@ -471,6 +471,12 @@ match brackets and other delimiters by colour to see the current scope more easi
   (use-package rainbow-delimiters
     :hook (prog-mode . rainbow-delimiters-mode))
 #+end_src
+** electric pair mode
+auto close braces, tags, etc.
+
+#+begin_src emacs-lisp
+  (setq electric-pair-mode t)
+#+end_src
 * development
 ** git
 *** magit
@@ -501,7 +507,7 @@ automatically detect the approriate treesitter mode dependant on the language mo
 ** languages
 *** guile scheme
 #+begin_src emacs-lisp
-  (use-package geiser-chicken)
+  (use-package geiser-guile)
 #+end_src
 *** rust
 **** several hooks
@@ -581,6 +587,12 @@ use ~emacsclient --eval "(emacs-everywhere)"~ from another window when writing t
 *Warning!* this does currently not work under wayland
 #+begin_src emacs-lisp :eval no :tangle no
   (use-package emacs-everywhere)
+#+end_src
+
+* system utilities
+** guix
+#+begin_src emacs-lisp
+  (use-package guix)
 #+end_src
 * runtime performance
 make gc pauses faster by decreasing the threshold, increasing the runtime performance

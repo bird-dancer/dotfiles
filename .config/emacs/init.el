@@ -245,6 +245,8 @@
 (use-package rainbow-delimiters
   :hook (prog-mode . rainbow-delimiters-mode))
 
+(setq electric-pair-mode t)
+
 (use-package magit
   :commands magit)
 
@@ -258,7 +260,7 @@
 
 (use-package format-all)
 
-(use-package geiser-chicken)
+(use-package geiser-guile)
 
 (add-to-list 'auto-mode-alist '("\\.rs\\'" . rust-ts-mode))
 (add-hook 'rust-ts-mode-hook #'rainbow-delimiters-mode)
@@ -293,5 +295,7 @@
 
 (use-package htmlize
   :defer t)
+
+(use-package guix)
 
 (setq gc-cons-threshold (* 2 1000 1000))
