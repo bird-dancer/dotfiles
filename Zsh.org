@@ -53,7 +53,6 @@ clear build directory and build with debug flags enabled
   alias comp='gcc -std=c17 -Wall -fstack-protector -g3 -lm'
 #+end_src
 ** ssh
-
 remember my ssh-keys during a sessions
 
 #+begin_src bash
@@ -125,7 +124,7 @@ enable emacs keybindings in zsh
 #+begin_src bash
   # End of lines configured by zsh-newuser-install
   # The following lines were added by compinstall
-  zstyle :compinstall filename '/home/felix/.zshrc'
+  zstyle :compinstall filename "$HOME/.zshrc"
   autoload -Uz compinit
   compinit
   # End of lines added by compinstall
