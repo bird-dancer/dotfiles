@@ -4,10 +4,12 @@
 * ~$HOME/.dotfiles~
 my configs aim to rely on as much as possible built in features to be as light-weight, future-proof and easy to understand as possible
 
-I use =gnu stow= to create symlinks from the =.dotfiles= repository/ folder to the locations where the config files are expected by their programs.
+I use [[https://www.gnu.org/software/stow/][GNU Stow]] to create symlinks from the =.dotfiles= folder to the locations where the config files are expected by their programs by just running this command:
+#+begin_src bash
+  stow .
+#+end_src
 
-More complex/ longer configs are available as ={Prograname}.org= files for better readability and are tangled to the acutal config file.
-
+More complex/ longer configs are available as ={Program-name}.org= files for better readability and are tangled to the acutal config file.
 
 * zsh
 ** requirements
