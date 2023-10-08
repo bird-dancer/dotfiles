@@ -16,8 +16,8 @@ More complex/ longer configs are available as ={Program-name}.org= files for bet
 + zsh
 + zsh-autocomplete
 + zsh-syntax-highlighting
-+ starship prompt
-+ exa
++ [[https://starship.rs/][starship prompt]] 
++ eza
 + bat
 
 * emacs
@@ -26,3 +26,6 @@ uses =use-package= as it is also built in
 ** requirements
 + GNU Emacs 29.1+
 
+* other requirements
++ sccache
++ openssh
