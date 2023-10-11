@@ -160,6 +160,7 @@
 
 (use-package ox-hugo
   :after org
+  :after ox
   :commands org-hugo-auto-export-mode)
 
 (setq org-startup-indented t
@@ -226,8 +227,6 @@
   (setq org-roam-node-display-template (concat "${title:*} " (propertize "${tags:10}" 'face 'org-tag)))
   (org-roam-db-autosync-mode))
 
-(setq gc-cons-threshold (* 2 1000 1000))
-
 (use-package hl-todo
   :init (hl-todo-mode)
   :config
@@ -249,6 +248,8 @@
 
 (use-package magit
   :commands magit)
+
+(use-package keychain-environment)
 
 (use-package diff-hl
   :init (global-diff-hl-mode))

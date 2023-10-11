@@ -11,11 +11,13 @@ Werks for me
 make emacs startup faster
 ** increase gc threshold
 make gc less active by increasing its threshold during startup so emacs starts up faster
+
 #+begin_src emacs-lisp
   (setq gc-cons-threshold (* 50 1000 1000))
   #+end_src
 ** use emacs server *disabled*
 Start the Emacs server from this instance so that all =emacsclient= calls are routed here.
+
 #+begin_src emacs-lisp :eval no :tangle no
   (server-start)
 #+end_src
@@ -36,6 +38,7 @@ Start the Emacs server from this instance so that all =emacsclient= calls are ro
 stop transient files from being created in the emacs config folder
 ** change user-emacs-directory *noeval*
 change the user-emacs-directory to keep unwanted things out of ~/.config/emacs
+
 #+begin_src emacs-lisp :eval no :tangle no
   (setq user-emacs-directory (expand-file-name "~/.cache/emacs/")
         url-history-file (expand-file-name "url/history" user-emacs-directory))
@@ -61,6 +64,7 @@ keep customization settings in a temporary file
 #+end_src
 
 move customization variables to a sepereate file and load it *noeval*
+
 #+begin_src emacs-lisp :eval no :tangle no
   (setq custom-file (locate-user-emacs-file "custom-vars.el"))
   (load custom-file 'noerror 'nomessage)
@@ -83,6 +87,7 @@ keep  auto-save files in a temporary directory
 * keyboard bindings
 ** open config
 shortcut to open the emacs config file with =C-c f P=
+
 #+begin_src emacs-lisp
   (defun open-config ()
     "Opens emacs config file"
@@ -94,6 +99,7 @@ shortcut to open the emacs config file with =C-c f P=
 #+end_src
 ** kill buffer and close window
 kill the current buffer and close its window with =C-x C-k=
+
 #+begin_src emacs-lisp
   (defun kill-buffer-and-close-window ()
     "Kill the current buffer and close its window."
@@ -104,6 +110,7 @@ kill the current buffer and close its window with =C-x C-k=
 #+end_src
 ** kill line backwards
 Kill line backwards from the position of the pointer to the beginning of the line. With =C-S-k=
+
 #+begin_src emacs-lisp
   (defun kill-line-backward ()
     "Kill line backwards from the position of the pointer to the beginning of the line."
@@ -113,6 +120,7 @@ Kill line backwards from the position of the pointer to the beginning of the lin
 #+end_src
 ** which-key
 which-key is great for getting an overview of what keybindings are available based on the prefix keys you entered.
+
 #+begin_src emacs-lisp
   (use-package which-key
     :defer 0
@@ -123,6 +131,7 @@ which-key is great for getting an overview of what keybindings are available bas
 #+end_src
 ** folding
 fold (collapse and expand) regions of text.
+
 #+begin_src emacs-lisp
   (add-hook 'prog-mode-hook 'hs-minor-mode)
   (add-hook 'rust-ts-mode 'hs-minor-mode)
@@ -133,6 +142,7 @@ fold (collapse and expand) regions of text.
 ** copy line
 FIXME: currently copies the complete line from beginning instead of from current cursor position
 copy the current line to the killring without deleting/killing it from the buffer
+
 #+begin_src emacs-lisp
   (defun copy-line-to-kill-ring ()
     "Copy the current line to the kill ring without killing it."
@@ -184,6 +194,7 @@ line numbers
 
 ** theme
 picks a light color-theme when the sun is risen and a dark theme when the sun is set
+
 #+begin_src emacs-lisp
   (use-package gruvbox-theme)
   (use-package circadian
@@ -210,6 +221,7 @@ picks a light color-theme when the sun is risen and a dark theme when the sun is
 ** navigation
 *** beacon
 cursor flashes after big jumps
+
 #+begin_src emacs-lisp
   (use-package beacon
     :init (beacon-mode 1))
@@ -249,6 +261,7 @@ cursor flashes after big jumps
 #+end_src
 *** candidate meta information
 meta information about vertico completion options (eg. file size, last edited)
+
 #+begin_src emacs-lisp
   (use-package marginalia
     :after vertico
@@ -272,6 +285,7 @@ icons for completion options
 
 *** Improve Candidate Filtering with Orderless
 improve vertico completions by allowing matches to search terms differently ordered
+
 #+begin_src emacs-lisp
   (use-package orderless
     :after vertico
@@ -281,6 +295,7 @@ improve vertico completions by allowing matches to search terms differently orde
 #+end_src
 ** company
 enable autocompletion in code with company
+
 #+begin_src emacs-lisp
   (use-package company
     :config
@@ -288,6 +303,7 @@ enable autocompletion in code with company
 #+end_src
 
 enable autocompletion for emoji
+
 #+begin_src emacs-lisp
   (use-package company-emoji
     :after company
@@ -297,6 +313,7 @@ enable autocompletion for emoji
 * org-mode
 ** defer startup
 for an improved emacs startup time loading =org= is defered until it is actually needed
+
 #+begin_src emacs-lisp
   (use-package org
     :defer t
@@ -313,10 +330,13 @@ add contrib package for extra features and add org-tempo for expanding structual
     :after org
     )
 #+end_src
+
 export org-mode files to html with hugo
+
 #+begin_src emacs-lisp
   (use-package ox-hugo
     :after org
+    :after ox
     :commands org-hugo-auto-export-mode)
 #+end_src
 ** improve looks
@@ -337,6 +357,7 @@ export org-mode files to html with hugo
 
 *** fonts and bullets
 make bullet points and headings look nice
+
 #+begin_src emacs-lisp
   (use-package org-superstar
     :after org
@@ -344,6 +365,7 @@ make bullet points and headings look nice
 #+end_src
 
 change headings
+
 #+begin_src emacs-lisp
   (custom-set-faces
    '(org-level-1 ((t (:height 1.75))))
@@ -354,13 +376,16 @@ change headings
 #+end_src
 
 give pasted links the title provided by the website
+
 #+begin_src emacs-lisp
   (use-package org-cliplink
     :after org
     :bind ("C-x p i" . org-cliplink))
 #+end_src
 ** table of contents
+
 auto generate a table of contents and update on save
+
 #+begin_src emacs-lisp
   (use-package org-make-toc
     :hook (org-mode . org-make-toc-mode))
@@ -368,6 +393,7 @@ auto generate a table of contents and update on save
 ** structure blocks
 *** block templates
 These templates enable you to type things like =<el= and then hit Tab to expand the template.
+
 #+begin_src emacs-lisp
   (require 'org-tempo)
   (add-to-list 'org-structure-template-alist '("sh" . "src sh"))
@@ -385,6 +411,7 @@ These templates enable you to type things like =<el= and then hit Tab to expand 
 #+end_src
 *** org-auto-tangle
 when ~#+auto_tangle: t~ is set in the beginning of an org-file tangle all code blocks that are set to tangle
+
 #+begin_src emacs-lisp
   (use-package org-auto-tangle
     :defer t
@@ -403,13 +430,14 @@ when ~#+auto_tangle: t~ is set in the beginning of an org-file tangle all code b
 #+end_src
 **** shell
 support for sh, bash, zsh, fish, dash etc.
+
 #+begin_src emacs-lisp :eval no :tangle no
   (use-package ob-doc-shell
     :after org)
 #+end_src
 ** drag-and-drop
-# drag and drop images into an org-mode buffer downloading the image and displaying it in the org-mode buffer
 Enable drag-and-drop support for images and files; inserts inline previews for images and an icon+link for other media types.
+
 #+begin_src emacs-lisp
   (use-package org-download
     :hook (dired-mode . org-download-enable))
@@ -434,22 +462,18 @@ Enable drag-and-drop support for images and files; inserts inline previews for i
     (org-roam-db-autosync-mode))
 #+end_src
 
-
-Make gc pauses faster by decreasing the threshold
-#+begin_src emacs-lisp
-  (setq gc-cons-threshold (* 2 1000 1000))
-#+end_src
-
 * editing configuration
 ** folding
 *** orgiami *disabled*
 fold (collapse and expand) regions of text.
+
 #+begin_src emacs-lisp :eval no :tangle no
   (use-package origami
     :hook (prog-mode . origami-mode)
 #+end_src
 ** highlight todo
 hightlight todo fixme etc.
+
 #+begin_src emacs-lisp
   (use-package hl-todo
     :init (hl-todo-mode)
@@ -467,6 +491,7 @@ hightlight todo fixme etc.
 #+end_src
 ** rainbow delimiters
 match brackets and other delimiters by colour to see the current scope more easily
+
 #+begin_src emacs-lisp
   (use-package rainbow-delimiters
     :hook (prog-mode . rainbow-delimiters-mode))
@@ -484,6 +509,12 @@ auto close braces, tags, etc.
   (use-package magit
     :commands magit)
 #+end_src
+
+to prevent being asked to type the ssh-key password on every action make it so magit knows the ssh-key-agents location:
+
+#+begin_src emacs-lisp
+  (use-package keychain-environment)
+#+end_src
 *** diff-hl
 highlight uncommited, changed lines on the side of a buffer
 
@@ -491,6 +522,7 @@ highlight uncommited, changed lines on the side of a buffer
   (use-package diff-hl
     :init (global-diff-hl-mode))
 #+end_src
+
 ** treesitter
 automatically detect the approriate treesitter mode dependant on the language mode
 
@@ -570,6 +602,7 @@ a add (dependancy)
 #+end_src
 ** vterm
 a full complete shell for emacs
+
 #+begin_src emacs-lisp
   (use-package vterm
     :commands vterm
@@ -577,6 +610,7 @@ a full complete shell for emacs
 #+end_src
 ** htmlize
 display current buffer as html
+
 #+begin_src emacs-lisp
   (use-package htmlize
     :defer t)
@@ -594,6 +628,12 @@ use ~emacsclient --eval "(emacs-everywhere)"~ from another window when writing t
 #+begin_src emacs-lisp
   (use-package guix)
 #+end_src
+
+* exwm *noeval*
+#+begin_src emacs-lisp :tangle no
+  (use-package exwm)
+#+end_src
+
 * runtime performance
 make gc pauses faster by decreasing the threshold, increasing the runtime performance
 
