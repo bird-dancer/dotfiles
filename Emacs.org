@@ -297,6 +297,7 @@ enable autocompletion for emoji
 * org-mode
 ** defer startup
 for an improved emacs startup time loading =org= is defered until it is actually needed
+
 #+begin_src emacs-lisp
   (use-package org
     :defer t
@@ -366,6 +367,7 @@ give pasted links the title provided by the website
 #+end_src
 ** table of contents
 auto generate a table of contents and update on save
+
 #+begin_src emacs-lisp
   (use-package org-make-toc
     :hook (org-mode . org-make-toc-mode))
@@ -373,6 +375,7 @@ auto generate a table of contents and update on save
 ** structure blocks
 *** block templates
 These templates enable you to type things like =<el= and then hit Tab to expand the template.
+
 #+begin_src emacs-lisp
   (require 'org-tempo)
   (add-to-list 'org-structure-template-alist '("sh" . "src sh"))
@@ -390,6 +393,7 @@ These templates enable you to type things like =<el= and then hit Tab to expand 
 #+end_src
 *** org-auto-tangle
 when ~#+auto_tangle: t~ is set in the beginning of an org-file tangle all code blocks that are set to tangle
+
 #+begin_src emacs-lisp
   (use-package org-auto-tangle
     :defer t
@@ -408,13 +412,14 @@ when ~#+auto_tangle: t~ is set in the beginning of an org-file tangle all code b
 #+end_src
 **** shell
 support for sh, bash, zsh, fish, dash etc.
+
 #+begin_src emacs-lisp :eval no :tangle no
   (use-package ob-doc-shell
     :after org)
 #+end_src
 ** drag-and-drop
-# drag and drop images into an org-mode buffer downloading the image and displaying it in the org-mode buffer
 Enable drag-and-drop support for images and files; inserts inline previews for images and an icon+link for other media types.
+
 #+begin_src emacs-lisp
   (use-package org-download
     :hook (dired-mode . org-download-enable))
