@@ -226,8 +226,6 @@
   (setq org-roam-node-display-template (concat "${title:*} " (propertize "${tags:10}" 'face 'org-tag)))
   (org-roam-db-autosync-mode))
 
-(setq gc-cons-threshold (* 2 1000 1000))
-
 (use-package hl-todo
   :init (hl-todo-mode)
   :config

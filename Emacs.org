@@ -439,12 +439,6 @@ Enable drag-and-drop support for images and files; inserts inline previews for i
     (org-roam-db-autosync-mode))
 #+end_src
 
-
-Make gc pauses faster by decreasing the threshold
-#+begin_src emacs-lisp
-  (setq gc-cons-threshold (* 2 1000 1000))
-#+end_src
-
 * editing configuration
 ** folding
 *** orgiami *disabled*
