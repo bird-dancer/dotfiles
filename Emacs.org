@@ -313,7 +313,9 @@ add contrib package for extra features and add org-tempo for expanding structual
     :after org
     )
 #+end_src
+
 export org-mode files to html with hugo
+
 #+begin_src emacs-lisp
   (use-package ox-hugo
     :after org
@@ -337,6 +339,7 @@ export org-mode files to html with hugo
 
 *** fonts and bullets
 make bullet points and headings look nice
+
 #+begin_src emacs-lisp
   (use-package org-superstar
     :after org
@@ -344,6 +347,7 @@ make bullet points and headings look nice
 #+end_src
 
 change headings
+
 #+begin_src emacs-lisp
   (custom-set-faces
    '(org-level-1 ((t (:height 1.75))))
@@ -354,6 +358,7 @@ change headings
 #+end_src
 
 give pasted links the title provided by the website
+
 #+begin_src emacs-lisp
   (use-package org-cliplink
     :after org
@@ -589,9 +594,9 @@ use ~emacsclient --eval "(emacs-everywhere)"~ from another window when writing t
   (use-package emacs-everywhere)
 #+end_src
 
-* system utilities
+* system utilities *noeval*
 ** guix
-#+begin_src emacs-lisp
+#+begin_src emacs-lisp :tangle no
   (use-package guix)
 #+end_src
 * runtime performance
@@ -612,9 +617,14 @@ make gc pauses faster by decreasing the threshold, increasing the runtime perfor
 + projectile
 + ibuffer
 + deft
++ usefull but not needed
+  ruby
+  [[https://github.com/pezra/rspec-mode][GitHub - pezra/rspec-mode: An RSpec minor mode for Emacs]]
 * from doom
 + format+ onsave
 + show git changes in a line to the side
 + grammar
 + =ctrl-a= should move to beginning of written line insead of actual line
 + word-wrap
+
+
