@@ -249,6 +249,7 @@ cursor flashes after big jumps
 #+end_src
 *** candidate meta information
 meta information about vertico completion options (eg. file size, last edited)
+
 #+begin_src emacs-lisp
   (use-package marginalia
     :after vertico
@@ -272,6 +273,7 @@ icons for completion options
 
 *** Improve Candidate Filtering with Orderless
 improve vertico completions by allowing matches to search terms differently ordered
+
 #+begin_src emacs-lisp
   (use-package orderless
     :after vertico
@@ -281,6 +283,7 @@ improve vertico completions by allowing matches to search terms differently orde
 #+end_src
 ** company
 enable autocompletion in code with company
+
 #+begin_src emacs-lisp
   (use-package company
     :config
@@ -288,6 +291,7 @@ enable autocompletion in code with company
 #+end_src
 
 enable autocompletion for emoji
+
 #+begin_src emacs-lisp
   (use-package company-emoji
     :after company
@@ -448,12 +452,14 @@ Enable drag-and-drop support for images and files; inserts inline previews for i
 ** folding
 *** orgiami *disabled*
 fold (collapse and expand) regions of text.
+
 #+begin_src emacs-lisp :eval no :tangle no
   (use-package origami
     :hook (prog-mode . origami-mode)
 #+end_src
 ** highlight todo
 hightlight todo fixme etc.
+
 #+begin_src emacs-lisp
   (use-package hl-todo
     :init (hl-todo-mode)
@@ -471,6 +477,7 @@ hightlight todo fixme etc.
 #+end_src
 ** rainbow delimiters
 match brackets and other delimiters by colour to see the current scope more easily
+
 #+begin_src emacs-lisp
   (use-package rainbow-delimiters
     :hook (prog-mode . rainbow-delimiters-mode))
@@ -550,21 +557,6 @@ add keybindings for eglot-mode
     (define-key eglot-mode-map (kbd "C-c c f") 'eglot-format-buffer)
     (define-key eglot-mode-map (kbd "<f6>") 'xref-find-definitions))
 #+end_src
-lsp actions
-C-c c
-f format buffer
-a eglot-code-actions
-c compile
-C recompile
-
-rust specific
-C-c C-c
-c clean
-b bench
-d doc
-k clippy
-b build
-a add (dependancy)
 * applications
 ** dired
 #+begin_src emacs-lisp
