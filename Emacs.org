@@ -578,21 +578,6 @@ add keybindings for eglot-mode
     (define-key eglot-mode-map (kbd "C-c c f") 'eglot-format-buffer)
     (define-key eglot-mode-map (kbd "<f6>") 'xref-find-definitions))
 #+end_src
-lsp actions
-C-c c
-f format buffer
-a eglot-code-actions
-c compile
-C recompile
-
-rust specific
-C-c C-c
-c clean
-b bench
-d doc
-k clippy
-b build
-a add (dependancy)
 * applications
 ** dired
 #+begin_src emacs-lisp
@@ -623,9 +608,9 @@ use ~emacsclient --eval "(emacs-everywhere)"~ from another window when writing t
   (use-package emacs-everywhere)
 #+end_src
 
-* system utilities
+* system utilities *noeval*
 ** guix
-#+begin_src emacs-lisp
+#+begin_src emacs-lisp :tangle no
   (use-package guix)
 #+end_src
 
@@ -652,9 +637,14 @@ make gc pauses faster by decreasing the threshold, increasing the runtime perfor
 + projectile
 + ibuffer
 + deft
++ usefull but not needed
+  ruby
+  [[https://github.com/pezra/rspec-mode][GitHub - pezra/rspec-mode: An RSpec minor mode for Emacs]]
 * from doom
 + format+ onsave
 + show git changes in a line to the side
 + grammar
 + =ctrl-a= should move to beginning of written line insead of actual line
 + word-wrap
+
+

@@ -297,6 +297,4 @@
 (use-package htmlize
   :defer t)
 
-(use-package guix)
-
 (setq gc-cons-threshold (* 2 1000 1000))
