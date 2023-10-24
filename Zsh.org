@@ -50,7 +50,7 @@ clear build directory and build with debug flags enabled
 =comp= compiles gcc code for optimal debugging, bug recuction and security
 
 #+begin_src bash
-  alias comp='gcc -std=c17 -Wall -fstack-protector -g3 -lm'
+  alias comp='gcc -std=c17 -Wall -Wextra -fstack-protector -g3 -lm'
 #+end_src
 ** ssh
 remember my ssh-keys during a sessions
@@ -173,7 +173,7 @@ add directories to the =$PATH= variable
 #+end_src
 
 * plugins
-** auto-suggestions
+** autosuggestions
 #+begin_src bash
   source /usr/share/zsh/plugins/zsh-autosuggestions/zsh-autosuggestions.zsh 2>/dev/null
 #+end_src
@@ -181,3 +181,12 @@ add directories to the =$PATH= variable
 #+begin_src bash
   source /usr/share/zsh/plugins/zsh-syntax-highlighting/zsh-syntax-highlighting.zsh 2>/dev/null
 #+end_src
+** history-substring-search
+#+begin_src bash
+  source /usr/share/zsh/plugins/zsh-history-substring-search/zsh-history-substring-search.zsh 2> /dev/null
+#+end_src
+** additional completions
+#+begin_src bash
+  fpath=(/usr/share/zsh/site-functions $fpath)
+#+end_src
+

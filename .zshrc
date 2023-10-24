@@ -9,7 +9,7 @@ alias b='cd ..'
 
 alias build='rm -rf build && cmake -B build -DCMAKE_BUILD_TYPE=Debug -DCMAKE_EXPORT_COMPILE_COMMANDS=1 && make -C'
 
-alias comp='gcc -std=c17 -Wall -fstack-protector -g3 -lm'
+alias comp='gcc -std=c17 -Wall -Wextra -fstack-protector -g3 -lm'
 
 eval $(ssh-agent) > /dev/null
 
@@ -81,3 +81,7 @@ path+=("$HOME/.local/share/gem/ruby/3.0.0/bin")
 source /usr/share/zsh/plugins/zsh-autosuggestions/zsh-autosuggestions.zsh 2>/dev/null
 
 source /usr/share/zsh/plugins/zsh-syntax-highlighting/zsh-syntax-highlighting.zsh 2>/dev/null
+
+source /usr/share/zsh/plugins/zsh-history-substring-search/zsh-history-substring-search.zsh 2> /dev/null
+
+fpath=(/usr/share/zsh/site-functions $fpath)
