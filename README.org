@@ -30,4 +30,4 @@ uses =use-package= as it is also built in
 + sccache
   for rust compilation (required in [[file:.cargo/config.toml]])
 + openssh
-  for ssh (required in [[file:.ssh/config]]
+  for ssh (required in [[file:.ssh/config]])
