@@ -630,12 +630,15 @@ make gc pauses faster by decreasing the threshold, increasing the runtime perfor
   (setq gc-cons-threshold (* 2 1000 1000))
 #+end_src
 * TODO
++ auto enable hl-todo
 + flycheck
 + make vertico case insensetive
 + look at my doom config
 + use tabs for indentation and make them "sticky"???
 + when inserting a space at the end of a line in org, pressing enter will go to the new line and remove the space at the end
 + auto close brackets
++ email mu4e: [[https://www.youtube.com/watch?v=yZRyEhi4y44&pp=ygULZW1hY3MgZW1haWw%3D][Streamline Your E-mail Management with mu4e - Emacs Mail - YouTube]]
++ handle passwords: [[https://www.youtube.com/watch?v=nZ_T7Q49B8Y][How to Encrypt Your Passwords with Emacs - YouTube]]
 * look into
 + treemacs
 + projectile
@@ -644,6 +647,9 @@ make gc pauses faster by decreasing the threshold, increasing the runtime perfor
 + usefull but not needed
   ruby
   [[https://github.com/pezra/rspec-mode][GitHub - pezra/rspec-mode: An RSpec minor mode for Emacs]]
++ editorconfig
++ look into: [[https://github.com/SystemCrafters/crafted-emacs][GitHub - SystemCrafters/crafted-emacs: A sensible base Emacs configuration.]]
++ autocompletion in org-mode code block. see crafted-emacs
 * from doom
 + format+ onsave
 + show git changes in a line to the side
