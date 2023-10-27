@@ -28,4 +28,6 @@ uses =use-package= as it is also built in
 
 * other requirements
 + sccache
+  for rust compilation (required in [[file:.cargo/config.toml]])
 + openssh
+  for ssh (required in [[file:.ssh/config]]
