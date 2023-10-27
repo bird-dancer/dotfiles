@@ -16,6 +16,7 @@ More complex/ longer configs are available as ={Program-name}.org= files for bet
 + zsh
 + zsh-autocomplete
 + zsh-syntax-highlighting
++ zsh-autosuggestions
 + [[https://starship.rs/][starship prompt]] 
 + eza
 + bat
