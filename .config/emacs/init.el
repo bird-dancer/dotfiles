@@ -218,7 +218,6 @@
   :hook (dired-mode . org-download-enable))
 
 (use-package org-roam
-  :ensure t
   :custom
   (org-roam-directory (file-truename "~/Desktop/Notes"))
   :bind (("C-c n l" . org-roam-buffer-toggle)

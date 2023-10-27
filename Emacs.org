@@ -83,6 +83,7 @@ keep  auto-save files in a temporary directory
 * keyboard bindings
 ** open config
 shortcut to open the emacs config file with =C-c f P=
+
 #+begin_src emacs-lisp
   (defun open-config ()
     "Opens emacs config file"
@@ -94,6 +95,7 @@ shortcut to open the emacs config file with =C-c f P=
 #+end_src
 ** kill buffer and close window
 kill the current buffer and close its window with =C-x C-k=
+
 #+begin_src emacs-lisp
   (defun kill-buffer-and-close-window ()
     "Kill the current buffer and close its window."
@@ -104,6 +106,7 @@ kill the current buffer and close its window with =C-x C-k=
 #+end_src
 ** kill line backwards
 Kill line backwards from the position of the pointer to the beginning of the line. With =C-S-k=
+
 #+begin_src emacs-lisp
   (defun kill-line-backward ()
     "Kill line backwards from the position of the pointer to the beginning of the line."
@@ -113,6 +116,7 @@ Kill line backwards from the position of the pointer to the beginning of the lin
 #+end_src
 ** which-key
 which-key is great for getting an overview of what keybindings are available based on the prefix keys you entered.
+
 #+begin_src emacs-lisp
   (use-package which-key
     :defer 0
@@ -123,6 +127,7 @@ which-key is great for getting an overview of what keybindings are available bas
 #+end_src
 ** folding
 fold (collapse and expand) regions of text.
+
 #+begin_src emacs-lisp
   (add-hook 'prog-mode-hook 'hs-minor-mode)
   (add-hook 'rust-ts-mode 'hs-minor-mode)
@@ -133,6 +138,7 @@ fold (collapse and expand) regions of text.
 ** copy line
 FIXME: currently copies the complete line from beginning instead of from current cursor position
 copy the current line to the killring without deleting/killing it from the buffer
+
 #+begin_src emacs-lisp
   (defun copy-line-to-kill-ring ()
     "Copy the current line to the kill ring without killing it."
@@ -426,10 +432,12 @@ when ~#+auto_tangle: t~ is set in the beginning of an org-file tangle all code b
   (use-package ob-doc-elisp
     :after org)
 #+end_src
-**** shell
+**** shell *not working* ⚠️
 support for sh, bash, zsh, fish, dash etc.
 
-#+begin_src emacs-lisp :eval no :tangle no
+🚧 currently this package is not found
+
+#+begin_src emacs-lisp :tangle no
   (use-package ob-doc-shell
     :after org)
 #+end_src
@@ -444,7 +452,6 @@ Enable drag-and-drop support for images and files; inserts inline previews for i
 ** org-roam
 #+begin_src emacs-lisp
   (use-package org-roam
-    :ensure t
     :custom
     (org-roam-directory (file-truename "~/Desktop/Notes"))
     :bind (("C-c n l" . org-roam-buffer-toggle)
@@ -599,6 +606,7 @@ add keybindings for eglot-mode
 #+end_src
 ** vterm
 a full complete shell for emacs
+
 #+begin_src emacs-lisp
   (use-package vterm
     :commands vterm
@@ -606,6 +614,7 @@ a full complete shell for emacs
 #+end_src
 ** htmlize
 display current buffer as html
+
 #+begin_src emacs-lisp
   (use-package htmlize
     :defer t)
