@@ -170,6 +170,8 @@ add directories to the =$PATH= variable
   path+=("$HOME/.config/emacs/bin")
   path+=("$HOME/.local/bin")
   path+=("$HOME/.local/share/gem/ruby/3.0.0/bin")
+  path+=("$HOME/arm/bin")
+
 #+end_src
 
 * plugins

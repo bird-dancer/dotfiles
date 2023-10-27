@@ -77,6 +77,7 @@ export GEM_HOME=$HOME/.local/share/gem
 path+=("$HOME/.config/emacs/bin")
 path+=("$HOME/.local/bin")
 path+=("$HOME/.local/share/gem/ruby/3.0.0/bin")
+path+=("$HOME/arm/bin")
 
 source /usr/share/zsh/plugins/zsh-autosuggestions/zsh-autosuggestions.zsh 2>/dev/null
 
