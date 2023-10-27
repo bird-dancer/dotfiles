@@ -233,6 +233,14 @@
   (setq org-roam-node-display-template (concat "${title:*} " (propertize "${tags:10}" 'face 'org-tag)))
   (org-roam-db-autosync-mode))
 
+(global-set-key (kbd "C-c a") #'org-agenda)
+
+(setq org-log-done t)
+
+(setq org-agenda-files
+      '("~/Desktop/Uni/uni.org"
+        "~/personal.org" ))
+
 (use-package hl-todo
   :init (hl-todo-mode)
   :config

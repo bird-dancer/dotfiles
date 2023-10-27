@@ -460,6 +460,27 @@ Enable drag-and-drop support for images and files; inserts inline previews for i
     (org-roam-db-autosync-mode))
 #+end_src
 
+** org-mode agenda
+set a shortcut to open the agenda view
+
+#+begin_src emacs-lisp
+  (global-set-key (kbd "C-c a") #'org-agenda)
+#+end_src
+
+insert a closed timestamp whenever a task is done
+
+#+begin_src emacs-lisp
+  (setq org-log-done t)
+#+end_src
+
+set org-agenda files
+
+#+begin_src emacs-lisp
+  (setq org-agenda-files
+        '("~/Desktop/Uni/uni.org"
+          "~/personal.org" ))
+#+end_src
+
 * editing configuration
 ** folding
 *** orgiami *disabled*
