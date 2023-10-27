@@ -11,11 +11,13 @@ Werks for me
 make emacs startup faster
 ** increase gc threshold
 make gc less active by increasing its threshold during startup so emacs starts up faster
+
 #+begin_src emacs-lisp
   (setq gc-cons-threshold (* 50 1000 1000))
   #+end_src
 ** use emacs server *disabled*
 Start the Emacs server from this instance so that all =emacsclient= calls are routed here.
+
 #+begin_src emacs-lisp :eval no :tangle no
   (server-start)
 #+end_src
@@ -36,6 +38,7 @@ Start the Emacs server from this instance so that all =emacsclient= calls are ro
 stop transient files from being created in the emacs config folder
 ** change user-emacs-directory *noeval*
 change the user-emacs-directory to keep unwanted things out of ~/.config/emacs
+
 #+begin_src emacs-lisp :eval no :tangle no
   (setq user-emacs-directory (expand-file-name "~/.cache/emacs/")
         url-history-file (expand-file-name "url/history" user-emacs-directory))
@@ -61,6 +64,7 @@ keep customization settings in a temporary file
 #+end_src
 
 move customization variables to a sepereate file and load it *noeval*
+
 #+begin_src emacs-lisp :eval no :tangle no
   (setq custom-file (locate-user-emacs-file "custom-vars.el"))
   (load custom-file 'noerror 'nomessage)
@@ -190,6 +194,7 @@ line numbers
 
 ** theme
 picks a light color-theme when the sun is risen and a dark theme when the sun is set
+
 #+begin_src emacs-lisp
   (use-package gruvbox-theme)
   (use-package circadian
@@ -216,6 +221,7 @@ picks a light color-theme when the sun is risen and a dark theme when the sun is
 ** navigation
 *** beacon
 cursor flashes after big jumps
+
 #+begin_src emacs-lisp
   (use-package beacon
     :init (beacon-mode 1))
@@ -330,6 +336,7 @@ export org-mode files to html with hugo
 #+begin_src emacs-lisp
   (use-package ox-hugo
     :after org
+    :after ox
     :commands org-hugo-auto-export-mode)
 #+end_src
 ** navigation
@@ -388,6 +395,7 @@ give pasted links the title provided by the website
     :bind ("C-x p i" . org-cliplink))
 #+end_src
 ** table of contents
+
 auto generate a table of contents and update on save
 
 #+begin_src emacs-lisp
@@ -535,6 +543,12 @@ auto close braces, tags, etc.
   (use-package magit
     :commands magit)
 #+end_src
+
+to prevent being asked to type the ssh-key password on every action make it so magit knows the ssh-key-agents location:
+
+#+begin_src emacs-lisp
+  (use-package keychain-environment)
+#+end_src
 *** diff-hl
 highlight uncommited, changed lines on the side of a buffer
 
@@ -542,6 +556,7 @@ highlight uncommited, changed lines on the side of a buffer
   (use-package diff-hl
     :init (global-diff-hl-mode))
 #+end_src
+
 ** treesitter
 automatically detect the approriate treesitter mode dependant on the language mode
 
@@ -632,6 +647,12 @@ use ~emacsclient --eval "(emacs-everywhere)"~ from another window when writing t
 #+begin_src emacs-lisp :tangle no
   (use-package guix)
 #+end_src
+
+* exwm *noeval*
+#+begin_src emacs-lisp :tangle no
+  (use-package exwm)
+#+end_src
+
 * runtime performance
 make gc pauses faster by decreasing the threshold, increasing the runtime performance
 

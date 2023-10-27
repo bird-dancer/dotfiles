@@ -160,6 +160,7 @@
 
 (use-package ox-hugo
   :after org
+  :after ox
   :commands org-hugo-auto-export-mode)
 
 (add-hook 'org-mode-hook
@@ -261,6 +262,8 @@
 
 (use-package magit
   :commands magit)
+
+(use-package keychain-environment)
 
 (use-package diff-hl
   :init (global-diff-hl-mode))
