@@ -242,7 +242,7 @@
         "~/personal.org" ))
 
 (use-package hl-todo
-  :init (hl-todo-mode)
+  :hook (prog-mode . hl-todo-mode)
   :config
   (setq hl-todo-keyword-faces
         '(("TODO"   . "#FF0000")
