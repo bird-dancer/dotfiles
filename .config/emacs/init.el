@@ -162,6 +162,13 @@
   :after org
   :commands org-hugo-auto-export-mode)
 
+(add-hook 'org-mode-hook
+          (lambda ()
+            (local-set-key (kbd "M-p") 'org-up-element)))
+(add-hook 'org-mode-hook
+          (lambda ()
+            (local-set-key (kbd "M-n") 'org-down-element)))
+
 (setq org-startup-indented t
       org-pretty-entities t
       org-hide-emphasis-markers t

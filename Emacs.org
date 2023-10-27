@@ -326,6 +326,18 @@ export org-mode files to html with hugo
     :after org
     :commands org-hugo-auto-export-mode)
 #+end_src
+** navigation
+use M-p and M-n to go up and down org levels
+
+#+begin_src emacs-lisp
+  (add-hook 'org-mode-hook
+            (lambda ()
+              (local-set-key (kbd "M-p") 'org-up-element)))
+  (add-hook 'org-mode-hook
+            (lambda ()
+              (local-set-key (kbd "M-n") 'org-down-element)))
+#+end_src
+
 ** improve looks
 *** general
 #+begin_src emacs-lisp
