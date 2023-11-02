@@ -594,9 +594,11 @@ When you have an active region that spans multiple lines, the following will add
 
 When you want to add multiple cursors not based on continuous lines, but based on keywords in the buffer, use:
 
-(global-set-key (kbd "C->") 'mc/mark-next-like-this)
-(global-set-key (kbd "C-<") 'mc/mark-previous-like-this)
-(global-set-key (kbd "C-c C-<") 'mc/mark-all-like-this)
+#+begin_src emacs-lisp
+  (global-set-key (kbd "C->") 'mc/mark-next-like-this)
+  (global-set-key (kbd "C-<") 'mc/mark-previous-like-this)
+  (global-set-key (kbd "C-c C-<") 'mc/mark-all-like-this)
+#+end_src
 
 ** folding
 *** orgiami *disabled*
