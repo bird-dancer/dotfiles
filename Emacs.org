@@ -4,18 +4,25 @@
 #+auto_tangle: t
 
 * preface
+
 simple "performant" GNU emacs 29.1+ config that uses as much built in stuff as possible
 
 Werks for me
+
 * startup Performance
+
 make emacs startup faster
+
 ** increase gc threshold
+
 make gc less active by increasing its threshold during startup so emacs starts up faster
 
 #+begin_src emacs-lisp
   (setq gc-cons-threshold (* 50 1000 1000))
   #+end_src
+  
 ** use emacs server *disabled*
+
 Start the Emacs server from this instance so that all =emacsclient= calls are routed here.
 
 #+begin_src emacs-lisp :eval no :tangle no
@@ -24,6 +31,7 @@ Start the Emacs server from this instance so that all =emacsclient= calls are ro
 
 * package Management
 ** Setup package repos
+
 #+begin_src emacs-lisp
   (require 'package)
   (add-to-list 'package-archives '("melpa" . "https://melpa.org/packages/") t)
@@ -35,15 +43,20 @@ Start the Emacs server from this instance so that all =emacsclient= calls are ro
 #+end_src
 
 * keep .config/emacs clean
+
 stop transient files from being created in the emacs config folder
+
 ** change user-emacs-directory *noeval*
+
 change the user-emacs-directory to keep unwanted things out of ~/.config/emacs
 
 #+begin_src emacs-lisp :eval no :tangle no
   (setq user-emacs-directory (expand-file-name "~/.cache/emacs/")
         url-history-file (expand-file-name "url/history" user-emacs-directory))
 #+end_src
+
 ** no-littering
+
 use no-littering to automatically set common paths to the new user-emacs-directory
 
 #+begin_src emacs-lisp
@@ -52,7 +65,9 @@ use no-littering to automatically set common paths to the new user-emacs-directo
     (setq auto-save-file-name-transforms
           `((".*" ,(no-littering-expand-var-file-name "auto-save/") t))))
 #+end_src
+
 ** custom settings in temp file *noeval*
+
 keep customization settings in a temporary file
 
 #+begin_src emacs-lisp
@@ -69,7 +84,9 @@ move customization variables to a sepereate file and load it *noeval*
   (setq custom-file (locate-user-emacs-file "custom-vars.el"))
   (load custom-file 'noerror 'nomessage)
 #+end_src
+
 ** auto generated files in tmp directory
+
 keep backup files in a temporary directory
 
 #+begin_src emacs-lisp
@@ -86,6 +103,7 @@ keep  auto-save files in a temporary directory
 
 * keyboard bindings
 ** open config
+
 shortcut to open the emacs config file with =C-c f P=
 
 #+begin_src emacs-lisp
@@ -98,6 +116,7 @@ shortcut to open the emacs config file with =C-c f P=
 
 #+end_src
 ** kill buffer and close window
+
 kill the current buffer and close its window with =C-x C-k=
 
 #+begin_src emacs-lisp
@@ -108,7 +127,9 @@ kill the current buffer and close its window with =C-x C-k=
     (delete-window))
   (global-set-key (kbd "C-x C-k") 'kill-buffer-and-close-window)
 #+end_src
+
 ** kill line backwards
+
 Kill line backwards from the position of the pointer to the beginning of the line. With =C-S-k=
 
 #+begin_src emacs-lisp
@@ -118,7 +139,9 @@ Kill line backwards from the position of the pointer to the beginning of the lin
     (kill-line 0))
   (global-set-key (kbd "C-S-k") 'kill-line-backward)
 #+end_src
+
 ** which-key
+
 which-key is great for getting an overview of what keybindings are available based on the prefix keys you entered.
 
 #+begin_src emacs-lisp
@@ -129,7 +152,9 @@ which-key is great for getting an overview of what keybindings are available bas
     (which-key-mode)
     (setq which-key-idle-delay 1))
 #+end_src
+
 ** folding
+
 fold (collapse and expand) regions of text.
 
 #+begin_src emacs-lisp
@@ -139,7 +164,9 @@ fold (collapse and expand) regions of text.
   (global-set-key (kbd "C-c f s") 'hs-show-block)
   (global-set-key (kbd "C-c f t") 'hs-toggle-hiding)
 #+end_src
+
 ** copy line
+
 FIXME: currently copies the complete line from beginning instead of from current cursor position
 copy the current line to the killring without deleting/killing it from the buffer
 
@@ -151,8 +178,10 @@ copy the current line to the killring without deleting/killing it from the buffe
       (kill-new line-text)))
   (global-set-key (kbd "C-S-c") 'copy-line)
 #+end_src
+
 * general
 ** user info
+
 #+begin_src emacs-lisp
   (setq user-full-name "Felix"
         user-mail-address "f.dumbeck@campus.tu-berlin.de")
@@ -160,39 +189,54 @@ copy the current line to the killring without deleting/killing it from the buffe
 
 ** user interface
 *** behavoir
+
 #+begin_src emacs-lisp
   (setq inhibit-startup-screen t)
 #+end_src
+
 flash when the bell rings
+
 #+begin_src  emacs-lisp
   (setq visible-bell t)
 #+end_src
+
 *** remove GUI elements
+
 #+begin_src emacs-lisp
   (menu-bar-mode 0)
   (tool-bar-mode 0)
   (scroll-bar-mode 0)
 #+end_src
+
 *** lines
+
 enable line highlighting
+
 #+begin_src emacs-lisp
   (global-hl-line-mode t)
 #+end_src
+
 prettify symbols
+
 #+begin_src emacs-lisp
   (global-prettify-symbols-mode t)
 #+end_src
+
 enable line wrapping
+
 #+begin_src emacs-lisp
   (global-visual-line-mode t)
 #+end_src
+
 line numbers
+
 #+begin_src emacs-lisp
   (global-display-line-numbers-mode t) ;; enable line numbers
   (setq display-line-numbers-type 'relative) ;; make line numbers relative
 #+end_src
 
 ** theme
+
 picks a light color-theme when the sun is risen and a dark theme when the sun is set
 
 #+begin_src emacs-lisp
@@ -208,11 +252,14 @@ picks a light color-theme when the sun is risen and a dark theme when the sun is
 
 ** font
 *** icon font
+
 #+begin_src emacs-lisp
   (use-package all-the-icons
     :if (display-graphic-p))
 #+end_src
+
 *** enable emojis 😎
+
 #+begin_src emacs-lisp
   (use-package emojify
     :init (emojify-mode))
@@ -220,35 +267,47 @@ picks a light color-theme when the sun is risen and a dark theme when the sun is
 
 ** navigation
 *** beacon
+
 cursor flashes after big jumps
 
 #+begin_src emacs-lisp
   (use-package beacon
     :init (beacon-mode 1))
 #+end_src
+
 *** multiple cursors
+
 #+begin_src emacs-lisp
   (use-package multiple-cursors
     :bind ("M-SPC" . set-rectangular-region-anchor))
 #+end_src
+
 ** modeline
+
 #+begin_src emacs-lisp
   (use-package doom-modeline
     :init (doom-modeline-mode t))
 #+end_src
+
 ** various
 *** show recently opened files
+
 #+begin_src emacs-lisp
   (recentf-mode t)
 #+end_src
+
 *** save location in file
+
 #+begin_src emacs-lisp
   (save-place-mode t)
 #+end_src
+
 *** Revert buffers when the underlying file has changed
+
 #+begin_src emacs-lisp
   (global-auto-revert-mode t)
 #+end_src
+
 * completion System
 ** vertico
 *** buffer autocompletion with vertico
@@ -312,6 +371,7 @@ enable autocompletion for emoji
 #+end_src
 * org-mode
 ** defer startup
+
 for an improved emacs startup time loading =org= is defered until it is actually needed
 
 #+begin_src emacs-lisp
@@ -320,11 +380,12 @@ for an improved emacs startup time loading =org= is defered until it is actually
     :commands (org-mode)
     )
 #+end_src
+
 ** functionality
+
 add contrib package for extra features and add org-tempo for expanding structual blocks from shortcuts eg. =<sTAB= will turn into =#+begin_src #+end_src=
 
 #+begin_src emacs-lisp
-
   (use-package org-contrib
     :init (require 'org-tempo)
     :after org
@@ -339,7 +400,9 @@ export org-mode files to html with hugo
     :after ox
     :commands org-hugo-auto-export-mode)
 #+end_src
+
 ** navigation
+
 use M-p and M-n to go up and down org levels
 
 #+begin_src emacs-lisp
@@ -353,6 +416,7 @@ use M-p and M-n to go up and down org levels
 
 ** improve looks
 *** general
+
 #+begin_src emacs-lisp
   (setq org-startup-indented t
         org-pretty-entities t
@@ -362,12 +426,14 @@ use M-p and M-n to go up and down org levels
 #+end_src
 
 *** Show hidden emphasis markers
+
 #+begin_src emacs-lisp
   (use-package org-appear
     :hook (org-mode . org-appear-mode))
 #+end_src
 
 *** fonts and bullets
+
 make bullet points and headings look nice
 
 #+begin_src emacs-lisp
@@ -394,6 +460,7 @@ give pasted links the title provided by the website
     :after org
     :bind ("C-x p i" . org-cliplink))
 #+end_src
+
 ** table of contents
 
 auto generate a table of contents and update on save
@@ -402,8 +469,10 @@ auto generate a table of contents and update on save
   (use-package org-make-toc
     :hook (org-mode . org-make-toc-mode))
 #+end_src
+
 ** structure blocks
 *** block templates
+
 These templates enable you to type things like =<el= and then hit Tab to expand the template.
 
 #+begin_src emacs-lisp
@@ -432,27 +501,34 @@ when ~#+auto_tangle: t~ is set in the beginning of an org-file tangle all code b
     :defer t
     :hook (org-mode . org-auto-tangle-mode))
 #+end_src
+
 *** languages
 **** rust
+
 #+begin_src emacs-lisp :tangle no
   (use-package ob-rust
     :after org)
 #+end_src
+
 **** emacs-lisp
+
 #+begin_src emacs-lisp :eval no :tangle no
   (use-package ob-doc-elisp
     :after org)
 #+end_src
-**** shell *not working* ⚠️
-support for sh, bash, zsh, fish, dash etc.
 
+**** shell *not working* ⚠️
+
+support for sh, bash, zsh, fish, dash etc.
 🚧 currently this package is not found
 
 #+begin_src emacs-lisp :tangle no
   (use-package ob-doc-shell
     :after org)
 #+end_src
+
 ** drag-and-drop
+
 Enable drag-and-drop support for images and files; inserts inline previews for images and an icon+link for other media types.
 
 #+begin_src emacs-lisp
@@ -461,6 +537,7 @@ Enable drag-and-drop support for images and files; inserts inline previews for i
 #+end_src
 
 ** org-roam
+
 #+begin_src emacs-lisp
   (use-package org-roam
     :custom
@@ -478,7 +555,8 @@ Enable drag-and-drop support for images and files; inserts inline previews for i
     (org-roam-db-autosync-mode))
 #+end_src
 
-** org-mode agenda
+** org agenda
+
 set a shortcut to open the agenda view
 
 #+begin_src emacs-lisp
@@ -510,13 +588,16 @@ set org-agenda files
 * editing configuration
 ** folding
 *** orgiami *disabled*
+
 fold (collapse and expand) regions of text.
 
 #+begin_src emacs-lisp :eval no :tangle no
   (use-package origami
     :hook (prog-mode . origami-mode)
 #+end_src
+
 ** highlight todo
+
 hightlight todo fixme etc.
 
 #+begin_src emacs-lisp
@@ -534,22 +615,28 @@ hightlight todo fixme etc.
     (keymap-set hl-todo-mode-map "C-c o" #'hl-todo-occur)
     (keymap-set hl-todo-mode-map "C-c i" #'hl-todo-insert))
 #+end_src
+
 ** rainbow delimiters
+
 match brackets and other delimiters by colour to see the current scope more easily
 
 #+begin_src emacs-lisp
   (use-package rainbow-delimiters
     :hook (prog-mode . rainbow-delimiters-mode))
 #+end_src
+
 ** electric pair mode
+
 auto close braces, tags, etc.
 
 #+begin_src emacs-lisp
   (setq electric-pair-mode t)
 #+end_src
+
 * development
 ** git
 *** magit
+
 #+begin_src emacs-lisp
   (use-package magit
     :commands magit)
@@ -560,7 +647,9 @@ to prevent being asked to type the ssh-key password on every action make it so m
 #+begin_src emacs-lisp
   (use-package keychain-environment)
 #+end_src
+
 *** diff-hl
+
 highlight uncommited, changed lines on the side of a buffer
 
 #+begin_src emacs-lisp
@@ -569,6 +658,7 @@ highlight uncommited, changed lines on the side of a buffer
 #+end_src
 
 ** treesitter
+
 automatically detect the approriate treesitter mode dependant on the language mode
 
 #+begin_src emacs-lisp
@@ -577,17 +667,23 @@ automatically detect the approriate treesitter mode dependant on the language mo
     (global-treesit-auto-mode))
   (setq treesit-auto-install 'prompt)
 #+end_src
+
 ** format code
+
 #+begin_src emacs-lisp
   (use-package format-all)
 #+end_src
+
 ** languages
 *** guile scheme
+
 #+begin_src emacs-lisp
   (use-package geiser-guile)
 #+end_src
+
 *** rust
 **** several hooks
+
 use =rust-ts-mode= automatically on rust files and start eglot
 
 #+begin_src emacs-lisp
@@ -598,7 +694,9 @@ use =rust-ts-mode= automatically on rust files and start eglot
   ;; not needed beacause of rustic:
   ;(add-hook 'rust-ts-mode-hook #'eglot) ; 
 #+end_src
+
 **** rustic
+
 add rustic for a better rust development experience
 
 #+begin_src emacs-lisp
@@ -608,8 +706,10 @@ add rustic for a better rust development experience
     :config
     (setq rustic-lsp-client 'eglot))
 #+end_src
+
 ** eglot
 *** keybindings
+
 add keybindings for eglot-mode
 
 #+begin_src emacs-lisp
@@ -623,14 +723,18 @@ add keybindings for eglot-mode
     (define-key eglot-mode-map (kbd "C-c c f") 'eglot-format-buffer)
     (define-key eglot-mode-map (kbd "<f6>") 'xref-find-definitions))
 #+end_src
+
 * applications
 ** dired
+
 #+begin_src emacs-lisp
   (use-package all-the-icons-dired
     :after all-the-icons
     :hook (dired-mode . all-the-icons-dired-mode))
 #+end_src
+
 ** vterm
+
 a full complete shell for emacs
 
 #+begin_src emacs-lisp
@@ -666,21 +770,25 @@ use ~emacsclient --eval "(emacs-everywhere)"~ from another window when writing t
 
 * system utilities *noeval*
 ** guix
+
 #+begin_src emacs-lisp :tangle no
   (use-package guix)
 #+end_src
 
 * exwm *noeval*
+
 #+begin_src emacs-lisp :tangle no
   (use-package exwm)
 #+end_src
 
 * runtime performance
+
 make gc pauses faster by decreasing the threshold, increasing the runtime performance
 
 #+begin_src emacs-lisp
   (setq gc-cons-threshold (* 2 1000 1000))
 #+end_src
+
 * TODO
 + auto enable hl-todo
 + flycheck
@@ -691,6 +799,7 @@ make gc pauses faster by decreasing the threshold, increasing the runtime perfor
 + auto close brackets
 + email mu4e: [[https://www.youtube.com/watch?v=yZRyEhi4y44&pp=ygULZW1hY3MgZW1haWw%3D][Streamline Your E-mail Management with mu4e - Emacs Mail - YouTube]]
 + handle passwords: [[https://www.youtube.com/watch?v=nZ_T7Q49B8Y][How to Encrypt Your Passwords with Emacs - YouTube]]
++ review nessecaty of org-mode looks, org-appear etc.
 * look into
 + treemacs
 + projectile
@@ -702,7 +811,14 @@ make gc pauses faster by decreasing the threshold, increasing the runtime perfor
 + editorconfig
 + look into: [[https://github.com/SystemCrafters/crafted-emacs][GitHub - SystemCrafters/crafted-emacs: A sensible base Emacs configuration.]]
 + autocompletion in org-mode code block. see crafted-emacs
-* from doom
++ code folding shortcuts (origami)
++ instead of auto-ts-mode [[https://github.com/emacs-tree-sitter/tree-sitter-langs][GitHub - emacs-tree-sitter/tree-sitter-langs: Language bundle for Emacs's tre...]]
++ ts-mode replaces c-mode so I can't change things like the cmode anymore
++ gcmh: dynamic garbage collection for improving speed
++ Combobulate: https://github.com/mickeynp/combobulate uses Tree-Sitter to provide a structured movement within your code [[https://www.masteringemacs.org/article/combobulate-structured-movement-editing-treesitter][Combobulate: Structured Movement and Editing with Tree-Sitter]]
++ ef-autumn theme
++ crafted org config: [[file:~/crafted-emacs/docs/crafted-org.org]]
+** from doom
 + format+ onsave
 + show git changes in a line to the side
 + grammar
