@@ -487,8 +487,16 @@ set a shortcut to open the agenda view
 
 insert a closed timestamp whenever a task is done
 
-#+begin_src emacs-lisp
+#+begin_src emacs-lisp :tangle no
   (setq org-log-done t)
+#+end_src
+
+make it so the agenda always starts yesterday and we can see +7 days from today instead of just until sunday
+
+#+begin_src emacs-lisp
+  (setq org-agenda-start-day "0d")
+  (setq org-agenda-span 7)
+  (setq org-agenda-start-on-weekday nil)
 #+end_src
 
 set org-agenda files

@@ -236,7 +236,9 @@
 
 (global-set-key (kbd "C-c a") #'org-agenda)
 
-(setq org-log-done t)
+(setq org-agenda-start-day "0d")
+(setq org-agenda-span 7)
+(setq org-agenda-start-on-weekday nil)
 
 (setq org-agenda-files
       '("~/Desktop/Uni/uni.org"
