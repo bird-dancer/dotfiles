@@ -265,23 +265,6 @@ picks a light color-theme when the sun is risen and a dark theme when the sun is
     :init (emojify-mode))
 #+end_src
 
-** navigation
-*** beacon
-
-cursor flashes after big jumps
-
-#+begin_src emacs-lisp
-  (use-package beacon
-    :init (beacon-mode 1))
-#+end_src
-
-*** multiple cursors
-
-#+begin_src emacs-lisp
-  (use-package multiple-cursors
-    :bind ("M-SPC" . set-rectangular-region-anchor))
-#+end_src
-
 ** modeline
 
 #+begin_src emacs-lisp
@@ -290,7 +273,7 @@ cursor flashes after big jumps
 #+end_src
 
 ** various
-*** show recently opened files
+*** show recently opened files first
 
 #+begin_src emacs-lisp
   (recentf-mode t)
@@ -586,6 +569,35 @@ set org-agenda files
 #+end_src
 
 * editing configuration
+** navigation
+*** beacon
+
+cursor flashes after big jumps
+
+#+begin_src emacs-lisp
+  (use-package beacon
+    :init (beacon-mode 1))
+#+end_src
+
+*** multiple cursors
+
+#+begin_src emacs-lisp
+  (use-package multiple-cursors
+    :bind ("M-SPC" . set-rectangular-region-anchor))
+#+end_src
+
+When you have an active region that spans multiple lines, the following will add a cursor to each line:
+
+#+begin_src emacs-lisp
+  (global-set-key (kbd "C-S-c C-S-c") 'mc/edit-lines)
+#+end_src
+
+When you want to add multiple cursors not based on continuous lines, but based on keywords in the buffer, use:
+
+(global-set-key (kbd "C->") 'mc/mark-next-like-this)
+(global-set-key (kbd "C-<") 'mc/mark-previous-like-this)
+(global-set-key (kbd "C-c C-<") 'mc/mark-all-like-this)
+
 ** folding
 *** orgiami *disabled*
 

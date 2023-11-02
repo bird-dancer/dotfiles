@@ -100,12 +100,6 @@
 (use-package emojify
   :init (emojify-mode))
 
-(use-package beacon
-  :init (beacon-mode 1))
-
-(use-package multiple-cursors
-  :bind ("M-SPC" . set-rectangular-region-anchor))
-
 (use-package doom-modeline
   :init (doom-modeline-mode t))
 
@@ -243,6 +237,14 @@
 (setq org-agenda-files
       '("~/Desktop/Uni/uni.org"
         "~/personal.org" ))
+
+(use-package beacon
+  :init (beacon-mode 1))
+
+(use-package multiple-cursors
+  :bind ("M-SPC" . set-rectangular-region-anchor))
+
+(global-set-key (kbd "C-S-c C-S-c") 'mc/edit-lines)
 
 (use-package hl-todo
   :hook (prog-mode . hl-todo-mode)
