@@ -24,7 +24,7 @@ use exa instead of ls and tree because it looks prettier
 #+begin_src bash
   alias ls='exa --icons'
   alias la='exa -a --icons'
-  alias ll='exa --icons -la'
+  alias ll='exa --icons -lagh'
   alias tree='exa --tree --icons'
 #+end_src
 *** bat

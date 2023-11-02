@@ -1,6 +1,6 @@
 alias ls='exa --icons'
 alias la='exa -a --icons'
-alias ll='exa --icons -la'
+alias ll='exa --icons -lagh'
 alias tree='exa --tree --icons'
 
 alias cat='bat'
