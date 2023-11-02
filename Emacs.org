@@ -638,14 +638,25 @@ a full complete shell for emacs
     :commands vterm
     :bind ("M-RET" . vterm))
 #+end_src
+
 ** htmlize
+
 display current buffer as html
 
 #+begin_src emacs-lisp
   (use-package htmlize
     :defer t)
 #+end_src
+
+** pdf-mode
+
+better interaction with pdf
+
+#+begin_src emacs-lisp
+  (use-package pdf-tools)
+#+end_src
 ** emacs-everywhere *not working!*
+
 use ~emacsclient --eval "(emacs-everywhere)"~ from another window when writing text to open this text in an Emacs buffer. Type =C-c C-c= to reinsert the edited text into the text field.
 
 *Warning!* this does currently not work under wayland
