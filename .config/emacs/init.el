@@ -209,6 +209,7 @@
 (add-to-list 'org-structure-template-alist '("go" . "src go"))
 (add-to-list 'org-structure-template-alist '("yaml" . "src yaml"))
 (add-to-list 'org-structure-template-alist '("json" . "src json"))
+(add-to-list 'org-structure-template-alist '("tex" . "src latex"))
 (add-to-list 'org-structure-template-alist '("rs" . "src rust"))
 
 (use-package org-auto-tangle
