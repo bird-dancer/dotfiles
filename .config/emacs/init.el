@@ -210,6 +210,10 @@
   :defer t
   :hook (org-mode . org-auto-tangle-mode))
 
+(org-babel-do-load-languages
+ 'org-babel-load-languages
+ '((shell . t)))
+
 (use-package org-download
   :hook (dired-mode . org-download-enable))
 

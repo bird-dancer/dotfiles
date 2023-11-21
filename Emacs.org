@@ -500,14 +500,14 @@ when ~#+auto_tangle: t~ is set in the beginning of an org-file tangle all code b
     :after org)
 #+end_src
 
-**** shell *not working* ⚠️
+**** shell
 
-support for sh, bash, zsh, fish, dash etc.
-🚧 currently this package is not found
+support for sh
 
-#+begin_src emacs-lisp :tangle no
-  (use-package ob-doc-shell
-    :after org)
+#+begin_src emacs-lisp
+  (org-babel-do-load-languages
+   'org-babel-load-languages
+   '((shell . t)))
 #+end_src
 
 ** drag-and-drop
