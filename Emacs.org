@@ -569,17 +569,7 @@ set org-agenda files
 #+end_src
 
 * editing configuration
-** navigation
-*** beacon
-
-cursor flashes after big jumps
-
-#+begin_src emacs-lisp
-  (use-package beacon
-    :init (beacon-mode 1))
-#+end_src
-
-*** multiple cursors
+** multiple cursors
 
 #+begin_src emacs-lisp
   (use-package multiple-cursors

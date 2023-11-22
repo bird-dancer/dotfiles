@@ -242,9 +242,6 @@
       '("~/Desktop/Uni/uni.org"
         "~/personal.org" ))
 
-(use-package beacon
-  :init (beacon-mode 1))
-
 (use-package multiple-cursors
   :bind ("M-SPC" . set-rectangular-region-anchor))
 
