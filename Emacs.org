@@ -685,6 +685,16 @@ automatically detect the approriate treesitter mode dependant on the language mo
   (use-package geiser-guile)
 #+end_src
 
+
+*** shell
+
+enable shellcheck using flymake for checking correctness and scanning common mistakes in shellcode
+
+#+begin_src emacs-lisp
+    (use-package flymake-shellcheck
+      :hook (bash-ts-mode . flymake-shellcheck-mode))
+#+end_src
+
 *** rust
 **** several hooks
 
