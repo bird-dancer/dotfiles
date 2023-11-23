@@ -518,8 +518,7 @@ position of the pointer to the beginning of the line. With =C-S-k=
 ** multiple cursors
 
 #+begin_src emacs-lisp
-  (use-package multiple-cursors
-    :bind ("M-SPC" . set-rectangular-region-anchor))
+  (use-package multiple-cursors)
 #+end_src
 
 When you have an active region that spans multiple lines, the following will add a cursor to each line:

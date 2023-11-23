@@ -225,8 +225,7 @@
   (kill-line 0))
 (global-set-key (kbd "C-S-k") 'kill-line-backward)
 
-(use-package multiple-cursors
-  :bind ("M-SPC" . set-rectangular-region-anchor))
+(use-package multiple-cursors)
 
 (global-set-key (kbd "C-;") 'mc/edit-lines)
 
