@@ -158,11 +158,11 @@ which-key is great for getting an overview of what keybindings are available bas
 fold (collapse and expand) regions of text.
 
 #+begin_src emacs-lisp
-  (add-hook 'prog-mode-hook 'hs-minor-mode)
-  (add-hook 'rust-ts-mode 'hs-minor-mode)
-  (global-set-key (kbd "C-c f h") 'hs-hide-block)
-  (global-set-key (kbd "C-c f s") 'hs-show-block)
-  (global-set-key (kbd "C-c f t") 'hs-toggle-hiding)
+  (global-set-key (kbd "C-c C-h") 'hs-hide-block)
+  (global-set-key (kbd "C-c C-s") 'hs-show-block)
+  (global-set-key (kbd "C-c C-t") 'hs-toggle-hiding)
+  (global-set-key (kbd "C-c C-a") 'hs-show-all)
+  (global-set-key (kbd "C-c C-l") 'hs-hide-all)
 #+end_src
 
 ** copy line

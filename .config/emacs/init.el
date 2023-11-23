@@ -52,11 +52,11 @@
   (which-key-mode)
   (setq which-key-idle-delay 1))
 
-(add-hook 'prog-mode-hook 'hs-minor-mode)
-(add-hook 'rust-ts-mode 'hs-minor-mode)
-(global-set-key (kbd "C-c f h") 'hs-hide-block)
-(global-set-key (kbd "C-c f s") 'hs-show-block)
-(global-set-key (kbd "C-c f t") 'hs-toggle-hiding)
+(global-set-key (kbd "C-c C-h") 'hs-hide-block)
+(global-set-key (kbd "C-c C-s") 'hs-show-block)
+(global-set-key (kbd "C-c C-t") 'hs-toggle-hiding)
+(global-set-key (kbd "C-c C-a") 'hs-show-all)
+(global-set-key (kbd "C-c C-l") 'hs-hide-all)
 
 (defun copy-line-to-kill-ring ()
   "Copy the current line to the kill ring without killing it."
