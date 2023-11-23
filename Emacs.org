@@ -590,16 +590,6 @@ When you want to add multiple cursors not based on continuous lines, but based o
   (global-set-key (kbd "C-c C-<") 'mc/mark-all-like-this)
 #+end_src
 
-** folding
-*** orgiami *disabled*
-
-fold (collapse and expand) regions of text.
-
-#+begin_src emacs-lisp :eval no :tangle no
-  (use-package origami
-    :hook (prog-mode . origami-mode)
-#+end_src
-
 ** highlight todo
 
 hightlight todo fixme etc.
