@@ -251,7 +251,6 @@
 (global-set-key (kbd "C-<") 'mc/mark-previous-like-this)
 (global-set-key (kbd "C-c C-<") 'mc/mark-all-like-this)
 
-
 (use-package hl-todo
   :hook ((prog-mode . hl-todo-mode)
          (org-mode . hl-todo-mode))
@@ -297,7 +296,6 @@
 (use-package flymake-shellcheck
   :hook (bash-ts-mode . flymake-shellcheck-mode))
 
-(add-to-list 'auto-mode-alist '("\\.rs\\'" . rust-ts-mode))
 (add-hook 'rust-ts-mode-hook #'rainbow-delimiters-mode)
 (add-hook 'rust-ts-mode-hook #'hs-minor-mode)
 (add-hook 'rust-ts-mode-hook #'hl-todo-mode)
@@ -316,6 +314,8 @@
 (use-package all-the-icons-dired
   :after all-the-icons
   :hook (dired-mode . all-the-icons-dired-mode))
+
+(setq dired-listing-switches "-alh")
 
 (use-package vterm
   :commands vterm

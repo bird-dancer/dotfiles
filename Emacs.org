@@ -19,7 +19,7 @@ make gc less active by increasing its threshold during startup so emacs starts u
 
 #+begin_src emacs-lisp
   (setq gc-cons-threshold (* 50 1000 1000))
-  #+end_src
+#+end_src
   
 ** use emacs server *disabled*
 
@@ -113,8 +113,8 @@ shortcut to open the emacs config file with =C-c f P=
     (setq find-file-visit-truename t)
     (find-file (locate-user-emacs-file "Emacs.org")))
   (global-set-key (kbd "C-c f P") 'open-config)
-
 #+end_src
+
 ** kill buffer and close window
 
 kill the current buffer and close its window with =C-x C-k=
@@ -294,6 +294,7 @@ picks a light color-theme when the sun is risen and a dark theme when the sun is
 * completion System
 ** vertico
 *** buffer autocompletion with vertico
+
 #+begin_src emacs-lisp
   (use-package vertico
     :custom
@@ -301,7 +302,9 @@ picks a light color-theme when the sun is risen and a dark theme when the sun is
     :init
     (vertico-mode))
 #+end_src
+
 *** candidate meta information
+
 meta information about vertico completion options (eg. file size, last edited)
 
 #+begin_src emacs-lisp
@@ -310,7 +313,9 @@ meta information about vertico completion options (eg. file size, last edited)
     :init
     (marginalia-mode))
 #+end_src
+
 *** vertico candidate icons
+
 icons for completion options 
 
 #+begin_src emacs-lisp
@@ -319,13 +324,16 @@ icons for completion options
     :init (all-the-icons-completion-mode)
     :hook (marginalia-mode . all-the-icons-completion-marginalia-setup))
 #+end_src
+
 *** save command history
+
 #+begin_src emacs-lisp
   (setq history-length 30)
   (savehist-mode t)
 #+end_src
 
 *** Improve Candidate Filtering with Orderless
+
 improve vertico completions by allowing matches to search terms differently ordered
 
 #+begin_src emacs-lisp
@@ -335,7 +343,9 @@ improve vertico completions by allowing matches to search terms differently orde
     (completion-styles '(orderless basic))
     (completion-category-overrides '((file (styles basic partial-completion)))))
 #+end_src
+
 ** company
+
 enable autocompletion in code with company
 
 #+begin_src emacs-lisp
@@ -352,6 +362,7 @@ enable autocompletion for emoji
     :init (company-emoji-init))
 
 #+end_src
+
 * org-mode
 ** defer startup
 
@@ -701,7 +712,6 @@ enable shellcheck using flymake for checking correctness and scanning common mis
 use =rust-ts-mode= automatically on rust files and start eglot
 
 #+begin_src emacs-lisp
-  ;(add-to-list 'auto-mode-alist '("\\.rs\\'" . rust-ts-mode))
   (add-hook 'rust-ts-mode-hook #'rainbow-delimiters-mode)
   (add-hook 'rust-ts-mode-hook #'hs-minor-mode)
   (add-hook 'rust-ts-mode-hook #'hl-todo-mode)
@@ -740,10 +750,18 @@ add keybindings for eglot-mode
 * applications
 ** dired
 
+show file icons
+
 #+begin_src emacs-lisp
   (use-package all-the-icons-dired
     :after all-the-icons
     :hook (dired-mode . all-the-icons-dired-mode))
+#+end_src
+
+show file size in human readable format
+
+#+begin_src emacs-lisp
+  (setq dired-listing-switches "-alh")
 #+end_src
 
 ** vterm
@@ -772,11 +790,13 @@ better interaction with pdf
 #+begin_src emacs-lisp
   (use-package pdf-tools)
 #+end_src
+
 ** emacs-everywhere *not working!*
 
 use ~emacsclient --eval "(emacs-everywhere)"~ from another window when writing text to open this text in an Emacs buffer. Type =C-c C-c= to reinsert the edited text into the text field.
 
 *Warning!* this does currently not work under wayland
+
 #+begin_src emacs-lisp :eval no :tangle no
   (use-package emacs-everywhere)
 #+end_src
@@ -831,6 +851,7 @@ make gc pauses faster by decreasing the threshold, increasing the runtime perfor
 + Combobulate: https://github.com/mickeynp/combobulate uses Tree-Sitter to provide a structured movement within your code [[https://www.masteringemacs.org/article/combobulate-structured-movement-editing-treesitter][Combobulate: Structured Movement and Editing with Tree-Sitter]]
 + ef-autumn theme
 + crafted org config: [[file:~/crafted-emacs/docs/crafted-org.org]]
++ [[https://github.com/mclear-tools/tabspaces][GitHub - mclear-tools/tabspaces]]
 ** from doom
 + format+ onsave
 + show git changes in a line to the side
