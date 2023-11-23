@@ -1,5 +1,5 @@
-#+TITLE: Emacs config
-#+AUTHOR: Felix Dumbeck
+#+TITLE: emacs config
+#+AUTHOR: felix dumbeck
 #+PROPERTY: header-args :emacs-lisp :tangle .config/emacs/init.el :results silent :mkdirp yes
 #+auto_tangle: t
 
@@ -75,19 +75,24 @@ keep  auto-save files in a temporary directory
 #+end_src
 
 ** user interface
-*** behavoir
+*** behavior
+**** dont show startup screen
 
 #+begin_src emacs-lisp
   (setq inhibit-startup-screen t)
 #+end_src
 
-flash when the bell rings
+**** flash when the bell rings
+
+to avoid emacs making a sound on things like trying to scroll past the first line make it flash the screen instead
 
 #+begin_src  emacs-lisp
   (setq visible-bell t)
 #+end_src
 
 *** remove GUI elements
+
+remove the menu-bar tool-bar and scroll-bar as a measure to remove visual clutter
 
 #+begin_src emacs-lisp
   (menu-bar-mode 0)
@@ -96,26 +101,25 @@ flash when the bell rings
 #+end_src
 
 *** lines
-
-enable line highlighting
+**** enable line highlighting
 
 #+begin_src emacs-lisp
   (global-hl-line-mode t)
 #+end_src
 
-prettify symbols
+**** prettify symbols
 
 #+begin_src emacs-lisp
   (global-prettify-symbols-mode t)
 #+end_src
 
-enable line wrapping
+**** enable line wrapping
 
 #+begin_src emacs-lisp
   (global-visual-line-mode t)
 #+end_src
 
-line numbers
+**** show relative line numbers
 
 #+begin_src emacs-lisp
   (global-display-line-numbers-mode t) ;; enable line numbers
@@ -161,7 +165,7 @@ picks a light color-theme when the sun is risen and a dark theme when the sun is
 
 ** modeline
 
-use the mode line form doom emacs to provide more information while looking nicer
+use the mode status line form doom emacs to provide more information while looking nicer
 
 #+begin_src emacs-lisp
   (use-package doom-modeline
@@ -230,7 +234,7 @@ performant and minimalistic vertical completion UI based on the default completi
 
 *** candidate meta information
 
-meta information about vertico completion options (eg. file size, last edited)
+show meta information about vertico completion options (eg. file size, last edited)
 
 #+begin_src emacs-lisp
   (use-package marginalia
@@ -241,7 +245,7 @@ meta information about vertico completion options (eg. file size, last edited)
 
 *** vertico candidate icons
 
-icons for completion options 
+icons for completion options
 
 #+begin_src emacs-lisp
   (use-package all-the-icons-completion
@@ -361,6 +365,7 @@ for an improved emacs startup time loading =org= is defered until it is actually
 #+end_src
 
 ** functionality
+*** org-contrib
 
 add contrib package for extra features and add org-tempo for expanding structual blocks from shortcuts eg. =<sTAB= will turn into =#+begin_src #+end_src=
 
@@ -371,7 +376,9 @@ add contrib package for extra features and add org-tempo for expanding structual
     )
 #+end_src
 
-export org-mode files to html with hugo
+*** ox-hugo
+
+export org-mode files to html pages using hugo
 
 #+begin_src emacs-lisp
   (use-package ox-hugo
@@ -437,7 +444,7 @@ make bullet points and headings look nice
 
 **** org-cliplink
 
-give pasted links the title provided by the website
+give pasted links the title provided by the meta-information of the website
 
 #+begin_src emacs-lisp
   (use-package org-cliplink
@@ -457,7 +464,7 @@ auto generate a table of contents and update on save
 ** structure blocks
 *** block templates
 
-These templates enable you to type things like =<el= and then hit Tab to expand the template.
+these templates enable you to type things like =<el= and then hit Tab to expand the template.
 
 #+begin_src emacs-lisp
   (require 'org-tempo)
@@ -494,7 +501,7 @@ when ~#+auto_tangle: t~ is set in the beginning of an org-file tangle all code b
     :after org)
 #+end_src
 
-**** shell
+**** shells
 
 support for shells such as sh, bash, zsh, fish ...
 
@@ -506,7 +513,7 @@ support for shells such as sh, bash, zsh, fish ...
 
 ** drag-and-drop
 
-Enable drag-and-drop support for images and files; inserts inline previews for images and an icon+link for other media types.
+enable drag-and-drop support for images and files; inserts inline previews for images and an icon+link for other media types.
 
 #+begin_src emacs-lisp
   (use-package org-download
@@ -565,7 +572,7 @@ set org-agenda files
 * editing configuration
 ** folding
 
-fold (collapse and expand) regions of text.
+fold (collapse and expand) regions of text
 
 #+begin_src emacs-lisp
   (global-set-key (kbd "C-c C-h") 'hs-hide-block)
@@ -577,7 +584,7 @@ fold (collapse and expand) regions of text.
 
 ** kill line backwards
 
-position of the pointer to the beginning of the line. With =C-S-k=
+position of the pointer to the beginning of the line with =C-S-k=
 
 #+begin_src emacs-lisp
   (defun kill-line-backward ()
@@ -593,13 +600,13 @@ position of the pointer to the beginning of the line. With =C-S-k=
   (use-package multiple-cursors)
 #+end_src
 
-When you have an active region that spans multiple lines, the following will add a cursor to each line:
+when you have an active region that spans multiple lines, the following will add a cursor to each line:
 
 #+begin_src emacs-lisp
   (global-set-key (kbd "C-;") 'mc/edit-lines)
 #+end_src
 
-When you want to add multiple cursors not based on continuous lines, but based on keywords in the buffer, use:
+when you want to add multiple cursors not based on continuous lines, but based on keywords in the buffer, use:
 
 #+begin_src emacs-lisp
   (global-set-key (kbd "C->") 'mc/mark-next-like-this)
@@ -788,7 +795,6 @@ make gc pauses faster by decreasing the threshold, increasing the runtime perfor
 #+end_src
 
 * TODO
-+ make vertico case insensetive
 + look at my doom config
 + use tabs for indentation and make them "sticky"???
 + when inserting a space at the end of a line in org, pressing enter will go to the new line and remove the space at the end
