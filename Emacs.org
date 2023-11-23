@@ -704,7 +704,6 @@ enable shellcheck using flymake for checking correctness and scanning common mis
 #+end_src
 
 *** rust
-**** several hooks
 
 use =rust-ts-mode= automatically on rust files and start eglot
 
@@ -713,15 +712,14 @@ use =rust-ts-mode= automatically on rust files and start eglot
   (add-hook 'rust-ts-mode-hook #'rainbow-delimiters-mode)
   (add-hook 'rust-ts-mode-hook #'hs-minor-mode)
   (add-hook 'rust-ts-mode-hook #'hl-todo-mode)
-  ;; not needed beacause of rustic:
-  ;(add-hook 'rust-ts-mode-hook #'eglot) ; 
+  (add-hook 'rust-ts-mode-hook #'eglot)
 #+end_src
 
-**** rustic
+**** rustic *disabled*
 
 add rustic for a better rust development experience
 
-#+begin_src emacs-lisp
+#+begin_src emacs-lisp :tangle no
   (use-package rustic
     :defer t
     :hook (rust-ts-mode . rustic-mode)

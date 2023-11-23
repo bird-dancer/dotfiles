@@ -297,14 +297,7 @@
 (add-hook 'rust-ts-mode-hook #'rainbow-delimiters-mode)
 (add-hook 'rust-ts-mode-hook #'hs-minor-mode)
 (add-hook 'rust-ts-mode-hook #'hl-todo-mode)
-;; not needed beacause of rustic:
-;(add-hook 'rust-ts-mode-hook #'eglot) ;
-
-(use-package rustic
-  :defer t
-  :hook (rust-ts-mode . rustic-mode)
-  :config
-  (setq rustic-lsp-client 'eglot))
+(add-hook 'rust-ts-mode-hook #'eglot)
 
 (use-package eglot
   :defer t
