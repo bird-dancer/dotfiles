@@ -668,9 +668,11 @@ automatically detect the approriate treesitter mode dependant on the language mo
 
 #+begin_src emacs-lisp
   (use-package treesit-auto
+    :custom
+    (treesit-auto-install 'prompt)
     :config
+    (treesit-auto-add-to-auto-mode-alist 'all)
     (global-treesit-auto-mode))
-  (setq treesit-auto-install 'prompt)
 #+end_src
 
 ** format code
@@ -709,7 +711,7 @@ enable shellcheck using flymake for checking correctness and scanning common mis
 use =rust-ts-mode= automatically on rust files and start eglot
 
 #+begin_src emacs-lisp
-  (add-to-list 'auto-mode-alist '("\\.rs\\'" . rust-ts-mode))
+  ;(add-to-list 'auto-mode-alist '("\\.rs\\'" . rust-ts-mode))
   (add-hook 'rust-ts-mode-hook #'rainbow-delimiters-mode)
   (add-hook 'rust-ts-mode-hook #'hs-minor-mode)
   (add-hook 'rust-ts-mode-hook #'hl-todo-mode)

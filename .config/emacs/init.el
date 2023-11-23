@@ -281,9 +281,11 @@
   :init (global-diff-hl-mode))
 
 (use-package treesit-auto
+  :custom
+  (treesit-auto-install 'prompt)
   :config
+  (treesit-auto-add-to-auto-mode-alist 'all)
   (global-treesit-auto-mode))
-(setq treesit-auto-install 'prompt)
 
 (use-package format-all)
 
