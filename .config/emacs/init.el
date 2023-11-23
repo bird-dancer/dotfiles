@@ -251,19 +251,21 @@
 (global-set-key (kbd "C-<") 'mc/mark-previous-like-this)
 (global-set-key (kbd "C-c C-<") 'mc/mark-all-like-this)
 
+
 (use-package hl-todo
-  :hook (prog-mode . hl-todo-mode)
+  :hook ((prog-mode . hl-todo-mode)
+         (org-mode . hl-todo-mode))
+  :bind (("C-c p" . hl-todo-previous)
+         ("C-c P" . hl-todo-next)
+         ("C-c o" . hl-todo-occur)
+         ("C-c i" . hl-todo-insert))
   :config
   (setq hl-todo-keyword-faces
         '(("TODO"   . "#FF0000")
           ("FIXME"  . "#FF0000")
           ("DEBUG"  . "#A020F0")
           ("GOTCHA" . "#FF4500")
-          ("STUB"   . "#1E90FF")))
-  (keymap-set hl-todo-mode-map "C-c p" #'hl-todo-previous)
-  (keymap-set hl-todo-mode-map "C-c P" #'hl-todo-next)
-  (keymap-set hl-todo-mode-map "C-c o" #'hl-todo-occur)
-  (keymap-set hl-todo-mode-map "C-c i" #'hl-todo-insert))
+          ("STUB"   . "#1E90FF"))))
 
 (use-package rainbow-delimiters
   :hook (prog-mode . rainbow-delimiters-mode))

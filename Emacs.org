@@ -606,18 +606,19 @@ hightlight todo fixme etc.
 
 #+begin_src emacs-lisp
   (use-package hl-todo
-    :hook (prog-mode . hl-todo-mode)
+    :hook ((prog-mode . hl-todo-mode)
+           (org-mode . hl-todo-mode))
+    :bind (("C-c p" . hl-todo-previous)
+           ("C-c P" . hl-todo-next)
+           ("C-c o" . hl-todo-occur)
+           ("C-c i" . hl-todo-insert))
     :config
     (setq hl-todo-keyword-faces
           '(("TODO"   . "#FF0000")
             ("FIXME"  . "#FF0000")
             ("DEBUG"  . "#A020F0")
             ("GOTCHA" . "#FF4500")
-            ("STUB"   . "#1E90FF")))
-    (keymap-set hl-todo-mode-map "C-c p" #'hl-todo-previous)
-    (keymap-set hl-todo-mode-map "C-c P" #'hl-todo-next)
-    (keymap-set hl-todo-mode-map "C-c o" #'hl-todo-occur)
-    (keymap-set hl-todo-mode-map "C-c i" #'hl-todo-insert))
+            ("STUB"   . "#1E90FF"))))
 #+end_src
 
 ** rainbow delimiters
