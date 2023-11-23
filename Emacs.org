@@ -22,7 +22,8 @@ make gc less active by increasing its threshold during startup so emacs starts u
 #+end_src
 
 * package Management
-** Setup package repos
+
+Setup package repos
 
 #+begin_src emacs-lisp
   (require 'package)
@@ -331,7 +332,9 @@ use M-p and M-n to go up and down org levels
         org-image-actual-width '(300))
 #+end_src
 
-*** Show hidden emphasis markers
+*** how hidden emphasis markers
+
+show style emphasis markers such as the * in =*bold*= when hovering over the word
 
 #+begin_src emacs-lisp
   (use-package org-appear
@@ -339,6 +342,7 @@ use M-p and M-n to go up and down org levels
 #+end_src
 
 *** fonts and bullets
+**** org-superstar
 
 make bullet points and headings look nice
 
@@ -348,7 +352,7 @@ make bullet points and headings look nice
     :hook (org-mode . org-superstar-mode))
 #+end_src
 
-change headings
+**** change heading and title size 
 
 #+begin_src emacs-lisp
   (custom-set-faces
@@ -358,6 +362,8 @@ change headings
    '(org-level-4 ((t (:height 1.1))))
    '(org-document-title ((t (:height 1.5)))))
 #+end_src
+
+**** org-cliplink
 
 give pasted links the title provided by the website
 
@@ -418,7 +424,7 @@ when ~#+auto_tangle: t~ is set in the beginning of an org-file tangle all code b
 
 **** shell
 
-support for sh
+support for shells such as sh, bash, zsh, fish ...
 
 #+begin_src emacs-lisp
   (org-babel-do-load-languages
@@ -432,7 +438,7 @@ Enable drag-and-drop support for images and files; inserts inline previews for i
 
 #+begin_src emacs-lisp
   (use-package org-download
-    :hook (dired-mode . org-download-enable))
+    :config (add-hook 'dired-mode-hook #'org-download-enable))
 #+end_src
 
 ** org-roam
@@ -617,8 +623,8 @@ automatically detect the approriate treesitter mode dependant on the language mo
 enable shellcheck using flymake for checking correctness and scanning common mistakes in shellcode
 
 #+begin_src emacs-lisp
-    (use-package flymake-shellcheck
-      :hook (bash-ts-mode . flymake-shellcheck-mode))
+  (use-package flymake-shellcheck
+    :hook (bash-ts-mode . flymake-shellcheck-mode))
 #+end_src
 
 *** rust
@@ -711,16 +717,14 @@ make gc pauses faster by decreasing the threshold, increasing the runtime perfor
 #+end_src
 
 * TODO
-+ auto enable hl-todo
-+ flycheck
 + make vertico case insensetive
 + look at my doom config
 + use tabs for indentation and make them "sticky"???
 + when inserting a space at the end of a line in org, pressing enter will go to the new line and remove the space at the end
-+ auto close brackets
 + email mu4e: [[https://www.youtube.com/watch?v=yZRyEhi4y44&pp=ygULZW1hY3MgZW1haWw%3D][Streamline Your E-mail Management with mu4e - Emacs Mail - YouTube]]
 + handle passwords: [[https://www.youtube.com/watch?v=nZ_T7Q49B8Y][How to Encrypt Your Passwords with Emacs - YouTube]]
 + review nessecaty of org-mode looks, org-appear etc.
++ find a shell prompt that works with eshell and term
 * look into
 + treemacs
 + projectile
@@ -742,9 +746,5 @@ make gc pauses faster by decreasing the threshold, increasing the runtime perfor
 + [[https://github.com/mclear-tools/tabspaces][GitHub - mclear-tools/tabspaces]]
 ** from doom
 + format+ onsave
-+ show git changes in a line to the side
 + grammar
 + =ctrl-a= should move to beginning of written line insead of actual line
-+ word-wrap
-
-

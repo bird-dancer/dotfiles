@@ -186,7 +186,7 @@
  '((shell . t)))
 
 (use-package org-download
-  :hook (dired-mode . org-download-enable))
+  :config (add-hook 'dired-mode-hook #'org-download-enable))
 
 (use-package org-roam
   :custom
