@@ -52,7 +52,7 @@
   :if (display-graphic-p))
 
 (use-package emojify
-  :init (emojify-mode))
+  :init (global-emojify-mode)
 
 (use-package doom-modeline
   :init (doom-modeline-mode t))

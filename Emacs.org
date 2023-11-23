@@ -149,7 +149,7 @@ picks a light color-theme when the sun is risen and a dark theme when the sun is
 
 #+begin_src emacs-lisp
   (use-package emojify
-    :init (emojify-mode))
+    :init (global-emojify-mode)      
 #+end_src
 
 ** modeline
