@@ -287,6 +287,8 @@
 
 (use-package geiser-guile)
 
+(use-package highlight-indent-guides
+  :hook (python-ts-mode . highlight-indent-guides-mode))
 
 (use-package flymake-shellcheck
   :hook (bash-ts-mode . flymake-shellcheck-mode))

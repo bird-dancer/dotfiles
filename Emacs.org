@@ -685,6 +685,14 @@ automatically detect the approriate treesitter mode dependant on the language mo
   (use-package geiser-guile)
 #+end_src
 
+*** python
+
+show indentation
+
+#+begin_src emacs-lisp
+  (use-package highlight-indent-guides
+    :hook (python-ts-mode . highlight-indent-guides-mode))
+#+end_src
 
 *** shell
 
