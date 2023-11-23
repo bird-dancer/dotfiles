@@ -1,0 +1,26 @@
+** open config
+
+shortcut to open the emacs config file with =C-c f P=
+
+#+begin_src emacs-lisp
+  (defun open-config ()
+    "Opens emacs config file"
+    (interactive)
+    (setq find-file-visit-truename t)
+    (find-file (locate-user-emacs-file "Emacs.org")))
+  (global-set-key (kbd "C-c f P") 'open-config)
+#+end_src
+
+** copy line
+
+FIXME: currently copies the complete line from beginning instead of from current cursor position
+copy the current line to the killring without deleting/killing it from the buffer
+
+#+begin_src emacs-lisp
+  (defun copy-line-to-kill-ring ()
+    "Copy the current line to the kill ring without killing it."
+    (interactive)
+    (let ((line-text (buffer-substring (line-beginning-position) (line-end-position))))
+      (kill-new line-text)))
+  (global-set-key (kbd "C-S-c") 'copy-line)
+#+end_src

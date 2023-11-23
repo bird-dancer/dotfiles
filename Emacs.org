@@ -102,19 +102,6 @@ keep  auto-save files in a temporary directory
 #+end_src
 
 * keyboard bindings
-** open config
-
-shortcut to open the emacs config file with =C-c f P=
-
-#+begin_src emacs-lisp
-  (defun open-config ()
-    "Opens emacs config file"
-    (interactive)
-    (setq find-file-visit-truename t)
-    (find-file (locate-user-emacs-file "Emacs.org")))
-  (global-set-key (kbd "C-c f P") 'open-config)
-#+end_src
-
 ** kill buffer and close window
 
 kill the current buffer and close its window with =C-x C-k=
@@ -130,7 +117,7 @@ kill the current buffer and close its window with =C-x C-k=
 
 ** kill line backwards
 
-Kill line backwards from the position of the pointer to the beginning of the line. With =C-S-k=
+position of the pointer to the beginning of the line. With =C-S-k=
 
 #+begin_src emacs-lisp
   (defun kill-line-backward ()
@@ -141,7 +128,6 @@ Kill line backwards from the position of the pointer to the beginning of the lin
 #+end_src
 
 ** which-key
-
 which-key is great for getting an overview of what keybindings are available based on the prefix keys you entered.
 
 #+begin_src emacs-lisp
@@ -163,20 +149,6 @@ fold (collapse and expand) regions of text.
   (global-set-key (kbd "C-c C-t") 'hs-toggle-hiding)
   (global-set-key (kbd "C-c C-a") 'hs-show-all)
   (global-set-key (kbd "C-c C-l") 'hs-hide-all)
-#+end_src
-
-** copy line
-
-FIXME: currently copies the complete line from beginning instead of from current cursor position
-copy the current line to the killring without deleting/killing it from the buffer
-
-#+begin_src emacs-lisp
-  (defun copy-line-to-kill-ring ()
-    "Copy the current line to the kill ring without killing it."
-    (interactive)
-    (let ((line-text (buffer-substring (line-beginning-position) (line-end-position))))
-      (kill-new line-text)))
-  (global-set-key (kbd "C-S-c") 'copy-line)
 #+end_src
 
 * general

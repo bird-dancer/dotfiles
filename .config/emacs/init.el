@@ -25,13 +25,6 @@
 (setq auto-save-list-file-prefix (expand-file-name "tmp/auto-saves/sessions/" user-emacs-directory)
       auto-save-file-name-transforms `((".*", (expand-file-name "tmp/auto-saves/" user-emacs-directory) t)))
 
-(defun open-config ()
-  "Opens emacs config file"
-  (interactive)
-  (setq find-file-visit-truename t)
-  (find-file (locate-user-emacs-file "Emacs.org")))
-(global-set-key (kbd "C-c f P") 'open-config)
-
 (defun kill-buffer-and-close-window ()
   "Kill the current buffer and close its window."
   (interactive)
@@ -57,13 +50,6 @@
 (global-set-key (kbd "C-c C-t") 'hs-toggle-hiding)
 (global-set-key (kbd "C-c C-a") 'hs-show-all)
 (global-set-key (kbd "C-c C-l") 'hs-hide-all)
-
-(defun copy-line-to-kill-ring ()
-  "Copy the current line to the kill ring without killing it."
-  (interactive)
-  (let ((line-text (buffer-substring (line-beginning-position) (line-end-position))))
-    (kill-new line-text)))
-(global-set-key (kbd "C-S-c") 'copy-line)
 
 (setq user-full-name "Felix"
       user-mail-address "f.dumbeck@campus.tu-berlin.de")
