@@ -13,43 +13,11 @@
   (setq auto-save-file-name-transforms
         `((".*" ,(no-littering-expand-var-file-name "auto-save/") t))))
 
-(setq custom-file
-      (if (boundp 'server-socket-dir)
-          (expand-file-name "custom.el" server-socket-dir)
-        (expand-file-name (format "emacs-custom-%s.el" (user-uid)) temporary-file-directory)))
-(load custom-file t)
-
 (setq backup-directory-alist `(("." . ,(expand-file-name "tmp/backups/" user-emacs-directory))))
 
 (make-directory (expand-file-name "tmp/auto-saves/" user-emacs-directory) t)
 (setq auto-save-list-file-prefix (expand-file-name "tmp/auto-saves/sessions/" user-emacs-directory)
       auto-save-file-name-transforms `((".*", (expand-file-name "tmp/auto-saves/" user-emacs-directory) t)))
-
-(defun kill-buffer-and-close-window ()
-  "Kill the current buffer and close its window."
-  (interactive)
-  (kill-buffer)
-  (delete-window))
-(global-set-key (kbd "C-x C-k") 'kill-buffer-and-close-window)
-
-(defun kill-line-backward ()
-  "Kill line backwards from the position of the pointer to the beginning of the line."
-  (interactive)
-  (kill-line 0))
-(global-set-key (kbd "C-S-k") 'kill-line-backward)
-
-(use-package which-key
-  :defer 0
-  :diminish which-key-mode
-  :config
-  (which-key-mode)
-  (setq which-key-idle-delay 1))
-
-(global-set-key (kbd "C-c C-h") 'hs-hide-block)
-(global-set-key (kbd "C-c C-s") 'hs-show-block)
-(global-set-key (kbd "C-c C-t") 'hs-toggle-hiding)
-(global-set-key (kbd "C-c C-a") 'hs-show-all)
-(global-set-key (kbd "C-c C-l") 'hs-hide-all)
 
 (setq user-full-name "Felix"
       user-mail-address "f.dumbeck@campus.tu-berlin.de")
@@ -94,6 +62,20 @@
 (save-place-mode t)
 
 (global-auto-revert-mode t)
+
+(use-package which-key
+  :defer 0
+  :diminish which-key-mode
+  :config
+  (which-key-mode)
+  (setq which-key-idle-delay 1))
+
+(defun kill-buffer-and-close-window ()
+  "Kill the current buffer and close its window."
+  (interactive)
+  (kill-buffer)
+  (delete-window))
+(global-set-key (kbd "C-x C-k") 'kill-buffer-and-close-window)
 
 (use-package vertico
   :custom
@@ -196,6 +178,9 @@
   :defer t
   :hook (org-mode . org-auto-tangle-mode))
 
+(use-package ob-rust
+  :after org)
+
 (org-babel-do-load-languages
  'org-babel-load-languages
  '((shell . t)))
@@ -227,6 +212,18 @@
 (setq org-agenda-files
       '("~/Desktop/Uni/uni.org"
         "~/personal.org" ))
+
+(global-set-key (kbd "C-c C-h") 'hs-hide-block)
+(global-set-key (kbd "C-c C-s") 'hs-show-block)
+(global-set-key (kbd "C-c C-t") 'hs-toggle-hiding)
+(global-set-key (kbd "C-c C-a") 'hs-show-all)
+(global-set-key (kbd "C-c C-l") 'hs-hide-all)
+
+(defun kill-line-backward ()
+  "Kill line backwards from the position of the pointer to the beginning of the line."
+  (interactive)
+  (kill-line 0))
+(global-set-key (kbd "C-S-k") 'kill-line-backward)
 
 (use-package multiple-cursors
   :bind ("M-SPC" . set-rectangular-region-anchor))
@@ -272,12 +269,7 @@
   (treesit-auto-add-to-auto-mode-alist 'all)
   (global-treesit-auto-mode))
 
-(use-package format-all)
-
 (use-package geiser-guile)
-
-(use-package highlight-indent-guides
-  :hook (python-ts-mode . highlight-indent-guides-mode))
 
 (use-package flymake-shellcheck
   :hook (bash-ts-mode . flymake-shellcheck-mode))
