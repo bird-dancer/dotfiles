@@ -376,6 +376,16 @@ add contrib package for extra features and add org-tempo for expanding structual
     )
 #+end_src
 
+*** org-cliplink
+
+give pasted links the title provided by the meta-information of the website
+
+#+begin_src emacs-lisp
+  (use-package org-cliplink
+    :after org
+    :bind ("C-x p i" . org-cliplink))
+#+end_src
+
 *** ox-hugo
 
 export org-mode files to html pages using hugo
@@ -440,16 +450,6 @@ make bullet points and headings look nice
    '(org-level-3 ((t (:height 1.25))))
    '(org-level-4 ((t (:height 1.1))))
    '(org-document-title ((t (:height 1.5)))))
-#+end_src
-
-**** org-cliplink
-
-give pasted links the title provided by the meta-information of the website
-
-#+begin_src emacs-lisp
-  (use-package org-cliplink
-    :after org
-    :bind ("C-x p i" . org-cliplink))
 #+end_src
 
 ** table of contents

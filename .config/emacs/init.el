@@ -164,6 +164,10 @@
   :after org
   )
 
+(use-package org-cliplink
+  :after org
+  :bind ("C-x p i" . org-cliplink))
+
 (use-package ox-hugo
   :after org
   :after ox
@@ -195,10 +199,6 @@
  '(org-level-3 ((t (:height 1.25))))
  '(org-level-4 ((t (:height 1.1))))
  '(org-document-title ((t (:height 1.5)))))
-
-(use-package org-cliplink
-  :after org
-  :bind ("C-x p i" . org-cliplink))
 
 (use-package org-make-toc
   :hook (org-mode . org-make-toc-mode))
