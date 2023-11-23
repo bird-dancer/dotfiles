@@ -270,7 +270,7 @@
 (use-package rainbow-delimiters
   :hook (prog-mode . rainbow-delimiters-mode))
 
-(setq electric-pair-mode t)
+(electric-pair-mode t)
 
 (use-package magit
   :commands magit)

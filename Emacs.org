@@ -635,7 +635,7 @@ match brackets and other delimiters by colour to see the current scope more easi
 auto close braces, tags, etc.
 
 #+begin_src emacs-lisp
-  (setq electric-pair-mode t)
+  (electric-pair-mode t)
 #+end_src
 
 * development
