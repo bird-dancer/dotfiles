@@ -154,6 +154,8 @@ picks a light color-theme when the sun is risen and a dark theme when the sun is
 
 ** modeline
 
+use the mode line form doom emacs to provide more information while looking nicer
+
 #+begin_src emacs-lisp
   (use-package doom-modeline
     :init (doom-modeline-mode t))
@@ -798,8 +800,6 @@ make gc pauses faster by decreasing the threshold, increasing the runtime perfor
   [[https://github.com/pezra/rspec-mode][GitHub - pezra/rspec-mode: An RSpec minor mode for Emacs]]
 + editorconfig
 + look into: [[https://github.com/SystemCrafters/crafted-emacs][GitHub - SystemCrafters/crafted-emacs: A sensible base Emacs configuration.]]
-+ autocompletion in org-mode code block. see crafted-emacs
-+ code folding shortcuts (origami)
 + instead of auto-ts-mode [[https://github.com/emacs-tree-sitter/tree-sitter-langs][GitHub - emacs-tree-sitter/tree-sitter-langs: Language bundle for Emacs's tre...]]
 + ts-mode replaces c-mode so I can't change things like the cmode anymore
 + gcmh: dynamic garbage collection for improving speed
