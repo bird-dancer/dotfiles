@@ -126,7 +126,7 @@ line numbers
 
 picks a light color-theme when the sun is risen and a dark theme when the sun is set
 
-#+begin_src emacs-lisp
+#+begin_src emacs-lisp :tangle no
   (use-package gruvbox-theme)
   (use-package circadian
     :config
@@ -135,6 +135,13 @@ picks a light color-theme when the sun is risen and a dark theme when the sun is
     (setq circadian-themes '((:sunrise . gruvbox-light-soft)
                              (:sunset  . gruvbox-dark-soft)))
     (circadian-setup))
+#+end_src
+
+*** ef-autumn
+
+#+begin_src emacs-lisp
+  (use-package ef-themes)
+  (load-theme 'ef-autumn t)
 #+end_src
 
 ** fonts

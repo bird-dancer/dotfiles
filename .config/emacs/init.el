@@ -39,14 +39,8 @@
 (global-display-line-numbers-mode t) ;; enable line numbers
 (setq display-line-numbers-type 'relative) ;; make line numbers relative
 
-(use-package gruvbox-theme)
-(use-package circadian
-  :config
-  (setq calendar-latitude 52.5)
-  (setq calendar-longitude 13.4)
-  (setq circadian-themes '((:sunrise . gruvbox-light-soft)
-                           (:sunset  . gruvbox-dark-soft)))
-  (circadian-setup))
+(use-package ef-themes)
+(load-theme 'ef-autumn t)
 
 (use-package all-the-icons
   :if (display-graphic-p))
