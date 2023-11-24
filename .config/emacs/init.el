@@ -23,6 +23,9 @@
       user-mail-address "f.dumbeck@campus.tu-berlin.de")
 
 (setq inhibit-startup-screen t)
+(setq initial-major-mode 'org-mode ;; Major mode of new buffers
+      initial-scratch-message ""
+      initial-buffer-choice t) ;; Blank scratch buffer
 
 (setq visible-bell t)
 
