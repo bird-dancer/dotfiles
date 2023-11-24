@@ -54,18 +54,18 @@
 (use-package doom-modeline
   :init (doom-modeline-mode t))
 
-(recentf-mode t)
-
-(save-place-mode t)
-
-(global-auto-revert-mode t)
-
 (use-package which-key
   :defer 0
   :diminish which-key-mode
   :config
   (which-key-mode)
   (setq which-key-idle-delay 1))
+
+(recentf-mode t)
+
+(save-place-mode t)
+
+(global-auto-revert-mode t)
 
 (defun kill-buffer-and-close-window ()
   "Kill the current buffer and close its window."
@@ -170,6 +170,10 @@
 (use-package org-cliplink
   :after org
   :bind ("C-x p i" . org-cliplink))
+
+(use-package ox-reveal
+  :config
+  (setq org-reveal-root "https://cdn.jsdelivr.net/npm/reveal.js"))
 
 (use-package ox-hugo
   :after org

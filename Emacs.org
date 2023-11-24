@@ -5,7 +5,7 @@
 
 * preface
 
-simple "performant" GNU emacs 29.1+ config that uses as much built in stuff as possible
+simple "performant" GNU emacs 29.1+ [[https://leanpub.com/lit-config/read][literate config]] that uses as much built in stuff as possible and builds upon that where necessary
 
 Werks for me
 
@@ -176,6 +176,19 @@ use the mode status line form doom emacs to provide more information while looki
     :init (doom-modeline-mode t))
 #+end_src
 
+** which-key
+
+which-key is great for getting an overview of what keybindings are available based on the prefix keys you entered.
+
+#+begin_src emacs-lisp
+  (use-package which-key
+    :defer 0
+    :diminish which-key-mode
+    :config
+    (which-key-mode)
+    (setq which-key-idle-delay 1))
+#+end_src
+
 ** various
 *** show recently opened files first
 
@@ -193,19 +206,6 @@ use the mode status line form doom emacs to provide more information while looki
 
 #+begin_src emacs-lisp
   (global-auto-revert-mode t)
-#+end_src
-
-*** which-key
-
-which-key is great for getting an overview of what keybindings are available based on the prefix keys you entered.
-
-#+begin_src emacs-lisp
-  (use-package which-key
-    :defer 0
-    :diminish which-key-mode
-    :config
-    (which-key-mode)
-    (setq which-key-idle-delay 1))
 #+end_src
 
 *** kill buffer and close window
@@ -388,6 +388,16 @@ give pasted links the title provided by the meta-information of the website
   (use-package org-cliplink
     :after org
     :bind ("C-x p i" . org-cliplink))
+#+end_src
+
+*** org-reveal
+
+create beautiful slide-shows from org documents
+
+#+begin_src emacs-lisp
+  (use-package ox-reveal
+    :config
+    (setq org-reveal-root "https://cdn.jsdelivr.net/npm/reveal.js"))
 #+end_src
 
 *** ox-hugo
@@ -807,6 +817,7 @@ make gc pauses faster by decreasing the threshold, increasing the runtime perfor
 + review nessecaty of org-mode looks, org-appear etc.
 + find a shell prompt that works with eshell and term
 * look into
++ [[https://github.com/Fuco1/smartparens][GitHub - Fuco1/smartparens: Minor mode for Emacs that deals with parens pairs...]]
 + treemacs
 + [[https://github.com/LuigiPiucco/nerd-icons-corfu][GitHub - LuigiPiucco/nerd-icons-corfu: Icons for corfu via nerd-icons]]
 + projectile
