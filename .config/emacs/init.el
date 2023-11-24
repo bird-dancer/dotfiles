@@ -45,6 +45,8 @@
 (use-package ef-themes)
 (load-theme 'ef-autumn t)
 
+(set-frame-font "Fantasque Sans Mono 11" nil t)
+
 (use-package all-the-icons
   :if (display-graphic-p))
 

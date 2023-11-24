@@ -153,29 +153,26 @@ picks a light color-theme when the sun is risen and a dark theme when the sun is
 #+end_src
 
 ** fonts
+*** general font
+#+begin_src emacs-lisp
+  (set-frame-font "Fantasque Sans Mono 11" nil t)
+#+end_src
 *** icon font
-
 #+begin_src emacs-lisp
   (use-package all-the-icons
     :if (display-graphic-p))
 #+end_src
-
 *** enable emojis 😎
-
 #+begin_src emacs-lisp
   (use-package emojify
     :init (global-emojify-mode))
 #+end_src
-
 ** modeline
-
 use the mode status line form doom emacs to provide more information while looking nicer
-
 #+begin_src emacs-lisp
   (use-package doom-modeline
     :init (doom-modeline-mode t))
 #+end_src
-
 ** which-key
 
 which-key is great for getting an overview of what keybindings are available based on the prefix keys you entered.
