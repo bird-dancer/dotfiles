@@ -204,10 +204,6 @@
 (use-package org-appear
   :hook (org-mode . org-appear-mode))
 
-(use-package org-superstar
-  :after org
-  :hook (org-mode . org-superstar-mode))
-
 (custom-set-faces
  '(org-level-1 ((t (:height 1.75))))
  '(org-level-2 ((t (:height 1.5))))

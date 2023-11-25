@@ -458,9 +458,9 @@ show style emphasis markers such as the * in =*bold*= when hovering over the wor
 
 make bullet points and headings look nice
 
-#+begin_src emacs-lisp
+#+begin_src emacs-lisp :tangle no
   (use-package org-superstar
-    :after org
+    :after org-mode
     :hook (org-mode . org-superstar-mode))
 #+end_src
 
