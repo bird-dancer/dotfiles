@@ -57,7 +57,6 @@
   :init (doom-modeline-mode t))
 
 (use-package which-key
-  :defer 0
   :diminish which-key-mode
   :config
   (which-key-mode)
@@ -172,21 +171,24 @@
 
 (use-package org-contrib
   :init (require 'org-tempo)
-  :after org
-  )
+  :after org-mode)
 
 (use-package org-cliplink
-  :after org
+  :after org-mode
   :bind ("C-x p i" . org-cliplink))
 
 (use-package ox-reveal
+  :after org-mode
   :config
   (setq org-reveal-root "https://cdn.jsdelivr.net/npm/reveal.js"))
 
 (use-package ox-hugo
-  :after org
-  :after ox
+  :after org-mode
   :commands org-hugo-auto-export-mode)
+
+(use-package org-download
+  :after org-mode
+  :config (add-hook 'dired-mode-hook #'org-download-enable))
 
 (add-hook 'org-mode-hook
           (lambda ()
@@ -212,6 +214,7 @@
  '(org-document-title ((t (:height 1.5)))))
 
 (use-package org-make-toc
+  :after org-mode
   :hook (org-mode . org-make-toc-mode))
 
 (require 'org-tempo)
@@ -234,14 +237,11 @@
   :hook (org-mode . org-auto-tangle-mode))
 
 (use-package ob-rust
-  :after org)
+  :after org-mode)
 
 (org-babel-do-load-languages
  'org-babel-load-languages
  '((shell . t)))
-
-(use-package org-download
-  :config (add-hook 'dired-mode-hook #'org-download-enable))
 
 (use-package org-roam
   :custom
@@ -280,13 +280,12 @@
   (kill-line 0))
 (global-set-key (kbd "C-S-k") 'kill-line-backward)
 
-(use-package multiple-cursors)
-
-(global-set-key (kbd "C-;") 'mc/edit-lines)
-
-(global-set-key (kbd "C->") 'mc/mark-next-like-this)
-(global-set-key (kbd "C-<") 'mc/mark-previous-like-this)
-(global-set-key (kbd "C-c C-<") 'mc/mark-all-like-this)
+(use-package multiple-cursors
+  :defer t
+  :bind(("C-;" . mc/edit-lines)
+        ("C->" . mc/mark-next-like-this)
+        ("C-<" . mc/mark-previous-like-this)
+        ("C-c C-<" . mc/mark-all-like-this)))
 
 (use-package rainbow-delimiters
   :hook (prog-mode . rainbow-delimiters-mode))
@@ -296,7 +295,8 @@
 (use-package magit
   :commands magit)
 
-(use-package keychain-environment)
+(use-package keychain-environment
+  :after magit)
 
 (use-package diff-hl
   :init (global-diff-hl-mode))
@@ -308,7 +308,8 @@
   (treesit-auto-add-to-auto-mode-alist 'all)
   (global-treesit-auto-mode))
 
-(use-package geiser-guile)
+(use-package geiser-guile
+  :hook (scheme-mode . geiser-guile))
 
 (use-package flymake-shellcheck
   :hook (bash-ts-mode . flymake-shellcheck-mode))
@@ -326,7 +327,9 @@
   (define-key eglot-mode-map (kbd "C-c c h") 'eldoc)
   (define-key eglot-mode-map (kbd "C-c c a") 'eglot-code-actions)
   (define-key eglot-mode-map (kbd "C-c c f") 'eglot-format-buffer)
-  (define-key eglot-mode-map (kbd "<f6>") 'xref-find-definitions))
+  (define-key eglot-mode-map (kbd "<f6>") 'xref-find-definitions)
+  ;(define-key eglot-mode-map (kbd "M-.") 'xref-find-definitions)
+  )
 
 (use-package all-the-icons-dired
   :after all-the-icons
@@ -341,6 +344,7 @@
 (use-package htmlize
   :defer t)
 
-(use-package pdf-tools)
+(use-package pdf-tools
+  :defer t)
 
 (setq gc-cons-threshold (* 2 1000 1000))

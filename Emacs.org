@@ -9,7 +9,7 @@ simple "performant" GNU emacs 29.1+ [[https://leanpub.com/lit-config/read][liter
 
 Werks for me
 
-* startup Performance
+* startup performance
 
 make emacs startup faster
 
@@ -19,6 +19,16 @@ make gc less active by increasing its threshold during startup so emacs starts u
 
 #+begin_src emacs-lisp
   (setq gc-cons-threshold (* 50 1000 1000))
+#+end_src
+
+** measure startup perfomance
+
+in order to measure the time it takes for Emacs to startup use ~emacs-init-time~
+
+see what packages are loaded at startup (*only have it enabled when debugging!*):
+
+#+begin_src emacs-lisp :tangle no
+  (setq use-package-verbose t)
 #+end_src
 
 * package Management
@@ -168,7 +178,9 @@ picks a light color-theme when the sun is risen and a dark theme when the sun is
     :init (global-emojify-mode))
 #+end_src
 ** modeline
+
 use the mode status line form doom emacs to provide more information while looking nicer
+
 #+begin_src emacs-lisp
   (use-package doom-modeline
     :init (doom-modeline-mode t))
@@ -179,7 +191,6 @@ which-key is great for getting an overview of what keybindings are available bas
 
 #+begin_src emacs-lisp
   (use-package which-key
-    :defer 0
     :diminish which-key-mode
     :config
     (which-key-mode)
@@ -385,8 +396,7 @@ add contrib package for extra features and add org-tempo for expanding structual
 #+begin_src emacs-lisp
   (use-package org-contrib
     :init (require 'org-tempo)
-    :after org
-    )
+    :after org-mode)
 #+end_src
 
 *** org-cliplink
@@ -395,7 +405,7 @@ give pasted links the title provided by the meta-information of the website
 
 #+begin_src emacs-lisp
   (use-package org-cliplink
-    :after org
+    :after org-mode
     :bind ("C-x p i" . org-cliplink))
 #+end_src
 
@@ -405,6 +415,7 @@ create beautiful slide-shows from org documents
 
 #+begin_src emacs-lisp
   (use-package ox-reveal
+    :after org-mode
     :config
     (setq org-reveal-root "https://cdn.jsdelivr.net/npm/reveal.js"))
 #+end_src
@@ -415,9 +426,17 @@ export org-mode files to html pages using hugo
 
 #+begin_src emacs-lisp
   (use-package ox-hugo
-    :after org
-    :after ox
+    :after org-mode
     :commands org-hugo-auto-export-mode)
+#+end_src
+*** drag-and-drop
+
+enable drag-and-drop support for images and files; inserts inline previews for images and an icon+link for other media types.
+
+#+begin_src emacs-lisp
+  (use-package org-download
+    :after org-mode
+    :config (add-hook 'dired-mode-hook #'org-download-enable))
 #+end_src
 
 ** navigation
@@ -481,6 +500,7 @@ auto generate a table of contents and update on save
 
 #+begin_src emacs-lisp
   (use-package org-make-toc
+    :after org-mode
     :hook (org-mode . org-make-toc-mode))
 #+end_src
 
@@ -521,7 +541,7 @@ when ~#+auto_tangle: t~ is set in the beginning of an org-file tangle all code b
 
 #+begin_src emacs-lisp
   (use-package ob-rust
-    :after org)
+    :after org-mode)
 #+end_src
 
 **** shells
@@ -532,15 +552,6 @@ support for shells such as sh, bash, zsh, fish ...
   (org-babel-do-load-languages
    'org-babel-load-languages
    '((shell . t)))
-#+end_src
-
-** drag-and-drop
-
-enable drag-and-drop support for images and files; inserts inline previews for images and an icon+link for other media types.
-
-#+begin_src emacs-lisp
-  (use-package org-download
-    :config (add-hook 'dired-mode-hook #'org-download-enable))
 #+end_src
 
 ** org-roam
@@ -563,18 +574,19 @@ enable drag-and-drop support for images and files; inserts inline previews for i
 #+end_src
 
 ** org agenda
-
-set a shortcut to open the agenda view
+*** set a shortcut to open the agenda view
 
 #+begin_src emacs-lisp
   (global-set-key (kbd "C-c a") #'org-agenda)
 #+end_src
 
-insert a closed timestamp whenever a task is done
+*** insert a closed timestamp whenever a task is done
 
 #+begin_src emacs-lisp :tangle no
   (setq org-log-done t)
 #+end_src
+
+*** time window
 
 make it so the agenda always starts yesterday and we can see +7 days from today instead of just until sunday
 
@@ -584,7 +596,9 @@ make it so the agenda always starts yesterday and we can see +7 days from today 
   (setq org-agenda-start-on-weekday nil)
 #+end_src
 
-set org-agenda files
+*** set org-agenda files
+
+the files that org-agenda will visit to search for timestamps to use when creating the agenda
 
 #+begin_src emacs-lisp
   (setq org-agenda-files
@@ -595,7 +609,7 @@ set org-agenda files
 * editing configuration
 ** folding
 
-fold (collapse and expand) regions of text
+set shortcuts for fold (collapse and expand) regions of text
 
 #+begin_src emacs-lisp
   (global-set-key (kbd "C-c C-h") 'hs-hide-block)
@@ -620,22 +634,18 @@ position of the pointer to the beginning of the line with =C-S-k=
 ** multiple cursors
 
 #+begin_src emacs-lisp
-  (use-package multiple-cursors)
+  (use-package multiple-cursors
+    :defer t
+    :bind(("C-;" . mc/edit-lines)
+          ("C->" . mc/mark-next-like-this)
+          ("C-<" . mc/mark-previous-like-this)
+          ("C-c C-<" . mc/mark-all-like-this)))
 #+end_src
-
-when you have an active region that spans multiple lines, the following will add a cursor to each line:
-
-#+begin_src emacs-lisp
-  (global-set-key (kbd "C-;") 'mc/edit-lines)
-#+end_src
-
-when you want to add multiple cursors not based on continuous lines, but based on keywords in the buffer, use:
-
-#+begin_src emacs-lisp
-  (global-set-key (kbd "C->") 'mc/mark-next-like-this)
-  (global-set-key (kbd "C-<") 'mc/mark-previous-like-this)
-  (global-set-key (kbd "C-c C-<") 'mc/mark-all-like-this)
-#+end_src
+    :config
+    (global-set-key (kbd "C-;") 'mc/edit-lines)
+    (global-set-key (kbd "C->") 'mc/mark-next-like-this)
+    (global-set-key (kbd "C-<") 'mc/mark-previous-like-this)
+    (global-set-key (kbd "C-c C-<") 'mc/mark-all-like-this))
 
 ** highlight todo
 
@@ -687,7 +697,8 @@ auto close braces, tags, etc.
 to prevent being asked to type the ssh-key password on every action make it so magit knows the ssh-key-agents location:
 
 #+begin_src emacs-lisp
-  (use-package keychain-environment)
+    (use-package keychain-environment
+      :after magit)
 #+end_src
 
 *** diff-hl
@@ -716,7 +727,8 @@ automatically detect the approriate treesitter mode dependant on the language mo
 *** guile scheme
 
 #+begin_src emacs-lisp
-  (use-package geiser-guile)
+    (use-package geiser-guile
+      :hook (scheme-mode . geiser-guile))
 #+end_src
 
 *** shell
@@ -741,24 +753,25 @@ use =rust-ts-mode= automatically on rust files and start eglot
 
 ** eglot
 
-add keybindings for eglot-mode
+add keybindings for when in eglot-mode
 
 #+begin_src emacs-lisp
-  (use-package eglot
-    :defer t
-    :config
-    (define-key eglot-mode-map (kbd "C-c c r") 'eglot-rename)
-    (define-key eglot-mode-map (kbd "C-c c o") 'eglot-code-action-organize-imports)
-    (define-key eglot-mode-map (kbd "C-c c h") 'eldoc)
-    (define-key eglot-mode-map (kbd "C-c c a") 'eglot-code-actions)
-    (define-key eglot-mode-map (kbd "C-c c f") 'eglot-format-buffer)
-    (define-key eglot-mode-map (kbd "<f6>") 'xref-find-definitions))
+      (use-package eglot
+        :defer t
+        :config
+        (define-key eglot-mode-map (kbd "C-c c r") 'eglot-rename)
+        (define-key eglot-mode-map (kbd "C-c c o") 'eglot-code-action-organize-imports)
+        (define-key eglot-mode-map (kbd "C-c c h") 'eldoc)
+        (define-key eglot-mode-map (kbd "C-c c a") 'eglot-code-actions)
+        (define-key eglot-mode-map (kbd "C-c c f") 'eglot-format-buffer)
+        (define-key eglot-mode-map (kbd "<f6>") 'xref-find-definitions)
+        ;(define-key eglot-mode-map (kbd "M-.") 'xref-find-definitions)
+        )
 #+end_src
 
 * applications
 ** dired
-
-show file icons
+*** show file icons
 
 #+begin_src emacs-lisp
   (use-package all-the-icons-dired
@@ -766,7 +779,7 @@ show file icons
     :hook (dired-mode . all-the-icons-dired-mode))
 #+end_src
 
-show file size in human readable format
+*** show file size in human readable format
 
 #+begin_src emacs-lisp
   (setq dired-listing-switches "-alh")
@@ -796,7 +809,8 @@ display current buffer as html
 better interaction with pdf
 
 #+begin_src emacs-lisp
-  (use-package pdf-tools)
+  (use-package pdf-tools
+    :defer t)
 #+end_src
 
 ** emacs-everywhere *not working!*
@@ -840,7 +854,6 @@ make gc pauses faster by decreasing the threshold, increasing the runtime perfor
 + ts-mode replaces c-mode so I can't change things like the cmode anymore
 + gcmh: dynamic garbage collection for improving speed
 + Combobulate: https://github.com/mickeynp/combobulate uses Tree-Sitter to provide a structured movement within your code [[https://www.masteringemacs.org/article/combobulate-structured-movement-editing-treesitter][Combobulate: Structured Movement and Editing with Tree-Sitter]]
-+ ef-autumn theme
 + crafted org config: [[file:~/crafted-emacs/docs/crafted-org.org]]
 + [[https://github.com/mclear-tools/tabspaces][GitHub - mclear-tools/tabspaces]]
 ** from doom
