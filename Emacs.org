@@ -295,7 +295,20 @@ in-buffer completion UI on top of the built-in completion framework
     ;; (corfu-scroll-margin 5)        ;; Use scroll margin
     :init
     (global-corfu-mode)
-    (corfu-history-mode))
+    (corfu-history-mode)
+    (corfu-popupinfo-mode)
+    :config
+    (setq corfu-popupinfo-delay nil))
+#+end_src
+
+*** nerd-icons-corfu
+
+add nerd-font icons to corfu completion candidates
+
+#+begin_src emacs-lisp
+  (use-package nerd-icons-corfu
+    :init
+    (add-to-list 'corfu-margin-formatters #'nerd-icons-corfu-formatter))
 #+end_src
 
 *** enable autocompletions in eshell
@@ -340,7 +353,7 @@ extend the built in completion at point functionality
     (add-to-list 'completion-at-point-functions #'cape-dabbrev)
     (add-to-list 'completion-at-point-functions #'cape-file)
     (add-to-list 'completion-at-point-functions #'cape-elisp-block)
-    ;;(add-to-list 'completion-at-point-functions #'cape-history)
+    (add-to-list 'completion-at-point-functions #'cape-history)
     ;;(add-to-list 'completion-at-point-functions #'cape-keyword)
     ;;(add-to-list 'completion-at-point-functions #'cape-tex)
     ;;(add-to-list 'completion-at-point-functions #'cape-sgml)
@@ -361,8 +374,7 @@ for an improved emacs startup time loading =org= is defered until it is actually
 #+begin_src emacs-lisp
   (use-package org
     :defer t
-    :commands (org-mode)
-    )
+    :commands (org-mode))
 #+end_src
 
 ** functionality
@@ -816,7 +828,6 @@ make gc pauses faster by decreasing the threshold, increasing the runtime perfor
 * look into
 + [[https://github.com/Fuco1/smartparens][GitHub - Fuco1/smartparens: Minor mode for Emacs that deals with parens pairs...]]
 + treemacs
-+ [[https://github.com/LuigiPiucco/nerd-icons-corfu][GitHub - LuigiPiucco/nerd-icons-corfu: Icons for corfu via nerd-icons]]
 + projectile
 + ibuffer
 + deft

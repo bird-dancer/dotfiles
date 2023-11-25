@@ -117,7 +117,14 @@
   ;; (corfu-scroll-margin 5)        ;; Use scroll margin
   :init
   (global-corfu-mode)
-  (corfu-history-mode))
+  (corfu-history-mode)
+  (corfu-popupinfo-mode)
+  :config
+  (setq corfu-popupinfo-delay nil))
+
+(use-package nerd-icons-corfu
+  :init
+  (add-to-list 'corfu-margin-formatters #'nerd-icons-corfu-formatter))
 
 (use-package cape
   ;; Bind dedicated completion commands
@@ -147,7 +154,7 @@
   (add-to-list 'completion-at-point-functions #'cape-dabbrev)
   (add-to-list 'completion-at-point-functions #'cape-file)
   (add-to-list 'completion-at-point-functions #'cape-elisp-block)
-  ;;(add-to-list 'completion-at-point-functions #'cape-history)
+  (add-to-list 'completion-at-point-functions #'cape-history)
   ;;(add-to-list 'completion-at-point-functions #'cape-keyword)
   ;;(add-to-list 'completion-at-point-functions #'cape-tex)
   ;;(add-to-list 'completion-at-point-functions #'cape-sgml)
@@ -161,8 +168,7 @@
 
 (use-package org
   :defer t
-  :commands (org-mode)
-  )
+  :commands (org-mode))
 
 (use-package org-contrib
   :init (require 'org-tempo)
