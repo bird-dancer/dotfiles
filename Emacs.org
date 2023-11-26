@@ -731,6 +731,12 @@ automatically detect the approriate treesitter mode dependant on the language mo
       :hook (scheme-mode . geiser-guile))
 #+end_src
 
+*** markdown
+#+begin_src emacs-lisp
+  (use-package markdown-mode
+    :mode ("\\.md\\'" . markdown-view-mode)
+    :init (setq markdown-command "multimarkdown"))
+#+end_src
 *** shell
 
 enable shellcheck using flymake for checking correctness and scanning common mistakes in shellcode

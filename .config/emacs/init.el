@@ -311,6 +311,10 @@
 (use-package geiser-guile
   :hook (scheme-mode . geiser-guile))
 
+(use-package markdown-mode
+  :mode ("\\.md\\'" . markdown-view-mode)
+  :init (setq markdown-command "multimarkdown"))
+
 (use-package flymake-shellcheck
   :hook (bash-ts-mode . flymake-shellcheck-mode))
 
