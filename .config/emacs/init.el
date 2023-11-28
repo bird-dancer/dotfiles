@@ -318,6 +318,8 @@
 (use-package flymake-shellcheck
   :hook (bash-ts-mode . flymake-shellcheck-mode))
 
+(add-to-list 'auto-mode-alist '("Makefile" . makefile-mode))
+
 (add-hook 'rust-ts-mode-hook #'rainbow-delimiters-mode)
 (add-hook 'rust-ts-mode-hook #'hs-minor-mode)
 (add-hook 'rust-ts-mode-hook #'hl-todo-mode)

@@ -746,6 +746,14 @@ enable shellcheck using flymake for checking correctness and scanning common mis
     :hook (bash-ts-mode . flymake-shellcheck-mode))
 #+end_src
 
+*** makefile
+
+auto enable makefile-mode for Makefiles
+
+#+begin_src emacs-lisp
+  (add-to-list 'auto-mode-alist '("Makefile" . makefile-mode))
+#+end_src
+
 *** rust
 
 use =rust-ts-mode= automatically on rust files and start eglot
