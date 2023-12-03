@@ -106,8 +106,8 @@
   (corfu-cycle t)                ;; Enable cycling for `corfu-next/previous'
   (corfu-auto t)                 ;; Enable auto completion
   (corfu-separator ?\s)          ;; Orderless field separator
-  (corfu-auto-refix 2) ;; show completions after two letters
-  (corfu-auto-delay 0.0) ;; show completions immediatly
+  (corfu-auto-prefix 2) ;; show completions after two letters
+  (corfu-auto-delay 0) ;; show completions immediatly
   ;; (corfu-quit-at-boundary nil)   ;; Never quit at completion boundary
   ;; (corfu-quit-no-match nil)      ;; Never quit, even if there is no match
   ;; (corfu-preview-current nil)    ;; Disable current candidate preview
@@ -154,11 +154,11 @@
   (add-to-list 'completion-at-point-functions #'cape-file)
   (add-to-list 'completion-at-point-functions #'cape-elisp-block)
   (add-to-list 'completion-at-point-functions #'cape-history)
-  ;;(add-to-list 'completion-at-point-functions #'cape-keyword)
+  (add-to-list 'completion-at-point-functions #'cape-keyword)
   ;;(add-to-list 'completion-at-point-functions #'cape-tex)
   ;;(add-to-list 'completion-at-point-functions #'cape-sgml)
   ;;(add-to-list 'completion-at-point-functions #'cape-rfc1345)
-  ;;(add-to-list 'completion-at-point-functions #'cape-abbrev)
+  (add-to-list 'completion-at-point-functions #'cape-abbrev)
   (add-to-list 'completion-at-point-functions #'cape-dict)
   (add-to-list 'completion-at-point-functions #'cape-emoji)
   ;;(add-to-list 'completion-at-point-functions #'cape-elisp-symbol)
@@ -265,8 +265,8 @@
 (setq org-agenda-start-on-weekday nil)
 
 (setq org-agenda-files
-      '("~/Desktop/Uni/uni.org"
-        "~/personal.org" ))
+      '("~/Desktop/uni/uni.org"
+        "~/Desktop/uni/personal.org"))
 
 (global-set-key (kbd "C-c C-h") 'hs-hide-block)
 (global-set-key (kbd "C-c C-s") 'hs-show-block)
