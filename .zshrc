@@ -3,6 +3,8 @@ alias la='exa -a --icons'
 alias ll='exa --icons -lagh'
 alias tree='exa --tree --icons'
 
+alias grep='rg'
+
 alias cat='bat'
 
 alias b='cd ..'
