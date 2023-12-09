@@ -801,12 +801,17 @@ add keybindings for when in eglot-mode
 
 ** vterm
 
-a full complete shell for emacs
-
 #+begin_src emacs-lisp
   (use-package vterm
-    :commands vterm
-    :bind ("M-RET" . vterm))
+    :commands vterm)
+#+end_src
+
+** eshell
+
+set M-RET shortcut for opening eshell
+
+#+begin_src emacs-lisp
+  (global-set-key (kbd "M-RET") 'eshell)
 #+end_src
 
 ** htmlize

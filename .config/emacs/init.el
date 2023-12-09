@@ -344,8 +344,9 @@
 (setq dired-listing-switches "-alh")
 
 (use-package vterm
-  :commands vterm
-  :bind ("M-RET" . vterm))
+  :commands vterm)
+
+(global-set-key (kbd "M-RET") 'eshell)
 
 (use-package htmlize
   :defer t)
