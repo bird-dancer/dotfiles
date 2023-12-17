@@ -41,7 +41,9 @@
 
 (global-visual-line-mode t)
 
-(global-display-line-numbers-mode t) ;; enable line numbers
+;(global-display-line-numbers-mode t) ;; enable line numbers
+(add-hook 'prog-mode-hook #'display-line-numbers-mode)
+(add-hook 'org-mode-hook #'display-line-numbers-mode)
 (setq display-line-numbers-type 'relative) ;; make line numbers relative
 
 (use-package ef-themes)
