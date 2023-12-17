@@ -322,11 +322,6 @@
 
 (add-to-list 'auto-mode-alist '("Makefile" . makefile-mode))
 
-(add-hook 'rust-ts-mode-hook #'rainbow-delimiters-mode)
-(add-hook 'rust-ts-mode-hook #'hs-minor-mode)
-(add-hook 'rust-ts-mode-hook #'hl-todo-mode)
-(add-hook 'rust-ts-mode-hook #'eglot)
-
 (use-package eglot
   :defer t
   :config
@@ -336,7 +331,7 @@
   (define-key eglot-mode-map (kbd "C-c c a") 'eglot-code-actions)
   (define-key eglot-mode-map (kbd "C-c c f") 'eglot-format-buffer)
   (define-key eglot-mode-map (kbd "<f6>") 'xref-find-definitions)
-  ;(define-key eglot-mode-map (kbd "M-.") 'xref-find-definitions)
+  (define-key eglot-mode-map (kbd "M-.") 'xref-find-definitions)
   )
 
 (use-package all-the-icons-dired
