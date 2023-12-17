@@ -176,7 +176,6 @@
   :after org-mode)
 
 (use-package org-cliplink
-  :after org-mode
   :bind ("C-x p i" . org-cliplink))
 
 (use-package ox-reveal

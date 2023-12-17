@@ -412,7 +412,6 @@ give pasted links the title provided by the meta-information of the website
 
 #+begin_src emacs-lisp
   (use-package org-cliplink
-    :after org-mode
     :bind ("C-x p i" . org-cliplink))
 #+end_src
 
