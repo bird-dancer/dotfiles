@@ -133,6 +133,13 @@
   :init
   (add-to-list 'corfu-margin-formatters #'nerd-icons-corfu-formatter))
 
+(use-package consult
+  :config
+  (keymap-global-set "C-s" 'consult-line)
+  (keymap-set minibuffer-local-map "C-r" 'consult-history)
+  (setq completion-in-region-function #'consult-completion-in-region)
+  )
+
 (use-package cape
   ;; Bind dedicated completion commands
   ;; Alternative prefix keys: C-c p, M-p, M-+, ...

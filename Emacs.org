@@ -350,6 +350,15 @@ add nerd-font icons to corfu completion candidates
               (corfu-mode))
 #+end_src
 
+** consult
+#+begin_src emacs-lisp
+  (use-package consult
+    :config
+    (keymap-global-set "C-s" 'consult-line)
+    (keymap-set minibuffer-local-map "C-r" 'consult-history)
+    (setq completion-in-region-function #'consult-completion-in-region)
+    )
+#+end_src
 ** cape
 
 extend the built in completion at point functionality
