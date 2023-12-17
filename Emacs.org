@@ -104,6 +104,10 @@ to avoid emacs making a sound on things like trying to scroll past the first lin
   (setq visible-bell t)
 #+end_src
 
+*** disable ui dialogs as prompts
+#+begin_src emacs-lisp
+  (setq use-dialog-box nil)
+#+end_src
 *** remove GUI elements
 
 remove the menu-bar tool-bar and scroll-bar as a measure to remove visual clutter
