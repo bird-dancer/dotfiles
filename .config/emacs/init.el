@@ -70,6 +70,8 @@
 
 (save-place-mode t)
 
+(delete-selection-mode)
+
 (global-auto-revert-mode t)
 
 (defun kill-buffer-and-close-window ()
