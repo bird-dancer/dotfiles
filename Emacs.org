@@ -288,7 +288,7 @@ icons for completion options
 *** save command history
 
 #+begin_src emacs-lisp
-  (setq history-length 30)
+  (setq history-length 50)
   (savehist-mode t)
 #+end_src
 

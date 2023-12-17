@@ -73,6 +73,8 @@
 (delete-selection-mode)
 
 (global-auto-revert-mode t)
+;; revert dired and other buffers
+(setq global-auto-revert-non-file-buffers t)
 
 (defun kill-buffer-and-close-window ()
   "Kill the current buffer and close its window."
@@ -342,6 +344,10 @@
   :hook (dired-mode . all-the-icons-dired-mode))
 
 (setq dired-listing-switches "-alh")
+
+(setq dired-auto-revert-buffer t)
+
+(setq dired-dwim-target t)
 
 (use-package vterm
   :commands vterm)
