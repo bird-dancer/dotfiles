@@ -97,7 +97,7 @@
   :init (all-the-icons-completion-mode)
   :hook (marginalia-mode . all-the-icons-completion-marginalia-setup))
 
-(setq history-length 30)
+(setq history-length 50)
 (savehist-mode t)
 
 (use-package orderless

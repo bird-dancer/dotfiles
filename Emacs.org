@@ -231,6 +231,8 @@ typed text replaces the selection if the selection is active, pressing delete or
 
 #+begin_src emacs-lisp
   (global-auto-revert-mode t)
+  ;; revert dired and other buffers
+  (setq global-auto-revert-non-file-buffers t)
 #+end_src
 
 *** kill buffer and close window
