@@ -49,15 +49,13 @@ Setup package repos
 
 stop transient files from being created in the emacs config folder
 
-** no-littering
+** change location of the custom file
 
-use no-littering to automatically set common paths to the new user-emacs-directory
+prevent emacs from adding custom settings to init.el and choose =custom.el= instead
 
 #+begin_src emacs-lisp
-  (use-package no-littering
-    :init
-    (setq auto-save-file-name-transforms
-          `((".*" ,(no-littering-expand-var-file-name "auto-save/") t))))
+  (setq custom-file (locate-user-emacs-file "custom.el"))
+  (load custom-file 'noerror 'nomessage)
 #+end_src
 
 ** auto generated files in tmp directory
