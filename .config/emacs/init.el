@@ -366,6 +366,7 @@
   :defer t)
 
 (use-package pdf-tools
-  :defer t)
+  :defer t
+  :mode ("\\.pdf\\'" . pdf-view-mode))
 
 (setq gc-cons-threshold (* 2 1000 1000))

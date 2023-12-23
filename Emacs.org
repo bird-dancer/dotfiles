@@ -847,13 +847,14 @@ display current buffer as html
     :defer t)
 #+end_src
 
-** pdf-mode
+** pdf-tools
 
 better interaction with pdf
 
 #+begin_src emacs-lisp
   (use-package pdf-tools
-    :defer t)
+    :defer t
+    :mode ("\\.pdf\\'" . pdf-view-mode))
 #+end_src
 
 ** emacs-everywhere *not working!*
