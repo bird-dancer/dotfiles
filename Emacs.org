@@ -353,6 +353,7 @@ add nerd-font icons to corfu completion candidates
 ** consult
 #+begin_src emacs-lisp
   (use-package consult
+    :bind ("C-c r" . 'consult-ripgrep)
     :config
     (keymap-global-set "C-s" 'consult-line)
     (keymap-set minibuffer-local-map "C-r" 'consult-history)

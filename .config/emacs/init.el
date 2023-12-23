@@ -134,6 +134,7 @@
   (add-to-list 'corfu-margin-formatters #'nerd-icons-corfu-formatter))
 
 (use-package consult
+  :bind ("C-c r" . 'consult-ripgrep)
   :config
   (keymap-global-set "C-s" 'consult-line)
   (keymap-set minibuffer-local-map "C-r" 'consult-history)
