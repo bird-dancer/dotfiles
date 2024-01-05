@@ -343,6 +343,8 @@
   (define-key eglot-mode-map (kbd "C-c c h") 'eldoc)
   (define-key eglot-mode-map (kbd "C-c c a") 'eglot-code-actions)
   (define-key eglot-mode-map (kbd "C-c c f") 'eglot-format-buffer)
+  (define-key eglot-mode-map (kbd "C-c c q") 'eglot-code-action-quickfix)
+  (define-key eglot-mode-map (kbd "C-c c e") 'eglot-code-action-extract)
   (define-key eglot-mode-map (kbd "<f6>") 'xref-find-definitions)
   (define-key eglot-mode-map (kbd "M-.") 'xref-find-definitions)
   )
