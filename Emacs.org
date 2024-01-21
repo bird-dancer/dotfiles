@@ -466,11 +466,11 @@ give pasted links the title provided by the meta-information of the website
     :bind ("C-x p i" . org-cliplink))
 #+end_src
 
-*** org-reveal
+*** org-reveal (not used)
 
 create beautiful slide-shows from org documents
 
-#+begin_src emacs-lisp
+#+begin_src emacs-lisp :tangle no
   (use-package ox-reveal
     :after org-mode
     :config

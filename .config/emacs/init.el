@@ -197,11 +197,6 @@
 (use-package org-cliplink
   :bind ("C-x p i" . org-cliplink))
 
-(use-package ox-reveal
-  :after org-mode
-  :config
-  (setq org-reveal-root "https://cdn.jsdelivr.net/npm/reveal.js"))
-
 (use-package ox-hugo
   :after org-mode
   :commands org-hugo-auto-export-mode)
