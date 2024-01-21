@@ -207,8 +207,8 @@
   :commands org-hugo-auto-export-mode)
 
 (use-package org-download
-  :after org-mode
-  :config (add-hook 'dired-mode-hook #'org-download-enable))
+  :defer t
+  :hook (org-mode #'org-download-mode))
 
 (add-hook 'org-mode-hook
           (lambda ()

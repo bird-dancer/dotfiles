@@ -492,8 +492,8 @@ enable drag-and-drop support for images and files; inserts inline previews for i
 
 #+begin_src emacs-lisp
   (use-package org-download
-    :after org-mode
-    :config (add-hook 'dired-mode-hook #'org-download-enable))
+    :defer t
+    :hook (org-mode #'org-download-mode))
 #+end_src
 
 ** navigation
