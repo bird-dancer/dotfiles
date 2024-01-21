@@ -47,7 +47,12 @@
 (setq display-line-numbers-type 'relative) ;; make line numbers relative
 
 (use-package ef-themes)
-(load-theme 'ef-autumn t)
+(load-theme 'ef-cherie t)
+;(load-theme 'ef-autumn t)
+;(load-theme 'ef-dark t)
+;(load-theme 'ef-duo-light t)
+;(load-theme 'ef-duo-dark t)
+;(load-theme 'ef-night t)
 
 (set-frame-font "Fantasque Sans Mono 12" nil t)
 

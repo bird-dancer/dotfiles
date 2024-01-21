@@ -150,25 +150,45 @@ remove the menu-bar tool-bar and scroll-bar as a measure to remove visual clutte
 #+end_src
 
 ** theme
+*** gruvbox-themes
+
+#+begin_src emacs-lisp :tangle no
+  (use-package gruvbox-theme)
+  (load-theme 'gruvbox-dark-hard t)
+  (load-theme 'gruvbox-light-soft t)
+#+end_src
+
+*** ef-themes
+
+#+begin_src emacs-lisp
+  (use-package ef-themes)
+  (load-theme 'ef-cherie t)
+  ;(load-theme 'ef-autumn t)
+  ;(load-theme 'ef-dark t)
+  ;(load-theme 'ef-duo-light t)
+  ;(load-theme 'ef-duo-dark t)
+  ;(load-theme 'ef-night t)
+#+end_src
+
+*** sunburn theme
+
+#+begin_src emacs-lisp :tangle no
+  (use-package sunburn-theme)
+  (load-theme 'sunburn- t)
+#+end_src
+
+*** auto pick theme
 
 picks a light color-theme when the sun is risen and a dark theme when the sun is set
 
 #+begin_src emacs-lisp :tangle no
-  (use-package gruvbox-theme)
   (use-package circadian
-    :config
-    (setq calendar-latitude 52.5)
-    (setq calendar-longitude 13.4)
-    (setq circadian-themes '((:sunrise . gruvbox-light-soft)
-                             (:sunset  . gruvbox-dark-soft)))
-    (circadian-setup))
-#+end_src
-
-*** ef-autumn
-
-#+begin_src emacs-lisp
-  (use-package ef-themes)
-  (load-theme 'ef-autumn t)
+  :config
+  (setq calendar-latitude 52.5)
+  (setq calendar-longitude 13.4)
+  (setq circadian-themes '((:sunrise . ef-melissa-light)
+                           (:sunset  . ef-melissa-dark)))
+  (circadian-setup))
 #+end_src
 
 ** fonts
@@ -197,6 +217,12 @@ use the mode status line form doom emacs to provide more information while looki
   (use-package doom-modeline
     :init (doom-modeline-mode t))
 #+end_src
+
+#+begin_src emacs-lisp :tangle no
+  (use-package hide-mode-line
+    :commands (hide-mode-line-mode))
+#+end_src
+
 ** which-key
 
 which-key is great for getting an overview of what keybindings are available based on the prefix keys you entered.
