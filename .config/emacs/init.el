@@ -135,6 +135,11 @@
   :init
   (add-to-list 'corfu-margin-formatters #'nerd-icons-corfu-formatter))
 
+(add-hook 'eshell-mode-hook
+          (lambda ()
+            (setq-local corfu-auto nil)
+            (corfu-mode)))
+
 (use-package consult
   :bind ("C-c r" . 'consult-ripgrep)
   :config
