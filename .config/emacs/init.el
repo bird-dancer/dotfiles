@@ -196,6 +196,8 @@
   :init (require 'org-tempo)
   :after org-mode)
 
+(setq org-startup-folded t)
+
 (use-package org-cliplink
   :bind ("C-x p i" . org-cliplink))
 

@@ -446,7 +446,10 @@ add contrib package for extra features and add org-tempo for expanding structual
     :init (require 'org-tempo)
     :after org-mode)
 #+end_src
-
+*** start up folded
+#+begin_src emacs-lisp
+  (setq org-startup-folded t)
+#+end_src
 *** org-cliplink
 
 give pasted links the title provided by the meta-information of the website
