@@ -216,6 +216,19 @@
           (lambda ()
             (local-set-key (kbd "M-n") 'org-down-element)))
 
+(add-hook 'org-mode-hook
+          (lambda ()
+            (local-set-key (kbd "C-S-F") 'org-shiftmetaright)))
+(add-hook 'org-mode-hook
+          (lambda ()
+          (local-set-key (kbd "C-S-B") 'org-shiftmetaleft)))
+(add-hook 'org-mode-hook
+          (lambda ()
+            (local-set-key (kbd "C-S-P") 'org-move-subtree-up)))
+(add-hook 'org-mode-hook
+          (lambda ()
+          (local-set-key (kbd "C-S-N") 'org-move-subtree-down)))
+
 (setq org-startup-indented t
       org-pretty-entities t
       org-hide-emphasis-markers t
