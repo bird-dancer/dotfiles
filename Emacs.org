@@ -167,13 +167,6 @@ remove the menu-bar tool-bar and scroll-bar as a measure to remove visual clutte
   ;(load-theme 'ef-night t)
 #+end_src
 
-*** sunburn theme
-
-#+begin_src emacs-lisp :tangle no
-  (use-package sunburn-theme)
-  (load-theme 'sunburn- t)
-#+end_src
-
 *** auto pick theme
 
 picks a light color-theme when the sun is risen and a dark theme when the sun is set
@@ -463,17 +456,6 @@ give pasted links the title provided by the meta-information of the website
     :bind ("C-x p i" . org-cliplink))
 #+end_src
 
-*** org-reveal (not used)
-
-create beautiful slide-shows from org documents
-
-#+begin_src emacs-lisp :tangle no
-  (use-package ox-reveal
-    :after org-mode
-    :config
-    (setq org-reveal-root "https://cdn.jsdelivr.net/npm/reveal.js"))
-#+end_src
-
 *** ox-hugo
 
 export org-mode files to html pages using hugo
@@ -632,12 +614,6 @@ support for shells such as sh, bash, zsh, fish ...
 
 #+begin_src emacs-lisp
   (global-set-key (kbd "C-c a") #'org-agenda)
-#+end_src
-
-*** insert a closed timestamp whenever a task is done
-
-#+begin_src emacs-lisp :tangle no
-  (setq org-log-done t)
 #+end_src
 
 *** time window
