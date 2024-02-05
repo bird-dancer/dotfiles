@@ -84,15 +84,12 @@ keep  auto-save files in a temporary directory
 #+end_src
 
 ** user interface
-*** startup
+*** startup buffer
 
 show empty org-mode scratch buffer at startup
 
 #+begin_src emacs-lisp
   (setq inhibit-startup-screen t)
-  (setq initial-major-mode 'org-mode ;; Major mode of new buffers
-        initial-scratch-message ""
-        initial-buffer-choice t) ;; Blank scratch buffer
 #+end_src
 
 *** flash when the bell rings
