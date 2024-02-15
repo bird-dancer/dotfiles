@@ -452,10 +452,13 @@ add contrib package for extra features and add org-tempo for expanding structual
     :init (require 'org-tempo)
     :after org-mode)
 #+end_src
+
 *** start up folded
+
 #+begin_src emacs-lisp
   (setq org-startup-folded t)
 #+end_src
+
 *** org-cliplink
 
 give pasted links the title provided by the meta-information of the website
@@ -485,8 +488,7 @@ enable drag-and-drop support for images and files; inserts inline previews for i
 #+end_src
 
 ** navigation
-
-use M-p and M-n to go up and down org levels
+*** use M-p and M-n to go up and down org levels
 
 #+begin_src emacs-lisp
   (add-hook 'org-mode-hook
@@ -540,7 +542,7 @@ make bullet points and headings look nice
 
 #+begin_src emacs-lisp :tangle no
   (use-package org-superstar
-    :after org-mode
+    ;:after org-mode
     :hook (org-mode . org-superstar-mode))
 #+end_src
 
@@ -762,7 +764,8 @@ highlight uncommited, changed lines on the side of a buffer
 
 #+begin_src emacs-lisp
   (use-package diff-hl
-    :init (global-diff-hl-mode))
+    :init (global-diff-hl-mode)
+    :hook (dired-mode . diff-hl-dired-mode))
 #+end_src
 
 ** treesitter
@@ -867,6 +870,8 @@ set M-RET shortcut for opening eshell
   (global-set-key (kbd "M-RET") 'eshell)
 #+end_src
 
+** email
+
 ** htmlize
 
 display current buffer as html
@@ -905,17 +910,18 @@ make gc pauses faster by decreasing the threshold, increasing the runtime perfor
 #+end_src
 
 * TODO
-+ look at my doom config
 + use tabs for indentation and make them "sticky"???
-+ when inserting a space at the end of a line in org, pressing enter will go to the new line and remove the space at the end
-+ email mu4e: [[https://www.youtube.com/watch?v=yZRyEhi4y44&pp=ygULZW1hY3MgZW1haWw%3D][Streamline Your E-mail Management with mu4e - Emacs Mail - YouTube]]
++ email
+  + gnus
+   + mu4e: [[https://www.youtube.com/watch?v=yZRyEhi4y44&pp=ygULZW1hY3MgZW1haWw%3D][Streamline Your E-mail Management with mu4e - Emacs Mail - YouTube]]
 + handle passwords: [[https://www.youtube.com/watch?v=nZ_T7Q49B8Y][How to Encrypt Your Passwords with Emacs - YouTube]]
-+ review nessecaty of org-mode looks, org-appear etc.
-+ find a shell prompt that works with eshell and term
 * look into
++ look at my doom config
 + [[https://github.com/Fuco1/smartparens][GitHub - Fuco1/smartparens: Minor mode for Emacs that deals with parens pairs...]]
++ avy [[https://github.com/abo-abo/avy][GitHub - abo-abo/avy: Jump to things in Emacs tree-style]]
 + treemacs
 + projectile
++ denote instead of org-roam
 + ibuffer
 + deft
 + usefull but not needed
@@ -932,4 +938,3 @@ make gc pauses faster by decreasing the threshold, increasing the runtime perfor
 ** from doom
 + format+ onsave
 + grammar
-+ =ctrl-a= should move to beginning of written line insead of actual line

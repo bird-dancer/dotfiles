@@ -332,7 +332,8 @@
   :after magit)
 
 (use-package diff-hl
-  :init (global-diff-hl-mode))
+  :init (global-diff-hl-mode)
+  :hook (dired-mode . diff-hl-dired-mode))
 
 (use-package treesit-auto
   :custom
