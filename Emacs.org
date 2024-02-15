@@ -151,6 +151,9 @@ remove the menu-bar tool-bar and scroll-bar as a measure to remove visual clutte
 
 #+begin_src emacs-lisp :tangle no
   (use-package gruvbox-theme)
+#+end_src
+
+#+begin_src emacs-lisp :tangle no
   (load-theme 'gruvbox-dark-hard t)
   (load-theme 'gruvbox-light-soft t)
 #+end_src
@@ -159,6 +162,9 @@ remove the menu-bar tool-bar and scroll-bar as a measure to remove visual clutte
 
 #+begin_src emacs-lisp
   (use-package ef-themes)
+#+end_src
+
+#+begin_src emacs-lisp
   (load-theme 'ef-cherie t)
   ;(load-theme 'ef-autumn t)
   ;(load-theme 'ef-dark t)

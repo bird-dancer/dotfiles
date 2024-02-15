@@ -44,6 +44,7 @@
 (setq display-line-numbers-type 'relative) ;; make line numbers relative
 
 (use-package ef-themes)
+
 (load-theme 'ef-cherie t)
 ;(load-theme 'ef-autumn t)
 ;(load-theme 'ef-dark t)
