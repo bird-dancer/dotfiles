@@ -66,7 +66,7 @@ clear build directory and build with debug flags enabled
 
 *** gcc
 
-=comp= compiles gcc code for optimal debugging, bug recuction and security
+=comp= compiles gcc code for optimal debugging, bug reduction and security
 
 #+begin_src bash
   alias comp='gcc -std=c17 -Wall -Wextra -fstack-protector -g3 -lm'
@@ -74,7 +74,7 @@ clear build directory and build with debug flags enabled
 
 ** ssh
 
-remember my ssh-keys during a sessions
+remember my ssh-keys during a session
 
 #+begin_src bash
   eval $(ssh-agent) > /dev/null
@@ -82,10 +82,10 @@ remember my ssh-keys during a sessions
 
 ** pacman
 
-shorten my most used pacman commands
-+ =pac= install and update
-+ =parc= remove
-+ =paci= info
+shorten my most used =pacman= commands
++ =pac=: install and update
++ =pacr=: remove
++ =paci=: info
 
 #+begin_src bash
   alias pac='sudo pacman -Syu'
@@ -107,7 +107,7 @@ automatically correct common typos I make
 
 ** ex
 
-extract/decompress all sorts of archives/copressed files by just typing =ex= /archive_name/
+extract/decompress all sorts of archives/compressed files by just typing =ex= /archive_name/
 
 #+begin_src bash
   ex (){
@@ -145,9 +145,9 @@ set saved history size and location
   SAVEHIST=1000
 #+end_src
 
-** emacs keybindings
+** Emacs keybindings
 
-enable emacs keybindings in zsh
+enable Emacs keybindings in zsh
 
 #+begin_src bash
   bindkey -e
