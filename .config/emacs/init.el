@@ -311,16 +311,51 @@
 (global-set-key (kbd "C-S-k") 'kill-line-backward)
 
 (use-package multiple-cursors
-  :defer t
-  :bind(("C-;" . mc/edit-lines)
-        ("C->" . mc/mark-next-like-this)
-        ("C-<" . mc/mark-previous-like-this)
-        ("C-c C-<" . mc/mark-all-like-this)))
+  :defer )
+;("C-;" . mc/edit-lines))
+(global-set-key (kbd "C-S-c C-S-c") 'mc/edit-lines)
+(global-set-key (kbd "C->") 'mc/mark-next-like-this)
+(global-set-key (kbd "C-<") 'mc/mark-previous-like-this)
+(global-set-key (kbd "C-c C-<") 'mc/mark-all-like-this)
+
+(use-package jinx)
+(add-hook 'emacs-startup-hook #'global-jinx-mode)
+(keymap-global-set "M-$" #'jinx-correct)
+(keymap-global-set "C-M-$" #'jinx-languages)
+(keymap-global-set "M-p" #'jinx-previous)
+(keymap-global-set "M-n" #'jinx-next)
+
+(use-package hl-todo
+  :hook ((prog-mode . hl-todo-mode)
+         (org-mode . hl-todo-mode))
+  :config
+  (keymap-set hl-todo-mode-map "C-c p" #'hl-todo-previous)
+  (keymap-set hl-todo-mode-map "C-c n" #'hl-todo-next)
+  (keymap-set hl-todo-mode-map "C-c o" #'hl-todo-occur)
+  (keymap-set hl-todo-mode-map "C-c i" #'hl-todo-insert))
+
+(setq hl-todo-keyword-faces
+      '(("TODO"   . "#FF0000")
+        ("FIXME"  . "#FF0000")
+        ("DEBUG"  . "#A020F0")
+        ("GOTCHA" . "#FF4500")
+        ("STUB"   . "#1E90FF")))
 
 (use-package rainbow-delimiters
   :hook (prog-mode . rainbow-delimiters-mode))
 
-(electric-pair-mode t)
+(use-package smartparens-mode
+:ensure smartparens  ;; install the package
+:hook (prog-mode text-mode markdown-mode) ;; add `smartparens-mode` to these hooks
+:config
+;; load default config
+(require 'smartparens-config))
+
+;(electric-pair-mode t)
+;(electric-indent-mode t)
+;(electric-quote-mode t)
+(setq minibuffer-default-prompt-format " [%s]") ; Emacs 29
+(minibuffer-electric-default-mode 1)
 
 (use-package magit
   :commands magit)

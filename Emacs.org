@@ -717,54 +717,91 @@ position of the pointer to the beginning of the line with =C-S-k=
 
 #+begin_src emacs-lisp
   (use-package multiple-cursors
-    :defer t
-    :bind(("C-;" . mc/edit-lines)
-          ("C->" . mc/mark-next-like-this)
-          ("C-<" . mc/mark-previous-like-this)
-          ("C-c C-<" . mc/mark-all-like-this)))
+    :defer )
+  ;("C-;" . mc/edit-lines))
+  (global-set-key (kbd "C-S-c C-S-c") 'mc/edit-lines)
+  (global-set-key (kbd "C->") 'mc/mark-next-like-this)
+  (global-set-key (kbd "C-<") 'mc/mark-previous-like-this)
+  (global-set-key (kbd "C-c C-<") 'mc/mark-all-like-this)
 #+end_src
-    :config
-    (global-set-key (kbd "C-;") 'mc/edit-lines)
-    (global-set-key (kbd "C->") 'mc/mark-next-like-this)
-    (global-set-key (kbd "C-<") 'mc/mark-previous-like-this)
-    (global-set-key (kbd "C-c C-<") 'mc/mark-all-like-this))
 
-** highlight todo
-
-hightlight todo fixme etc.
+** spellcheck
+*** flyspell (not active)
+use flyspell, the default spellcheck
 
 #+begin_src emacs-lisp :tangle no
+  (use-package flyspell-correct
+    :after flyspell
+    :bind (:map flyspell-mode-map ("C-;" . flyspell-correct-wrapper)))
+#+end_src
+
+#+begin_src emacs-lisp :tangle no
+    (define-key flyspell-mode-map (kbd "C-M-i") #'flyspell-correct-word)
+#+end_src
+
+*** jinx spellchecking, using enchant
+
+#+begin_src emacs-lisp
+  (use-package jinx)
+  (add-hook 'emacs-startup-hook #'global-jinx-mode)
+  (keymap-global-set "M-$" #'jinx-correct)
+  (keymap-global-set "C-M-$" #'jinx-languages)
+  (keymap-global-set "M-p" #'jinx-previous)
+  (keymap-global-set "M-n" #'jinx-next)
+  #+end_src
+
+** highlight TODO 
+
+highlight TODO FIXME etc.
+
+#+begin_src emacs-lisp
   (use-package hl-todo
     :hook ((prog-mode . hl-todo-mode)
            (org-mode . hl-todo-mode))
-    :bind (("C-c p" . hl-todo-previous)
-           ("C-c P" . hl-todo-next)
-           ("C-c o" . hl-todo-occur)
-           ("C-c i" . hl-todo-insert))
     :config
-    (setq hl-todo-keyword-faces
-          '(("TODO"   . "#FF0000")
-            ("FIXME"  . "#FF0000")
-            ("DEBUG"  . "#A020F0")
-            ("GOTCHA" . "#FF4500")
-            ("STUB"   . "#1E90FF"))))
+    (keymap-set hl-todo-mode-map "C-c p" #'hl-todo-previous)
+    (keymap-set hl-todo-mode-map "C-c n" #'hl-todo-next)
+    (keymap-set hl-todo-mode-map "C-c o" #'hl-todo-occur)
+    (keymap-set hl-todo-mode-map "C-c i" #'hl-todo-insert))
+
+  (setq hl-todo-keyword-faces
+        '(("TODO"   . "#FF0000")
+          ("FIXME"  . "#FF0000")
+          ("DEBUG"  . "#A020F0")
+          ("GOTCHA" . "#FF4500")
+          ("STUB"   . "#1E90FF")))
 #+end_src
 
 ** rainbow delimiters
 
-match brackets and other delimiters by colour to see the current scope more easily
+match brackets and other delimiters by color to see the current scope more easily
 
 #+begin_src emacs-lisp
   (use-package rainbow-delimiters
     :hook (prog-mode . rainbow-delimiters-mode))
 #+end_src
 
-** electric pair mode
+** auto close brackets FIXME 
+*** smartparens
+#+begin_src emacs-lisp
+  (use-package smartparens-mode
+  :ensure smartparens  ;; install the package
+  :hook (prog-mode text-mode markdown-mode) ;; add `smartparens-mode` to these hooks
+  :config
+  ;; load default config
+  (require 'smartparens-config))
+#+end_src
 
-auto close braces, tags, etc.
+*** electric behavior
+
+auto indent,  via electric-mode
 
 #+begin_src emacs-lisp
-  (electric-pair-mode t)
+  ;(electric-pair-mode t)
+  ;(electric-indent-mode t)
+  ;(electric-quote-mode t)
+  (setq minibuffer-default-prompt-format " [%s]") ; Emacs 29
+  (minibuffer-electric-default-mode 1)
 #+end_src
 
 * development
