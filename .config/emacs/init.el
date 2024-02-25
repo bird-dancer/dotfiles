@@ -289,16 +289,18 @@
 (global-set-key (kbd "C-c a") #'org-agenda)
 
 (setq org-agenda-start-day "0d")
-(setq org-agenda-span 14)
+(setq org-agenda-span 20)
 (setq org-agenda-start-on-weekday nil)
 
 (setq org-agenda-files
       '("~/Desktop/uni/uni.org"
         "~/Desktop/uni/personal.org"))
 
+(add-hook 'prog-mode-hook #'hs-minor-mode)
 (global-set-key (kbd "C-c C-h") 'hs-hide-block)
 (global-set-key (kbd "C-c C-s") 'hs-show-block)
 (global-set-key (kbd "C-c C-t") 'hs-toggle-hiding)
+(global-set-key (kbd "C-<tab>") 'hs-toggle-hiding)
 (global-set-key (kbd "C-c C-a") 'hs-show-all)
 (global-set-key (kbd "C-c C-l") 'hs-hide-all)
 
@@ -359,11 +361,12 @@
   (define-key eglot-mode-map (kbd "C-c c f") 'eglot-format-buffer)
   (define-key eglot-mode-map (kbd "C-c c q") 'eglot-code-action-quickfix)
   (define-key eglot-mode-map (kbd "C-c c e") 'eglot-code-action-extract)
-  (define-key eglot-mode-map (kbd "<f6>") 'xref-find-definitions)
+  ;(define-key eglot-mode-map (kbd "<f6>") 'xref-find-definitions)
   (define-key eglot-mode-map (kbd "M-.") 'xref-find-definitions)
   )
 
 (use-package all-the-icons-dired
+  :defer t
   :after all-the-icons
   :hook (dired-mode . all-the-icons-dired-mode))
 

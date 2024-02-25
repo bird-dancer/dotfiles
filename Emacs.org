@@ -543,7 +543,7 @@ disabled because it conflicts with the [[jinx spellchecking, using enchant]] sho
 
 #+begin_src emacs-lisp
   (setq org-startup-indented t
-        org-pretty-entities t
+        ;org-pretty-entities t
         org-hide-emphasis-markers t
         org-startup-with-inline-images t
         org-image-actual-width '(300))
@@ -672,7 +672,7 @@ make it so the agenda always starts today and we can see two weeks from today in
 
 #+begin_src emacs-lisp
   (setq org-agenda-start-day "0d")
-  (setq org-agenda-span 14)
+  (setq org-agenda-span 20)
   (setq org-agenda-start-on-weekday nil)
 #+end_src
 
@@ -692,9 +692,11 @@ the files that org-agenda will visit to search for timestamps to use when creati
 set shortcuts for fold (collapse and expand) regions of text/code-blocks
 
 #+begin_src emacs-lisp
+  (add-hook 'prog-mode-hook #'hs-minor-mode)
   (global-set-key (kbd "C-c C-h") 'hs-hide-block)
   (global-set-key (kbd "C-c C-s") 'hs-show-block)
   (global-set-key (kbd "C-c C-t") 'hs-toggle-hiding)
+  (global-set-key (kbd "C-<tab>") 'hs-toggle-hiding)
   (global-set-key (kbd "C-c C-a") 'hs-show-all)
   (global-set-key (kbd "C-c C-l") 'hs-hide-all)
 #+end_src
