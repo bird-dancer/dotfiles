@@ -261,6 +261,14 @@ typed text replaces the selection if the selection is active, pressing delete or
   (setq global-auto-revert-non-file-buffers t)
 #+end_src
 
+*** yank (paste) when pressing C-z
+
+because it is very confusing when switching between qwerty and qwertz and the window gets minimized
+
+#+begin_src emacs-lisp
+  (global-set-key (kbd "C-z") 'yank)
+#+end_src
+
 *** kill buffer and close window
 
 kill the current buffer and close its window/frame with =C-x C-k=

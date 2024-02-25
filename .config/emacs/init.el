@@ -78,6 +78,8 @@
 ;; revert dired and other buffers
 (setq global-auto-revert-non-file-buffers t)
 
+(global-set-key (kbd "C-z") 'yank)
+
 (defun kill-buffer-and-close-window ()
   "Kill the current buffer and close its window."
   (interactive)
