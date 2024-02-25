@@ -113,6 +113,14 @@
         completion-category-defaults nil
         completion-category-overrides '((file (styles partial-completion)))))
 
+(use-package consult
+  :bind ("C-c r" . 'consult-ripgrep)
+  :config
+  (keymap-global-set "C-s" 'consult-line)
+  (keymap-set minibuffer-local-map "C-r" 'consult-history)
+  (setq completion-in-region-function #'consult-completion-in-region)
+  )
+
 (use-package corfu
   :custom
   (corfu-cycle t)                ;; Enable cycling for `corfu-next/previous'
@@ -141,14 +149,6 @@
           (lambda ()
             (setq-local corfu-auto nil)
             (corfu-mode)))
-
-(use-package consult
-  :bind ("C-c r" . 'consult-ripgrep)
-  :config
-  (keymap-global-set "C-s" 'consult-line)
-  (keymap-set minibuffer-local-map "C-r" 'consult-history)
-  (setq completion-in-region-function #'consult-completion-in-region)
-  )
 
 (use-package cape
   ;; Bind dedicated completion commands
@@ -193,6 +193,11 @@
 (use-package org
   :defer t
   :commands (org-mode))
+
+(defun transform-comments (backend)
+  (while (re-search-forward "[:blank:]*# " nil t)
+    (replace-match "#+LATEX: % ")))
+  (add-hook 'org-export-before-parsing-hook #'transform-comments)
 
 (use-package org-contrib
   :init (require 'org-tempo)

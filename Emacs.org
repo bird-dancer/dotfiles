@@ -454,9 +454,20 @@ for an improved Emacs startup time loading =org= is deferred until it is actuall
 #+end_src
 
 ** functionality
+*** export to latex
+
+when exporting org mode to latex, keep the comments
+
+#+begin_src emacs-lisp
+  (defun transform-comments (backend)
+    (while (re-search-forward "[:blank:]*# " nil t)
+      (replace-match "#+LATEX: % ")))
+    (add-hook 'org-export-before-parsing-hook #'transform-comments)
+#+end_src
+
 *** org-contrib
 
-add contrib package for extra features and add org-tempo for expanding structual blocks from shortcuts eg. =<sTAB= will turn into =#+begin_src #+end_src=
+add contrib package for extra features and add org-tempo for expanding structural blocks from shortcuts eg. =<sTAB= will turn into =#+begin_src #+end_src=
 
 #+begin_src emacs-lisp
   (use-package org-contrib
