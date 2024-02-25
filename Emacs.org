@@ -187,9 +187,9 @@ picks a light color-theme when the sun is risen and a dark theme when the sun is
 ** fonts
 *** general font
 #+begin_src emacs-lisp
-  (set-frame-font "Fantasque Sans Mono 12" nil t)
+  ;(set-frame-font "Fantasque Sans Mono 12" nil t)
+  (set-frame-font "Comic Mono 11" nil t)
 #+end_src
-
 *** icon font
 #+begin_src emacs-lisp
   (use-package all-the-icons
@@ -199,6 +199,7 @@ picks a light color-theme when the sun is risen and a dark theme when the sun is
 *** enable emojis 😎
 #+begin_src emacs-lisp
   (use-package emojify
+    :defer t
     :init (global-emojify-mode))
 #+end_src
 

@@ -4,8 +4,7 @@
 (add-to-list 'package-archives '("melpa" . "https://melpa.org/packages/") t)
 (add-to-list 'package-archives '("melpa-stable" . "https://stable.melpa.org/packages/") t)
 (package-initialize)
-;; make all use-package :ensure t
-(require 'use-package-ensure)
+(require 'use-package-ensure) ;; make all use-package :ensure t
 (setq use-package-always-ensure t)
 
 (setq custom-file (locate-user-emacs-file "custom.el"))
@@ -26,8 +25,6 @@
 
 (setq use-dialog-box nil)
 
-(setq use-dialog-box nil)
-
 (menu-bar-mode 0)
 (tool-bar-mode 0)
 (scroll-bar-mode 0)
@@ -45,19 +42,21 @@
 
 (use-package ef-themes)
 
-(load-theme 'ef-cherie t)
-;(load-theme 'ef-autumn t)
+;(load-theme 'ef-cherie t)
+(load-theme 'ef-autumn t)
 ;(load-theme 'ef-dark t)
 ;(load-theme 'ef-duo-light t)
 ;(load-theme 'ef-duo-dark t)
 ;(load-theme 'ef-night t)
 
-(set-frame-font "Fantasque Sans Mono 12" nil t)
+;(set-frame-font "Fantasque Sans Mono 12" nil t)
+(set-frame-font "Comic Mono 11" nil t)
 
 (use-package all-the-icons
   :if (display-graphic-p))
 
 (use-package emojify
+  :defer t
   :init (global-emojify-mode))
 
 (use-package doom-modeline
