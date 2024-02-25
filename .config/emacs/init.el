@@ -212,32 +212,21 @@
   :after org-mode
   :commands org-hugo-auto-export-mode)
 
-(use-package org-download
-  :defer t
-  :hook (org-mode #'org-download-mode))
-
 (add-hook 'org-mode-hook
-          (lambda ()
-            (local-set-key (kbd "M-p") 'org-up-element)))
+           (lambda ()
+             (local-set-key (kbd "M-F") 'org-shiftmetaright)))
 (add-hook 'org-mode-hook
-          (lambda ()
-            (local-set-key (kbd "M-n") 'org-down-element)))
-
+           (lambda ()
+           (local-set-key (kbd "M-B") 'org-shiftmetaleft)))
 (add-hook 'org-mode-hook
-          (lambda ()
-            (local-set-key (kbd "C-S-F") 'org-shiftmetaright)))
+           (lambda ()
+             (local-set-key (kbd "M-P") 'org-move-subtree-up)))
 (add-hook 'org-mode-hook
-          (lambda ()
-          (local-set-key (kbd "C-S-B") 'org-shiftmetaleft)))
-(add-hook 'org-mode-hook
-          (lambda ()
-            (local-set-key (kbd "C-S-P") 'org-move-subtree-up)))
-(add-hook 'org-mode-hook
-          (lambda ()
-          (local-set-key (kbd "C-S-N") 'org-move-subtree-down)))
+           (lambda ()
+           (local-set-key (kbd "M-N") 'org-move-subtree-down)))
 
 (setq org-startup-indented t
-      org-pretty-entities t
+      ;org-pretty-entities t
       org-hide-emphasis-markers t
       org-startup-with-inline-images t
       org-image-actual-width '(300))
