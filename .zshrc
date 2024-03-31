@@ -1,7 +1,7 @@
-alias ls='exa --icons'
-alias la='exa -a --icons'
-alias ll='exa --icons -lagh'
-alias tree='exa --tree --icons'
+alias ls='eza --icons'
+alias la='eza -a --icons'
+alias ll='eza --icons -lagh'
+alias tree='eza --tree --icons'
 
 alias grep='rg'
 
@@ -69,17 +69,6 @@ function cd {
 ls
 
 eval "$(starship init zsh)"
-
-export EDITOR=$(which emacs)
-
-export RUSTC_WRAPPER=sccache
-export JAVA_HOME=/usr/lib/jvm/default
-export GEM_HOME=$HOME/.local/share/gem
-
-path+=("$HOME/.config/emacs/bin")
-path+=("$HOME/.local/bin")
-path+=("$HOME/.local/share/gem/ruby/3.0.0/bin")
-path+=("$HOME/arm/bin")
 
 source /usr/share/zsh/plugins/zsh-autosuggestions/zsh-autosuggestions.zsh 2>/dev/null
 
