@@ -1,9 +1,15 @@
+alias ls='lsd'
+alias la='lsd -a'
+alias ll='lsd -lag'
+alias tree='lsd --tree'
+
 alias ls='eza --icons'
 alias la='eza -a --icons'
 alias ll='eza --icons -lagh'
 alias tree='eza --tree --icons'
 
-alias grep='rg'
+#alias grep='rg'
+alias grep='grep --color=auto'
 
 alias cat='bat'
 
@@ -18,12 +24,15 @@ eval $(ssh-agent) > /dev/null
 alias pac='sudo pacman -Syu'
 alias pacr='sudo pacman -Rs'
 alias paci='pacman -Si'
+alias cleanup='sudo pacman -Rns $(pacman -Qtdq)'
 
 alias celar='clear'
 alias lcear='clear'
 alias lcear='clear'
 alias clea='clear'
 alias cleat='clear'
+
+alias em='/usr/bin/emacs -nw'
 
 ex (){
         if [ -f $1 ] ; then
@@ -47,10 +56,14 @@ ex (){
         fi
 }
 
+export TERM="xterm-256color"
+
 # Lines configured by zsh-newuser-install
 HISTFILE=~/.histfile
 HISTSIZE=1000
 SAVEHIST=1000
+
+export HISTORY_IGNORE="(ls|cd|pwd|exit|sudo reboot|history|cd -|cd ..)"
 
 bindkey -e
 
@@ -64,7 +77,7 @@ compinit
 export LC_CTYPE=en_US.UTF-8
 
 function cd {
-        builtin cd "$@" && ls
+    builtin cd "$@" && ls
 }
 ls
 

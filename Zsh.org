@@ -12,31 +12,43 @@ this zsh config uses =zsh-autocomplete= and =zsh-syntax-highlighting= and has no
 to load env variables to the login shell rather then just the active shell
 *** editor
 #+begin_src bash :tangle .zprofile
-  export EDITOR=$(which emacs)
+  if [ -z "$(which emacs)" ] ; then
+      export EDITOR=$(which emacs)
+  fi
 #+end_src
 *** programming
 #+begin_src bash :tangle .zprofile
-  export RUSTC_WRAPPER=sccache
-  export JAVA_HOME=/usr/lib/jvm/default
-  export GEM_HOME="$(gem env user_gemhome)"
+  if [ -z "$(which sccache)" ] ; then
+      export RUSTC_WRAPPER=sccache
+  fi
+  if [ -d "/usr/lib/jvm/default" ] ; then
+      export JAVA_HOME=/usr/lib/jvm/default
+  fi
+  if [ -z "$(which gem)" ] ; then
+      export GEM_HOME="$(gem env user_gemhome)"
+  fi
 #+end_src
 *** path
 #+begin_src bash :tangle .zprofile
-  #path+=("$HOME/.config/emacs/bin")
-  export PATH="$PATH:$HOME/.local/bin"
-  export PATH="$PATH:$GEM_HOME/bin"
+  if [ -d "$HOME/.emacs.d/bin" ] ; then
+      export PATH="$HOME/.emacs.d/bin:$PATH"
+  fi
+  if [ -d "$HOME/.local/bin" ] ; then
+      export PATH="$PATH:$HOME/.local/bin"
+  fi
+  if [ -d "$GEM_HOME/bin" ] ; then
+      export PATH="$PATH:$GEM_HOME/bin"
+  fi
 #+end_src
 * zshrc
 ** aliases
-
 because the aliases are used in the rest of the config they are first
-
 *** replace default tools
 **** lsd *notangle*
 
 use ls deluxe (lsd) instead of ls and tree because it looks prettier
 
-#+begin_src bash :tangle no
+#+begin_src bash
   alias ls='lsd'
   alias la='lsd -a'
   alias ll='lsd -lag'
@@ -54,12 +66,11 @@ use exa instead of ls and tree because it looks prettier
 #+end_src
 **** grep
 #+begin_src bash
-  alias grep='rg'
+  #alias grep='rg'
+  alias grep='grep --color=auto'
 #+end_src
 **** bat
-
 use bat instead of cat and tree because it looks prettier
-
 #+begin_src bash
   alias cat='bat'
 #+end_src
@@ -98,11 +109,13 @@ shorten my most used =pacman= commands
 + =pac=: install and update
 + =pacr=: remove
 + =paci=: info
++ =cleanup=: remove orphaned packages
 
 #+begin_src bash
   alias pac='sudo pacman -Syu'
   alias pacr='sudo pacman -Rs'
   alias paci='pacman -Si'
+  alias cleanup='sudo pacman -Rns $(pacman -Qtdq)'
 #+end_src
 *** typos
 
@@ -114,6 +127,10 @@ automatically correct common typos I make
   alias lcear='clear'
   alias clea='clear'
   alias cleat='clear'
+#+end_src
+*** emacs
+#+begin_src bash
+  alias em='/usr/bin/emacs -nw'
 #+end_src
 *** ex
 
@@ -143,15 +160,21 @@ extract/decompress all sorts of archives/compressed files by just typing =ex= /a
   }
 #+end_src
 ** general
+*** set color
+#+begin_src bash
+  export TERM="xterm-256color"
+#+end_src
 *** history
-
-set saved history size and location
-
-#+begin_src bash  
+**** set saved history size and location
+#+begin_src bash
   # Lines configured by zsh-newuser-install
   HISTFILE=~/.histfile
   HISTSIZE=1000
   SAVEHIST=1000
+#+end_src
+**** remove duplicate entries
+#+begin_src bash
+  export HISTORY_IGNORE="(ls|cd|pwd|exit|sudo reboot|history|cd -|cd ..)"
 #+end_src
 *** Emacs keybindings
 
@@ -184,7 +207,7 @@ runs =ls= after =cd=
 
 #+begin_src bash
   function cd {
-          builtin cd "$@" && ls
+      builtin cd "$@" && ls
   }
   ls
 #+end_src
@@ -197,22 +220,18 @@ load the [[https://starship.rs/][starship]] prompt
 #+end_src
 ** plugins
 *** autosuggestions
-
 #+begin_src bash 
   source /usr/share/zsh/plugins/zsh-autosuggestions/zsh-autosuggestions.zsh 2>/dev/null
 #+end_src
 *** syntax-highlighting
-
 #+begin_src bash 
   source /usr/share/zsh/plugins/zsh-syntax-highlighting/zsh-syntax-highlighting.zsh 2>/dev/null
 #+end_src
 *** history-substring-search
-
 #+begin_src bash 
   source /usr/share/zsh/plugins/zsh-history-substring-search/zsh-history-substring-search.zsh 2> /dev/null
 #+end_src
 *** additional completions
-
 #+begin_src bash 
   fpath=(/usr/share/zsh/site-functions $fpath)
 #+end_src
