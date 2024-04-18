@@ -1,3 +1,5 @@
+[[ -r ~/.bashrc ]] && . ~/.bashrc
+
 if [ -z "$(which emacs)" ] ; then
     export EDITOR=$(which emacs)
 fi
@@ -11,6 +13,8 @@ fi
 if [ -z "$(which gem)" ] ; then
     export GEM_HOME="$(gem env user_gemhome)"
 fi
+
+export LC_CTYPE=en_US.UTF-8
 
 if [ -d "$HOME/.emacs.d/bin" ] ; then
     export PATH="$HOME/.emacs.d/bin:$PATH"

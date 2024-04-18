@@ -2,7 +2,7 @@
 
 (require 'package)
 (add-to-list 'package-archives '("melpa" . "https://melpa.org/packages/") t)
-(add-to-list 'package-archives '("melpa-stable" . "https://stable.melpa.org/packages/") t)
+;(add-to-list 'package-archives '("melpa-stable" . "https://stable.melpa.org/packages/") t)
 (package-initialize)
 (require 'use-package-ensure) ;; make all use-package :ensure t
 (setq use-package-always-ensure t)
@@ -10,7 +10,9 @@
 (setq custom-file (locate-user-emacs-file "custom.el"))
 (load custom-file 'noerror 'nomessage)
 
-(setq backup-directory-alist `(("." . ,(expand-file-name "tmp/backups/" user-emacs-directory))))
+(setq backup-dir (expand-file-name "tmp/backups/" user-emacs-directory))
+(setq backup-directory-alist `(("." . , backup-dir)))
+(setq delete-old-versions t)
 
 (make-directory (expand-file-name "tmp/auto-saves/" user-emacs-directory) t)
 (setq auto-save-list-file-prefix (expand-file-name "tmp/auto-saves/sessions/" user-emacs-directory)
@@ -43,14 +45,25 @@
 (use-package ef-themes)
 
 ;(load-theme 'ef-cherie t)
-(load-theme 'ef-autumn t)
+;(load-theme 'ef-autumn t)
 ;(load-theme 'ef-dark t)
+;(load-theme 'ef-spring t)
+;(load-theme 'ef-melissa-light t)
 ;(load-theme 'ef-duo-light t)
 ;(load-theme 'ef-duo-dark t)
 ;(load-theme 'ef-night t)
 
+(use-package circadian
+  :config
+  (setq calendar-latitude 52.5)
+  (setq calendar-longitude 13.4)
+  (setq circadian-themes '((:sunrise . ef-melissa-light)
+                           (:sunset  . ef-autumn)))
+  (circadian-setup))
+
 ;(set-frame-font "Fantasque Sans Mono 12" nil t)
-(set-frame-font "Comic Mono 11" nil t)
+(set-frame-font "Comic Mono 12" nil t)
+;(add-to-list 'default-frame-alist '(font . "Comic Mono 11"))
 
 (use-package all-the-icons
   :if (display-graphic-p))
@@ -62,11 +75,54 @@
 (use-package doom-modeline
   :init (doom-modeline-mode t))
 
+(use-package elfeed)
+(global-set-key (kbd "C-x w") 'elfeed)
+(setq elfeed-feeds
+      '("http://nullprogram.com/feed/"
+        "https://planet.emacslife.com/atom.xml"
+        "https://archlinux.org/feeds/news/"))
+
 (use-package which-key
   :diminish which-key-mode
   :config
   (which-key-mode)
   (setq which-key-idle-delay 1))
+
+(defun delete-current-file-make-backup ()
+  "Delete current file, makes a backup~, close the buffer.
+If buffer is not a file, copy content to `kill-ring', delete buffer.
+If buffer is a file, the file's directory is shown with cursor at the next file.
+
+Backup filename is “‹name›~‹dateTimeStamp›~”. Existing file of the same name is overwritten. If buffer is not a file, the backup file name starts with “xx_”.
+
+URL `http://xahlee.info/emacs/emacs/elisp_delete-current-file.html'
+Version: 2018-05-15 2023-08-11 2023-10-28"
+  (interactive)
+  (when (eq major-mode 'dired-mode)
+    (user-error "%s: In dired. Nothing is done." real-this-command))
+  (let ((xfname buffer-file-name)
+        (xbuffname (buffer-name))
+        xbackupPath)
+    (setq xbackupPath
+          (concat
+           backup-dir
+           (format "~%s~" (format-time-string "%Y-%m-%d_%H%M%S"))))
+    (if xfname
+        (progn
+          (save-buffer xfname)
+          (rename-file xfname xbackupPath t)
+          (kill-buffer xbuffname)
+          (message "File deleted. Backup at
+%s" xbackupPath)
+          (when (boundp 'xah-recently-closed-buffers)
+            (push (cons nil xbackupPath) xah-recently-closed-buffers)))
+      (progn
+        (widen)
+        (kill-new (buffer-string))
+        (kill-buffer xbuffname)
+        (message "non-file buffer killed. buffer text copied to `kill-ring'."))))
+  (when (eq major-mode 'dired-mode) (revert-buffer)))
+(global-set-key (kbd "C-x x x") 'delete-current-file-make-backup)
 
 (recentf-mode t)
 
@@ -118,8 +174,7 @@
   :config
   (keymap-global-set "C-s" 'consult-line)
   (keymap-set minibuffer-local-map "C-r" 'consult-history)
-  (setq completion-in-region-function #'consult-completion-in-region)
-  )
+  (setq completion-in-region-function #'consult-completion-in-region))
 
 (use-package corfu
   :custom
@@ -194,14 +249,22 @@
   :defer t
   :commands (org-mode))
 
+(defun unpropertize (string)
+  "Removes all text properties from STRING."
+  (set-text-properties 0 (length string) nil string) string)
+(defun org-get-headings ()
+  "Return a list of an org document's headings."
+  (org-map-entries (lambda () (unpropertize (org-get-heading t t t t)))))
+(defun org-insert-link-headline (header)
+  "Insert internal link to HEADER entry in current file."
+  (interactive (list (completing-read "Link: " (org-get-headings) nil nil)))
+  (org-insert-link nil header))
+;(define-key org-mode-map (kbd "C-c h") 'org-insert-link-headline)
+
 (defun transform-comments (backend)
   (while (re-search-forward "[:blank:]*# " nil t)
     (replace-match "#+LATEX: % ")))
   (add-hook 'org-export-before-parsing-hook #'transform-comments)
-
-(use-package org-contrib
-  :init (require 'org-tempo)
-  :after org-mode)
 
 (setq org-startup-folded t)
 
@@ -241,10 +304,6 @@
  '(org-level-4 ((t (:height 1.1))))
  '(org-document-title ((t (:height 1.5)))))
 
-(use-package org-make-toc
-  :after org-mode
-  :hook (org-mode . org-make-toc-mode))
-
 (require 'org-tempo)
 (add-to-list 'org-structure-template-alist '("sh" . "src sh"))
 (add-to-list 'org-structure-template-alist '("ba" . "src bash"))
@@ -260,12 +319,11 @@
 (add-to-list 'org-structure-template-alist '("tex" . "src latex"))
 (add-to-list 'org-structure-template-alist '("rs" . "src rust"))
 
+(setq org-confirm-babel-evaluate nil)
+
 (use-package org-auto-tangle
   :defer t
   :hook (org-mode . org-auto-tangle-mode))
-
-(use-package ob-rust
-  :after org-mode)
 
 (org-babel-do-load-languages
  'org-babel-load-languages
@@ -273,7 +331,7 @@
 
 (use-package org-roam
   :custom
-  (org-roam-directory (file-truename "~/Desktop/Notes"))
+  (org-roam-directory (file-truename "~/Notes"))
   :bind (("C-c n l" . org-roam-buffer-toggle)
          ("C-c n f" . org-roam-node-find)
          ("C-c n g" . org-roam-graph)
@@ -293,8 +351,8 @@
 (setq org-agenda-start-on-weekday nil)
 
 (setq org-agenda-files
-      '("~/Desktop/uni/uni.org"
-        "~/Desktop/uni/personal.org"))
+      '("~/uni/uni.org"
+        "~/uni/personal.org"))
 
 (add-hook 'prog-mode-hook #'hs-minor-mode)
 (global-set-key (kbd "C-c C-h") 'hs-hide-block)
@@ -310,9 +368,8 @@
   (kill-line 0))
 (global-set-key (kbd "C-S-k") 'kill-line-backward)
 
-(use-package multiple-cursors
-  :defer )
-;("C-;" . mc/edit-lines))
+(use-package multiple-cursors)
+(global-set-key (kbd "C-;") 'mc/edit-lines)
 (global-set-key (kbd "C-S-c C-S-c") 'mc/edit-lines)
 (global-set-key (kbd "C->") 'mc/mark-next-like-this)
 (global-set-key (kbd "C-<") 'mc/mark-previous-like-this)
@@ -326,20 +383,21 @@
 (keymap-global-set "M-n" #'jinx-next)
 
 (use-package hl-todo
-  :hook ((prog-mode . hl-todo-mode)
-         (org-mode . hl-todo-mode))
-  :config
-  (keymap-set hl-todo-mode-map "C-c p" #'hl-todo-previous)
-  (keymap-set hl-todo-mode-map "C-c n" #'hl-todo-next)
-  (keymap-set hl-todo-mode-map "C-c o" #'hl-todo-occur)
-  (keymap-set hl-todo-mode-map "C-c i" #'hl-todo-insert))
+    :hook ((prog-mode . hl-todo-mode)
+           (org-mode . hl-todo-mode))
+    :config
+    ;(keymap-set hl-todo-mode-map "C-c p" #'hl-todo-previous)
+    ;(keymap-set hl-todo-mode-map "C-c n" #'hl-todo-next)
+    ;(keymap-set hl-todo-mode-map "C-c o" #'hl-todo-occur)
+    ;(keymap-set hl-todo-mode-map "C-c i" #'hl-todo-insert)
+    )
 
-(setq hl-todo-keyword-faces
-      '(("TODO"   . "#FF0000")
-        ("FIXME"  . "#FF0000")
-        ("DEBUG"  . "#A020F0")
-        ("GOTCHA" . "#FF4500")
-        ("STUB"   . "#1E90FF")))
+  (setq hl-todo-keyword-faces
+        '(("TODO"   . "#FF0000")
+          ("FIXME"  . "#FF0000")
+          ("DEBUG"  . "#A020F0")
+          ("GOTCHA" . "#FF4500")
+          ("STUB"   . "#1E90FF")))
 
 (use-package rainbow-delimiters
   :hook (prog-mode . rainbow-delimiters-mode))
@@ -348,11 +406,10 @@
 :ensure smartparens  ;; install the package
 :hook (prog-mode text-mode markdown-mode) ;; add `smartparens-mode` to these hooks
 :config
-;; load default config
 (require 'smartparens-config))
 
 ;(electric-pair-mode t)
-;(electric-indent-mode t)
+(electric-indent-mode t)
 ;(electric-quote-mode t)
 (setq minibuffer-default-prompt-format " [%s]") ; Emacs 29
 (minibuffer-electric-default-mode 1)
@@ -374,31 +431,48 @@
   (treesit-auto-add-to-auto-mode-alist 'all)
   (global-treesit-auto-mode))
 
-(use-package geiser-guile
-  :hook (scheme-mode . geiser-guile))
-
 (use-package markdown-mode
   :mode ("\\.md\\'" . markdown-view-mode)
   :init (setq markdown-command "multimarkdown"))
 
-(use-package flymake-shellcheck
-  :hook (bash-ts-mode . flymake-shellcheck-mode))
+(use-package erblint)
+
+(use-package flymake-eslint)
+
+(use-package elm-mode)
+(setq elm-mode-hook '(elm-indent-simple-mode))
+(add-hook 'elm-mode-hook 'elm-format-on-save-mode)
+
+(use-package web-mode
+  :config
+  (add-to-list 'auto-mode-alist '("\\.html?\\'" . web-mode))
+  (add-to-list 'auto-mode-alist '("\\.phtml\\'" . web-mode))
+  (add-to-list 'auto-mode-alist '("\\.tpl\\.php\\'" . web-mode))
+  (add-to-list 'auto-mode-alist '("\\.[agj]sp\\'" . web-mode))
+  (add-to-list 'auto-mode-alist '("\\.as[cp]x\\'" . web-mode))
+  (add-to-list 'auto-mode-alist '("\\.erb\\'" . web-mode))
+  (add-to-list 'auto-mode-alist '("\\.mustache\\'" . web-mode))
+  (add-to-list 'auto-mode-alist '("\\.djhtml\\'" . web-mode)))
 
 (add-to-list 'auto-mode-alist '("Makefile" . makefile-mode))
 
-(use-package eglot
-  :defer t
-  :config
-  (define-key eglot-mode-map (kbd "C-c c r") 'eglot-rename)
-  (define-key eglot-mode-map (kbd "C-c c o") 'eglot-code-action-organize-imports)
-  (define-key eglot-mode-map (kbd "C-c c h") 'eldoc)
-  (define-key eglot-mode-map (kbd "C-c c a") 'eglot-code-actions)
-  (define-key eglot-mode-map (kbd "C-c c f") 'eglot-format-buffer)
-  (define-key eglot-mode-map (kbd "C-c c q") 'eglot-code-action-quickfix)
-  (define-key eglot-mode-map (kbd "C-c c e") 'eglot-code-action-extract)
-  ;(define-key eglot-mode-map (kbd "<f6>") 'xref-find-definitions)
-  (define-key eglot-mode-map (kbd "M-.") 'xref-find-definitions)
-  )
+;(setenv "PATH" (concat "/home/felix/.local/" (getenv "PATH")))
+                                        ;(setenv "PATH" (concat "/usr/local/sbin/" (getenv "PATH")))
+                                        ;(setenv "PATH" (concat "/usr/local/bin/" (getenv "PATH")))
+                                        ;(setenv "PATH" (concat "/usr/bin/" (getenv "PATH")))
+                                        ;(setenv "PATH" (concat (getenv "PATH") ":/home/felix/.local/bin"))
+                                        ;(setenv "PATH" (concat (getenv "PATH") ":/home/felix/.local/share/gem/ruby/3.0.0/bin"))
+                                        ;(setenv "GEM_HOME" "/home/felix/.local/share/gem")
+(require 'eglot)
+(define-key eglot-mode-map (kbd "C-c c r") 'eglot-rename)
+(define-key eglot-mode-map (kbd "C-c c o") 'eglot-code-action-organize-imports)
+(define-key eglot-mode-map (kbd "C-c c h") 'eldoc)
+(define-key eglot-mode-map (kbd "C-c c a") 'eglot-code-actions)
+(define-key eglot-mode-map (kbd "C-c c f") 'eglot-format-buffer)
+(define-key eglot-mode-map (kbd "C-c c q") 'eglot-code-action-quickfix)
+(define-key eglot-mode-map (kbd "C-c c e") 'eglot-code-action-extract)
+(define-key eglot-mode-map (kbd "<f6>") 'xref-find-definitions)
+(define-key eglot-mode-map (kbd "M-.") 'xref-find-definitions)
 
 (use-package all-the-icons-dired
   :defer t
@@ -410,9 +484,6 @@
 (setq dired-auto-revert-buffer t)
 
 (setq dired-dwim-target t)
-
-(use-package vterm
-  :commands vterm)
 
 (global-set-key (kbd "M-RET") 'eshell)
 

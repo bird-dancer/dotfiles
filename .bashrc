@@ -1,5 +1,3 @@
-export LC_CTYPE=en_US.UTF-8
-
 alias em='/usr/bin/emacs -nw'
 
 alias celar='clear'
@@ -19,12 +17,13 @@ eval $(ssh-agent) > /dev/null
 alias build='rm -rf build && cmake -B build -DCMAKE_BUILD_TYPE=Debug -DCMAKE_EXPORT_COMPILE_COMMANDS=1 && make -C'
 
 alias comp='gcc -std=c17 -Wall -Wextra -fstack-protector -g3 -lm'
+export GCC_COLORS='error=01;31:warning=01;35:note=01;36:caret=01;32:locus=01:quote=01'
 
 alias b='cd ..'
 
-alias ls='ls --color=auto'
-alias la='ls -a --color=auto'
-alias ll='ls -lagh --color=auto'
+alias ls='ls -F --color=auto'
+alias la='ls -AF --color=auto'
+alias ll='ls -lAghF --color=auto'
 
 #alias grep='rg'
 alias grep='grep --color=auto'
@@ -58,7 +57,9 @@ export TERM="xterm-256color"
 
 source /usr/share/doc/pkgfile/command-not-found.bash
 
-export HISTCONTROL=erasedups:ignorenoth
+HISTSIZE=1000
+HISTFILESIZE=2000  
+HISTCONTROL=ignoreboth
 
 bind '"\e[A": history-search-backward'
 bind '"\e[B": history-search-forward'
