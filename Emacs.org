@@ -123,18 +123,21 @@ remove the menu-bar tool-bar and scroll-bar as a measure to remove visual clutte
   (setq display-line-numbers-type 'relative) ;; make line numbers relative
 #+end_src
 ** theme
-*** gruvbox-themes
+*** cool themes (not used)
 #+begin_src emacs-lisp :tangle no
-  (use-package gruvbox-theme)
-  (load-theme 'gruvbox-dark-hard t)
-  (load-theme 'gruvbox-light-soft t)
+  (use-package gruvbox-theme :defer)
+  (use-package jazz-theme :defer)
+  (use-package zenburn-theme)
+  (use-package anti-zenburn-theme)
+  (use-package hc-zenburn-theme)
+  ;(load-theme 'gruvbox-dark-hard t)
+  ;(load-theme 'gruvbox-light-soft t)
 #+end_src
 *** ef-themes
 #+begin_src emacs-lisp
-  (use-package ef-themes)
+  (use-package ef-themes :defer)
 #+end_src
-
-#+begin_src emacs-lisp
+#+begin_src emacs-lisp :tangle no
   ;(load-theme 'ef-cherie t)
   ;(load-theme 'ef-autumn t)
   ;(load-theme 'ef-dark t)
@@ -145,7 +148,6 @@ remove the menu-bar tool-bar and scroll-bar as a measure to remove visual clutte
   ;(load-theme 'ef-night t)
 #+end_src
 *** auto pick theme
-
 picks a light color-theme when the sun is risen and a dark theme when the sun is set
 
 #+begin_src emacs-lisp
@@ -161,8 +163,8 @@ picks a light color-theme when the sun is risen and a dark theme when the sun is
 *** general font
 #+begin_src emacs-lisp
   ;(set-frame-font "Fantasque Sans Mono 12" nil t)totot
-  (set-frame-font "Comic Mono 12" nil t)
-  ;(set-frame-font "Comic Shanns Mono 12" nil t)
+  ;(set-frame-font "Comic Mono 12" nil t)
+  (set-frame-font "Comic Shanns Mono 13" nil t)
   ;(set-frame-font "Comic Shanns Mono Nerd Font Mono 12" nil t)
   ;(add-to-list 'default-frame-alist '(font . "Comic Mono 11"))
 #+end_src
@@ -193,11 +195,13 @@ make it so mode line can be hidden by calling =hide-mode-line=
     :commands (hide-mode-line-mode))
 #+end_src
 ** elf-feed
+subscribe to rss-feeds
 #+begin_src emacs-lisp
   (use-package elfeed)
   (global-set-key (kbd "C-x w") 'elfeed)
   (setq elfeed-feeds
         '("http://nullprogram.com/feed/"
+          "https://mccd.space/feed.xml"
           "https://dthompson.us/feed.xml"
           "https://planet.emacslife.com/atom.xml"
           "https://archlinux.org/feeds/news/"))
@@ -636,6 +640,10 @@ when ~#+auto_tangle: t~ is set in the beginning of an org-file, tangle all code 
   (use-package ob-rust
     :after org-mode)
 #+end_src
+**** guile
+#+begin_src emacs-lisp
+ (use-package geiser-guile) 
+#+end_src
 **** shells (sh, bash, zsh, fish, etc.)
 #+begin_src emacs-lisp
   (org-babel-do-load-languages
@@ -643,7 +651,7 @@ when ~#+auto_tangle: t~ is set in the beginning of an org-file, tangle all code 
    '((shell . t)))
 #+end_src
 ** org-roam
-#+begin_src emacs-lisp
+#+begin_src emacs-lisp :tangle no
   (use-package org-roam
     :custom
     (org-roam-directory (file-truename "~/Notes"))
@@ -726,7 +734,7 @@ use flyspell, the default spellcheck
     (define-key flyspell-mode-map (kbd "C-M-i") #'flyspell-correct-word)
 #+end_src
 *** jinx spellchecking, using enchant
-#+begin_src emacs-lisp
+#+begin_src emacs-lisp :tangle no
   (use-package jinx)
   (add-hook 'emacs-startup-hook #'global-jinx-mode)
   (keymap-global-set "M-$" #'jinx-correct)
@@ -941,6 +949,11 @@ add keybindings for when in eglot-mode (Emacs' built in language-server)
 #+begin_src emacs-lisp
   (setq dired-dwim-target t)
 #+end_src
+** email
+email with notmuch
+#+begin_src emacs-lisp
+  
+#+end_src
 ** vterm
 complete terminal in Emacs
 #+begin_src emacs-lisp :tangle no
@@ -995,6 +1008,8 @@ make garbage-collection pauses faster by decreasing the threshold, increasing th
   + mu4e: [[https://www.youtube.com/watch?v=yZRyEhi4y44&pp=ygULZW1hY3MgZW1haWw%3D][Streamline Your E-mail Management with mu4e - Emacs Mail - YouTube]]
 + handle passwords: [[https://www.youtube.com/watch?v=nZ_T7Q49B8Y][How to Encrypt Your Passwords with Emacs - YouTube]]
 * look into
++ [[https://github.com/Wilfred/deadgrep?tab=readme-ov-file][GitHub - Wilfred/deadgrep: fast, friendly searching with ripgrep and Emacs]]
++ [[https://www.emacswiki.org/emacs/HippieExpand][EmacsWiki: Hippie Expand]]
 + [[https://github.com/emacs-sideline/sideline][GitHub - emacs-sideline/sideline: Show information on the side]]
 + for eshell [[https://github.com/xenodium/dotsies][GitHub - xenodium/dotsies: Dot files, Emacs config, etc]]
 + [[https://github.com/bbatsov/crux][GitHub - bbatsov/crux: A Collection of Ridiculously Useful eXtensions for Emacs]]

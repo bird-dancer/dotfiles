@@ -18,7 +18,7 @@
 (setq auto-save-list-file-prefix (expand-file-name "tmp/auto-saves/sessions/" user-emacs-directory)
       auto-save-file-name-transforms `((".*", (expand-file-name "tmp/auto-saves/" user-emacs-directory) t)))
 
-(setq user-full-name "Felix"
+(setq user-full-name "Felix Dumbeck"
       user-mail-address "f.dumbeck@campus.tu-berlin.de")
 
 (setq inhibit-startup-screen t)
@@ -42,16 +42,7 @@
 (add-hook 'org-mode-hook #'display-line-numbers-mode)
 (setq display-line-numbers-type 'relative) ;; make line numbers relative
 
-(use-package ef-themes)
-
-;(load-theme 'ef-cherie t)
-;(load-theme 'ef-autumn t)
-;(load-theme 'ef-dark t)
-;(load-theme 'ef-spring t)
-;(load-theme 'ef-melissa-light t)
-;(load-theme 'ef-duo-light t)
-;(load-theme 'ef-duo-dark t)
-;(load-theme 'ef-night t)
+(use-package ef-themes :defer)
 
 (use-package circadian
   :config
@@ -61,8 +52,10 @@
                            (:sunset  . ef-autumn)))
   (circadian-setup))
 
-;(set-frame-font "Fantasque Sans Mono 12" nil t)
-(set-frame-font "Comic Mono 12" nil t)
+;(set-frame-font "Fantasque Sans Mono 12" nil t)totot
+;(set-frame-font "Comic Mono 12" nil t)
+(set-frame-font "Comic Shanns Mono 13" nil t)
+;(set-frame-font "Comic Shanns Mono Nerd Font Mono 12" nil t)
 ;(add-to-list 'default-frame-alist '(font . "Comic Mono 11"))
 
 (use-package all-the-icons
@@ -79,6 +72,8 @@
 (global-set-key (kbd "C-x w") 'elfeed)
 (setq elfeed-feeds
       '("http://nullprogram.com/feed/"
+        "https://mccd.space/feed.xml"
+        "https://dthompson.us/feed.xml"
         "https://planet.emacslife.com/atom.xml"
         "https://archlinux.org/feeds/news/"))
 
@@ -325,24 +320,11 @@ Version: 2018-05-15 2023-08-11 2023-10-28"
   :defer t
   :hook (org-mode . org-auto-tangle-mode))
 
+(use-package geiser-guile)
+
 (org-babel-do-load-languages
  'org-babel-load-languages
  '((shell . t)))
-
-(use-package org-roam
-  :custom
-  (org-roam-directory (file-truename "~/Notes"))
-  :bind (("C-c n l" . org-roam-buffer-toggle)
-         ("C-c n f" . org-roam-node-find)
-         ("C-c n g" . org-roam-graph)
-         ("C-c n i" . org-roam-node-insert)
-         ("C-c n c" . org-roam-capture)
-         ;; Dailies
-         ("C-c n j" . org-roam-dailies-capture-today))
-  :config
-  ;; If you're using a vertical completion framework, you might want a more informative completion interface
-  (setq org-roam-node-display-template (concat "${title:*} " (propertize "${tags:10}" 'face 'org-tag)))
-  (org-roam-db-autosync-mode))
 
 (global-set-key (kbd "C-c a") #'org-agenda)
 
@@ -374,13 +356,6 @@ Version: 2018-05-15 2023-08-11 2023-10-28"
 (global-set-key (kbd "C->") 'mc/mark-next-like-this)
 (global-set-key (kbd "C-<") 'mc/mark-previous-like-this)
 (global-set-key (kbd "C-c C-<") 'mc/mark-all-like-this)
-
-(use-package jinx)
-(add-hook 'emacs-startup-hook #'global-jinx-mode)
-(keymap-global-set "M-$" #'jinx-correct)
-(keymap-global-set "C-M-$" #'jinx-languages)
-(keymap-global-set "M-p" #'jinx-previous)
-(keymap-global-set "M-n" #'jinx-next)
 
 (use-package hl-todo
     :hook ((prog-mode . hl-todo-mode)
@@ -484,6 +459,8 @@ Version: 2018-05-15 2023-08-11 2023-10-28"
 (setq dired-auto-revert-buffer t)
 
 (setq dired-dwim-target t)
+
+
 
 (global-set-key (kbd "M-RET") 'eshell)
 
