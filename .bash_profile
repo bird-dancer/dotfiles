@@ -1,9 +1,12 @@
 [[ -r ~/.bashrc ]] && . ~/.bashrc
+  GUIX_PROFILE="$HOME/.config/guix/current"
+. "$GUIX_PROFILE/etc/profile"
 
 if [ -z "$(which emacs)" ] ; then
     export EDITOR=$(which emacs)
 fi
 
+export CC=gcc CXX=g++
 if [ -z "$(which sccache)" ] ; then
     export RUSTC_WRAPPER=sccache
 fi

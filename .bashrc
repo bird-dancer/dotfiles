@@ -1,3 +1,6 @@
+alias docker_stop='sudo docker stop $(sudo docker ps -a -q)'
+alias docker_rm='sudo docker rm $(sudo docker ps -a -q)'
+
 alias em='/usr/bin/emacs -nw'
 
 alias celar='clear'
@@ -16,6 +19,7 @@ eval $(ssh-agent) > /dev/null
 
 alias build='rm -rf build && cmake -B build -DCMAKE_BUILD_TYPE=Debug -DCMAKE_EXPORT_COMPILE_COMMANDS=1 && make -C'
 
+export CC=gcc CXX=g++
 alias comp='gcc -std=c17 -Wall -Wextra -fstack-protector -g3 -lm'
 export GCC_COLORS='error=01;31:warning=01;35:note=01;36:caret=01;32:locus=01:quote=01'
 
