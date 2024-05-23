@@ -1,7 +1,7 @@
 # This is Git's per-user configuration file.
 [user]
-	name = Felix
-	email = f.dumbeck@campus.tu-berlin.de
+	name = Felix Dumbeck
+	email = felix@dumbeck.net
 [color]
 	diff = auto
 	status = auto
@@ -11,8 +11,9 @@
 	pager = true
 [core]
 	editor = emacs
-
 [push]
 	autoSetupRemote = true
 [github]
+	user = bird-dancer
+[gitlab]
 	user = bird-dancer
