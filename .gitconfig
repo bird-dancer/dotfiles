@@ -11,7 +11,6 @@
 	pager = true
 [core]
 	editor = emacs
-
 [push]
 	autoSetupRemote = true
 [github]

@@ -164,7 +164,7 @@ picks a light color-theme when the sun is risen and a dark theme when the sun is
 #+begin_src emacs-lisp
   ;(set-frame-font "Fantasque Sans Mono 12" nil t)totot
   ;(set-frame-font "Comic Mono 12" nil t)
-  (set-frame-font "Comic Shanns Mono 13" nil t)
+  (set-frame-font "Comic Shanns 13" nil t)
   ;(set-frame-font "Comic Shanns Mono Nerd Font Mono 12" nil t)
   ;(add-to-list 'default-frame-alist '(font . "Comic Mono 11"))
 #+end_src
@@ -172,12 +172,6 @@ picks a light color-theme when the sun is risen and a dark theme when the sun is
 #+begin_src emacs-lisp
   (use-package all-the-icons
     :if (display-graphic-p))
-#+end_src
-*** enable emojis 😎
-#+begin_src emacs-lisp
-  (use-package emojify
-    :defer t
-    :init (global-emojify-mode))
 #+end_src
 ** mode-line
 
@@ -425,7 +419,7 @@ extend the built in completion at point functionality
            ("C-c p a" . cape-abbrev)
            ("C-c p l" . cape-line)
            ("C-c p w" . cape-dict)
-           ("C-c p :" . cape-emoji)
+           ("C-c p :" . cape-emoji);;; might be deleted
            ("C-c p \\" . cape-tex)
            ("C-c p _" . cape-tex)
            ("C-c p ^" . cape-tex)
@@ -651,7 +645,7 @@ when ~#+auto_tangle: t~ is set in the beginning of an org-file, tangle all code 
    '((shell . t)))
 #+end_src
 ** org-roam
-#+begin_src emacs-lisp :tangle no
+#+begin_src emacs-lisp
   (use-package org-roam
     :custom
     (org-roam-directory (file-truename "~/Notes"))
@@ -673,18 +667,14 @@ when ~#+auto_tangle: t~ is set in the beginning of an org-file, tangle all code 
   (global-set-key (kbd "C-c a") #'org-agenda)
 #+end_src
 *** time window
-
 make it so the agenda always starts today and we can see two weeks from today instead of just until Sunday
-
 #+begin_src emacs-lisp
   (setq org-agenda-start-day "0d")
   (setq org-agenda-span 20)
   (setq org-agenda-start-on-weekday nil)
 #+end_src
 *** set org-agenda files
-
 the files that org-agenda will visit to search for timestamps to use when creating the agenda
-
 #+begin_src emacs-lisp
     (setq org-agenda-files
           '("~/uni/uni.org"
@@ -692,9 +682,7 @@ the files that org-agenda will visit to search for timestamps to use when creati
 #+end_src
 * editing configuration
 ** folding
-
 set shortcuts for fold (collapse and expand) regions of text/code-blocks
-
 #+begin_src emacs-lisp
   (add-hook 'prog-mode-hook #'hs-minor-mode)
   (global-set-key (kbd "C-c C-h") 'hs-hide-block)
@@ -705,9 +693,7 @@ set shortcuts for fold (collapse and expand) regions of text/code-blocks
   (global-set-key (kbd "C-c C-l") 'hs-hide-all)
 #+end_src
 ** kill line backwards
-
 position of the pointer to the beginning of the line with =C-S-k=
-
 #+begin_src emacs-lisp
   (defun kill-line-backward ()
     "Kill line backwards from the position of the pointer to the beginning of the line."
@@ -929,6 +915,11 @@ add keybindings for when in eglot-mode (Emacs' built in language-server)
   (define-key eglot-mode-map (kbd "M-.") 'xref-find-definitions)
 #+end_src
 * applications
+** restclient
+manually explore and test HTTP REST webservices
+#+begin_src emacs-lisp
+  (use-package restclient)
+#+end_src
 ** dired
 *** show file icons
 #+begin_src emacs-lisp

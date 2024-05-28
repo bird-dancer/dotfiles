@@ -54,16 +54,12 @@
 
 ;(set-frame-font "Fantasque Sans Mono 12" nil t)totot
 ;(set-frame-font "Comic Mono 12" nil t)
-(set-frame-font "Comic Shanns Mono 13" nil t)
+(set-frame-font "Comic Shanns 13" nil t)
 ;(set-frame-font "Comic Shanns Mono Nerd Font Mono 12" nil t)
 ;(add-to-list 'default-frame-alist '(font . "Comic Mono 11"))
 
 (use-package all-the-icons
   :if (display-graphic-p))
-
-(use-package emojify
-  :defer t
-  :init (global-emojify-mode))
 
 (use-package doom-modeline
   :init (doom-modeline-mode t))
@@ -214,7 +210,7 @@ Version: 2018-05-15 2023-08-11 2023-10-28"
          ("C-c p a" . cape-abbrev)
          ("C-c p l" . cape-line)
          ("C-c p w" . cape-dict)
-         ("C-c p :" . cape-emoji)
+         ("C-c p :" . cape-emoji);;; might be deleted
          ("C-c p \\" . cape-tex)
          ("C-c p _" . cape-tex)
          ("C-c p ^" . cape-tex)
@@ -323,6 +319,21 @@ Version: 2018-05-15 2023-08-11 2023-10-28"
 (org-babel-do-load-languages
  'org-babel-load-languages
  '((shell . t)))
+
+(use-package org-roam
+  :custom
+  (org-roam-directory (file-truename "~/Notes"))
+  :bind (("C-c n l" . org-roam-buffer-toggle)
+         ("C-c n f" . org-roam-node-find)
+         ("C-c n g" . org-roam-graph)
+         ("C-c n i" . org-roam-node-insert)
+         ("C-c n c" . org-roam-capture)
+         ;; Dailies
+         ("C-c n j" . org-roam-dailies-capture-today))
+  :config
+  ;; If you're using a vertical completion framework, you might want a more informative completion interface
+  (setq org-roam-node-display-template (concat "${title:*} " (propertize "${tags:10}" 'face 'org-tag)))
+  (org-roam-db-autosync-mode))
 
 (global-set-key (kbd "C-c a") #'org-agenda)
 
@@ -446,6 +457,8 @@ Version: 2018-05-15 2023-08-11 2023-10-28"
 (define-key eglot-mode-map (kbd "C-c c e") 'eglot-code-action-extract)
 (define-key eglot-mode-map (kbd "<f6>") 'xref-find-definitions)
 (define-key eglot-mode-map (kbd "M-.") 'xref-find-definitions)
+
+(use-package restclient)
 
 (use-package all-the-icons-dired
   :defer t

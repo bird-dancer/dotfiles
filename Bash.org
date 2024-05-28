@@ -12,6 +12,8 @@ to load env variables to the login shell rather then just the active shell
 ** load bashrc to bash_profile
 #+begin_src bash :tangle .bash_profile
   [[ -r ~/.bashrc ]] && . ~/.bashrc
+    GUIX_PROFILE="$HOME/.config/guix/current"
+  . "$GUIX_PROFILE/etc/profile"
 #+end_src
 ** editor
 #+begin_src bash :tangle .bash_profile
@@ -20,18 +22,17 @@ to load env variables to the login shell rather then just the active shell
   fi
 #+end_src
 ** programming
-#+begin_src bash :tangle no
+#+begin_src bash :tangle .bash_profile
   export CC=gcc CXX=g++
-  #.bash_profile
-    if [ -z "$(which sccache)" ] ; then
-        export RUSTC_WRAPPER=sccache
-    fi
-    if [ -d "/usr/lib/jvm/default" ] ; then
-        export JAVA_HOME=/usr/lib/jvm/default
-    fi
-    if [ -z "$(which gem)" ] ; then
-        export GEM_HOME="$(gem env user_gemhome)"
-    fi
+  if [ -z "$(which sccache)" ] ; then
+      export RUSTC_WRAPPER=sccache
+  fi
+  if [ -d "/usr/lib/jvm/default" ] ; then
+      export JAVA_HOME=/usr/lib/jvm/default
+  fi
+  if [ -z "$(which gem)" ] ; then
+      export GEM_HOME="$(gem env user_gemhome)"
+  fi
 #+end_src
 ** format
 set locale format to =en_us utf-8=
@@ -59,6 +60,11 @@ because the aliases are used in the rest of the config they are first
   if [ -f ~/.bash_aliases ]; then
       . ~/.bash_aliases
   fi
+#+end_src
+*** docker
+#+begin_src bash
+  alias docker_stop='sudo docker stop $(sudo docker ps -a -q)'
+  alias docker_rm='sudo docker rm $(sudo docker ps -a -q)'
 #+end_src
 *** emacs
 #+begin_src bash
@@ -119,6 +125,7 @@ clear build directory and build with debug flags enabled
 **** gcc
 =comp= compiles gcc code for optimal debugging, bug reduction and security
 #+begin_src bash
+  export CC=gcc CXX=g++
   alias comp='gcc -std=c17 -Wall -Wextra -fstack-protector -g3 -lm'
   export GCC_COLORS='error=01;31:warning=01;35:note=01;36:caret=01;32:locus=01:quote=01'
 #+end_src
