@@ -52,10 +52,9 @@
                            (:sunset  . ef-autumn)))
   (circadian-setup))
 
-;(set-frame-font "Fantasque Sans Mono 12" nil t)totot
+;(set-frame-font "Fantasque Sans Mono 12" nil t)
 ;(set-frame-font "Comic Mono 12" nil t)
 (set-frame-font "Comic Shanns 13" nil t)
-;(set-frame-font "Comic Shanns Mono Nerd Font Mono 12" nil t)
 ;(add-to-list 'default-frame-alist '(font . "Comic Mono 11"))
 
 (use-package all-the-icons
@@ -440,13 +439,9 @@ Version: 2018-05-15 2023-08-11 2023-10-28"
 
 (add-to-list 'auto-mode-alist '("Makefile" . makefile-mode))
 
-;(setenv "PATH" (concat "/home/felix/.local/" (getenv "PATH")))
-                                        ;(setenv "PATH" (concat "/usr/local/sbin/" (getenv "PATH")))
-                                        ;(setenv "PATH" (concat "/usr/local/bin/" (getenv "PATH")))
-                                        ;(setenv "PATH" (concat "/usr/bin/" (getenv "PATH")))
-                                        ;(setenv "PATH" (concat (getenv "PATH") ":/home/felix/.local/bin"))
-                                        ;(setenv "PATH" (concat (getenv "PATH") ":/home/felix/.local/share/gem/ruby/3.0.0/bin"))
-                                        ;(setenv "GEM_HOME" "/home/felix/.local/share/gem")
+(define-key flymake-mode-map (kbd "M-n") 'flymake-goto-next-error)
+(define-key flymake-mode-map (kbd "M-p") 'flymake-goto-prev-error)
+
 (require 'eglot)
 (define-key eglot-mode-map (kbd "C-c c r") 'eglot-rename)
 (define-key eglot-mode-map (kbd "C-c c o") 'eglot-code-action-organize-imports)
