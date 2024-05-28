@@ -641,8 +641,8 @@ when ~#+auto_tangle: t~ is set in the beginning of an org-file, tangle all code 
     :after org-mode)
 #+end_src
 **** guile
-#+begin_src emacs-lisp
- (use-package geiser-guile) 
+#+begin_src emacs-lisp :tangle no
+ (use-package geiser-guile)
 #+end_src
 **** shells (sh, bash, zsh, fish, etc.)
 #+begin_src emacs-lisp

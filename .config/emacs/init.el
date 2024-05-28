@@ -320,8 +320,6 @@ Version: 2018-05-15 2023-08-11 2023-10-28"
   :defer t
   :hook (org-mode . org-auto-tangle-mode))
 
-(use-package geiser-guile)
-
 (org-babel-do-load-languages
  'org-babel-load-languages
  '((shell . t)))

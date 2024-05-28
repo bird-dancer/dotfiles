@@ -7,7 +7,6 @@
 * preface
 
 this bash config uses =bash-complete= and has no further requirements. The contents of the code blocks will be tangled to =~/.bashrc= and =~/.bash_profile=.
-
 * profile
 to load env variables to the login shell rather then just the active shell
 ** load bashrc to bash_profile
@@ -21,16 +20,18 @@ to load env variables to the login shell rather then just the active shell
   fi
 #+end_src
 ** programming
-#+begin_src bash :tangle .bash_profile
-  if [ -z "$(which sccache)" ] ; then
-      export RUSTC_WRAPPER=sccache
-  fi
-  if [ -d "/usr/lib/jvm/default" ] ; then
-      export JAVA_HOME=/usr/lib/jvm/default
-  fi
-  if [ -z "$(which gem)" ] ; then
-      export GEM_HOME="$(gem env user_gemhome)"
-  fi
+#+begin_src bash :tangle no
+  export CC=gcc CXX=g++
+  #.bash_profile
+    if [ -z "$(which sccache)" ] ; then
+        export RUSTC_WRAPPER=sccache
+    fi
+    if [ -d "/usr/lib/jvm/default" ] ; then
+        export JAVA_HOME=/usr/lib/jvm/default
+    fi
+    if [ -z "$(which gem)" ] ; then
+        export GEM_HOME="$(gem env user_gemhome)"
+    fi
 #+end_src
 ** format
 set locale format to =en_us utf-8=
@@ -39,6 +40,7 @@ set locale format to =en_us utf-8=
 #+end_src
 ** path
 #+begin_src bash :tangle .bash_profile
+  export PATH="$HOME/sccache/target/release:$PATH"
   if [ -d "$HOME/.emacs.d/bin" ] ; then
       export PATH="$HOME/.emacs.d/bin:$PATH"
   fi
@@ -50,8 +52,6 @@ set locale format to =en_us utf-8=
   fi
 #+end_src
 * bashrc
-** source profile
-
 ** aliases
 because the aliases are used in the rest of the config they are first
 *** load aliases from =~./bash_aliases=
@@ -65,9 +65,7 @@ because the aliases are used in the rest of the config they are first
   alias em='/usr/bin/emacs -nw'
 #+end_src
 *** typos
-
 automatically correct common typos I make
-
 #+begin_src bash
   alias celar='clear'
   alias lcear='clear'
@@ -84,12 +82,28 @@ shorten my most used =pacman= commands
 + =pacq=: query for matching packages
 + =cleanup=: remove orphaned packages
 
-#+begin_src bash
+#+begin_src bash :tangle no
   alias pac='sudo pacman -Syu'
   alias pacr='sudo pacman -Rs'
   alias paci='pacman -Si'
   alias pacq='pacman -Qs'
   alias cleanup='sudo pacman -Rns $(pacman -Qtdq)'
+#+end_src
+*** guix
+
+shorten my most used =pacman= commands
++ =pac=: install and update
++ =pacr=: remove
++ =paci=: info
++ =pacq=: query for matching packages
++ =cleanup=: remove orphaned packages
+
+#+begin_src bash
+  alias pac='sudo pacman -Syu'
+  alias pacr='sudo pacman -Rs'
+  alias paci='pacman -Si'
+  alias pacq='pacman -Qs'
+  alias cleanup='sudo guix system delete-generations; guix package -d; guix gc'
 #+end_src
 *** ssh
 remember my ssh-keys during a session
@@ -129,31 +143,35 @@ usage: ex <file>
 #+begin_src bash
   ex ()
   {
-    if [ -f "$1" ] ; then
-      case $1 in
-        ,*.tar.bz2)   tar xjf $1   ;;
-        ,*.tar.gz)    tar xzf $1   ;;
-        ,*.bz2)       bunzip2 $1   ;;
-        ,*.rar)       unrar x $1   ;;
-        ,*.gz)        gunzip $1    ;;
-        ,*.tar)       tar xf $1    ;;
-        ,*.tbz2)      tar xjf $1   ;;
-        ,*.tgz)       tar xzf $1   ;;
-        ,*.zip)       unzip $1     ;;
-        ,*.Z)         uncompress $1;;
-        ,*.7z)        7z x $1      ;;
-        ,*.deb)       ar x $1      ;;
-        ,*.tar.xz)    tar xf $1    ;;
-        ,*.tar.zst)   unzstd $1    ;;
-        ,*)           echo "'$1' cannot be extracted via ex()" ;;
-      esac
-    else
-      echo "'$1' is not a valid file"
-    fi
+      if [ -f "$1" ] ; then
+          case $1 in
+              ,*.tar.bz2)   tar xjf $1   ;;
+              ,*.tar.gz)    tar xzf $1   ;;
+              ,*.bz2)       bunzip2 $1   ;;
+              ,*.rar)       unrar x $1   ;;
+              ,*.gz)        gunzip $1    ;;
+              ,*.tar)       tar xf $1    ;;
+              ,*.tbz2)      tar xjf $1   ;;
+              ,*.tgz)       tar xzf $1   ;;
+              ,*.zip)       unzip $1     ;;
+              ,*.Z)         uncompress $1;;
+              ,*.7z)        7z x $1      ;;
+              ,*.deb)       ar x $1      ;;
+              ,*.tar.xz)    tar xf $1    ;;
+              ,*.tar.zst)   unzstd $1    ;;
+              ,*)           echo "'$1' cannot be extracted via ex()" ;;
+          esac
+      else
+          echo "'$1' is not a valid file"
+      fi
   }
 #+end_src
 
 ** general
+*** set
+#+begin_src bash
+  export XDG_RUNTIME_DIR=/run/user/$(id -u)
+#+end_src
 *** set color
 #+begin_src bash
   export TERM="xterm-256color"
@@ -181,12 +199,14 @@ tangle to =.inputrc= for other read-line programs
 *** auto-completion
 #+begin_src bash :tangle no
   [[ $PS1 && -f /usr/share/bash-completion/bash_completion ]] && \
-    . /usr/share/bash-completion/bash_completion
+      . /usr/share/bash-completion/bash_completion
 #+end_src
 **** enable completion for aliases
 #+begin_src bash
-  source /usr/share/bash-complete-alias/complete_alias
-  complete -F _complete_alias "${!BASH_ALIASES[@]}"
+  #source /run/current-system/profile/etc/profile.d/
+  #source /usr/share/bash-complete-alias/complete_alias
+  source /run/current-system/usr/share/bash-complete-alias/complete_alias
+    complete -F _complete_alias "${!BASH_ALIASES[@]}"
 #+end_src
 *** ignore case on auto completion
 #+begin_src bash :tangle .bashrc
@@ -208,4 +228,12 @@ tangle to =.inputrc= for other read-line programs
 #+end_src
 
 * look into
++ blesh
++ liquidprompt
++ grc
++ rig (generate Random user data)
++ boxes?
++ fzy
++ hstr
++ 
 + [[https://github.com/ajeetdsouza/zoxide][GitHub - ajeetdsouza/zoxide: A smarter cd command. Supports all major shells.]]

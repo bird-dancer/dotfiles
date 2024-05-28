@@ -10,7 +10,7 @@ alias pac='sudo pacman -Syu'
 alias pacr='sudo pacman -Rs'
 alias paci='pacman -Si'
 alias pacq='pacman -Qs'
-alias cleanup='sudo pacman -Rns $(pacman -Qtdq)'
+alias cleanup='sudo guix system delete-generations; guix package -d; guix gc'
 
 eval $(ssh-agent) > /dev/null
 
@@ -30,28 +30,30 @@ alias grep='grep --color=auto'
 
 ex ()
 {
-  if [ -f "$1" ] ; then
-    case $1 in
-      *.tar.bz2)   tar xjf $1   ;;
-      *.tar.gz)    tar xzf $1   ;;
-      *.bz2)       bunzip2 $1   ;;
-      *.rar)       unrar x $1   ;;
-      *.gz)        gunzip $1    ;;
-      *.tar)       tar xf $1    ;;
-      *.tbz2)      tar xjf $1   ;;
-      *.tgz)       tar xzf $1   ;;
-      *.zip)       unzip $1     ;;
-      *.Z)         uncompress $1;;
-      *.7z)        7z x $1      ;;
-      *.deb)       ar x $1      ;;
-      *.tar.xz)    tar xf $1    ;;
-      *.tar.zst)   unzstd $1    ;;
-      *)           echo "'$1' cannot be extracted via ex()" ;;
-    esac
-  else
-    echo "'$1' is not a valid file"
-  fi
+    if [ -f "$1" ] ; then
+        case $1 in
+            *.tar.bz2)   tar xjf $1   ;;
+            *.tar.gz)    tar xzf $1   ;;
+            *.bz2)       bunzip2 $1   ;;
+            *.rar)       unrar x $1   ;;
+            *.gz)        gunzip $1    ;;
+            *.tar)       tar xf $1    ;;
+            *.tbz2)      tar xjf $1   ;;
+            *.tgz)       tar xzf $1   ;;
+            *.zip)       unzip $1     ;;
+            *.Z)         uncompress $1;;
+            *.7z)        7z x $1      ;;
+            *.deb)       ar x $1      ;;
+            *.tar.xz)    tar xf $1    ;;
+            *.tar.zst)   unzstd $1    ;;
+            *)           echo "'$1' cannot be extracted via ex()" ;;
+        esac
+    else
+        echo "'$1' is not a valid file"
+    fi
 }
+
+export XDG_RUNTIME_DIR=/run/user/$(id -u)
 
 export TERM="xterm-256color"
 
@@ -66,8 +68,10 @@ bind '"\e[B": history-search-forward'
 #bind '"^[^M-f": history-search-backward'
 #bind '"\e\C-m": history-search-forward'
 
-source /usr/share/bash-complete-alias/complete_alias
-complete -F _complete_alias "${!BASH_ALIASES[@]}"
+#source /run/current-system/profile/etc/profile.d/
+#source /usr/share/bash-complete-alias/complete_alias
+source /run/current-system/usr/share/bash-complete-alias/complete_alias
+  complete -F _complete_alias "${!BASH_ALIASES[@]}"
 
 bind "set completion-ignore-case on"
 
