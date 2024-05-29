@@ -72,10 +72,9 @@ bind '"\e[B": history-search-forward'
 #bind '"^[^M-f": history-search-backward'
 #bind '"\e\C-m": history-search-forward'
 
-#source /run/current-system/profile/etc/profile.d/
-#source /usr/share/bash-complete-alias/complete_alias
-source /run/current-system/usr/share/bash-complete-alias/complete_alias
-  complete -F _complete_alias "${!BASH_ALIASES[@]}"
+source /usr/share/bash-complete-alias/complete_alias
+#source /run/current-system/usr/share/bash-complete-alias/complete_alias
+complete -F _complete_alias "${!BASH_ALIASES[@]}"
 
 bind "set completion-ignore-case on"
 
