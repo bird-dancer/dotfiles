@@ -892,12 +892,13 @@ auto enable makefile-mode for Makefiles
   (add-to-list 'auto-mode-alist '("Makefile" . makefile-mode))
 #+end_src
 ** flymake
-finding syntax errors on the fly, also works with eglot and spellcheck (it also might be worth checking out [[https://www.flycheck.org] Flycheck]])
+finding syntax errors on the fly, also works with eglot and spellcheck (it also might be worth checking out [[[https://www.flycheck.org] Flycheck]])
 #+begin_src emacs-lisp
-  (define-key flymake-mode-map (kbd "M-n") 'flymake-goto-next-error)
-  (define-key flymake-mode-map (kbd "M-p") 'flymake-goto-prev-error)
+  ;(define-key flymake-mode-map (kbd "M-n") 'flymake-goto-next-error)
+  ;(define-key flymake-mode-map (kbd "M-p") 'flymake-goto-prev-error)
+  (global-set-key (kbd "M-n") 'flymake-goto-next-error)
+  (global-set-key (kbd "M-p") 'flymake-goto-prev-error)
 #+end_src
-
 ** eglot
 
 add keybindings for when in eglot-mode (Emacs' built in language-server)

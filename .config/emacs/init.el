@@ -439,8 +439,10 @@ Version: 2018-05-15 2023-08-11 2023-10-28"
 
 (add-to-list 'auto-mode-alist '("Makefile" . makefile-mode))
 
-(define-key flymake-mode-map (kbd "M-n") 'flymake-goto-next-error)
-(define-key flymake-mode-map (kbd "M-p") 'flymake-goto-prev-error)
+;(define-key flymake-mode-map (kbd "M-n") 'flymake-goto-next-error)
+;(define-key flymake-mode-map (kbd "M-p") 'flymake-goto-prev-error)
+(global-set-key (kbd "M-n") 'flymake-goto-next-error)
+(global-set-key (kbd "M-p") 'flymake-goto-prev-error)
 
 (require 'eglot)
 (define-key eglot-mode-map (kbd "C-c c r") 'eglot-rename)
