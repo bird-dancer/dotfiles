@@ -365,6 +365,18 @@ Version: 2018-05-15 2023-08-11 2023-10-28"
 (global-set-key (kbd "C-<") 'mc/mark-previous-like-this)
 (global-set-key (kbd "C-c C-<") 'mc/mark-all-like-this)
 
+(use-package jinx
+  :hook (emacs-startup . global-jinx-mode)
+  :bind (("M-$" . jinx-correct)
+         ("C-M-$" . jinx-languages)
+         ("M-p" . jinx-previous)
+         ("M-n" . jinx-next)))
+;; (add-hook 'emacs-startup-hook #'global-jinx-mode)
+;; (keymap-global-set "M-$" #'jinx-correct)
+;; (keymap-global-set "C-M-$" #'jinx-languages)
+;; (keymap-global-set "M-p" #'jinx-previous)
+;; (keymap-global-set "M-n" #'jinx-next)
+
 (use-package hl-todo
     :hook ((prog-mode . hl-todo-mode)
            (org-mode . hl-todo-mode))

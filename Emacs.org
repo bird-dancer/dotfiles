@@ -18,7 +18,6 @@ make garbage-collection less active by increasing its threshold during startup s
 #+begin_src emacs-lisp
   (setq gc-cons-threshold (* 50 1000 1000))
 #+end_src
-
 ** measure startup performance
 
 in order to measure the time it takes for Emacs to startup use ~emacs-init-time~
@@ -28,11 +27,8 @@ see what packages are loaded at startup (*only have it enabled when debugging!*)
 #+begin_src emacs-lisp :tangle no
   (setq use-package-verbose t)
 #+end_src
-
 * package management
-
 Setup package repositories
-
 #+begin_src emacs-lisp
   (require 'package)
   (add-to-list 'package-archives '("melpa" . "https://melpa.org/packages/") t)
@@ -719,13 +715,19 @@ use flyspell, the default spellcheck
     (define-key flyspell-mode-map (kbd "C-M-i") #'flyspell-correct-word)
 #+end_src
 *** jinx spellchecking, using enchant
-#+begin_src emacs-lisp :tangle no
-  (use-package jinx)
-  (add-hook 'emacs-startup-hook #'global-jinx-mode)
-  (keymap-global-set "M-$" #'jinx-correct)
-  (keymap-global-set "C-M-$" #'jinx-languages)
-  (keymap-global-set "M-p" #'jinx-previous)
-  (keymap-global-set "M-n" #'jinx-next)
+requires (lib-)enchant using hunspell dictionaries
+#+begin_src emacs-lisp
+  (use-package jinx
+    :hook (emacs-startup . global-jinx-mode)
+    :bind (("M-$" . jinx-correct)
+           ("C-M-$" . jinx-languages)
+           ("M-p" . jinx-previous)
+           ("M-n" . jinx-next)))
+  ;; (add-hook 'emacs-startup-hook #'global-jinx-mode)
+  ;; (keymap-global-set "M-$" #'jinx-correct)
+  ;; (keymap-global-set "C-M-$" #'jinx-languages)
+  ;; (keymap-global-set "M-p" #'jinx-previous)
+  ;; (keymap-global-set "M-n" #'jinx-next)
   #+end_src
 ** highlight TODO
 
@@ -986,9 +988,7 @@ use ~emacsclient --eval "(emacs-everywhere)"~ from another window when writing t
   (use-package emacs-everywhere)
 #+end_src
 * runtime performance
-
 make garbage-collection pauses faster by decreasing the threshold, increasing the runtime performance
-
 #+begin_src emacs-lisp
   (setq gc-cons-threshold (* 2 1000 1000))
 #+end_src
