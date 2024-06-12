@@ -12,17 +12,15 @@ to load env variables to the login shell rather then just the active shell
 ** load bashrc to bash_profile
 #+begin_src bash :tangle .bash_profile
   [[ -r ~/.bashrc ]] && . ~/.bashrc
-    GUIX_PROFILE="$HOME/.config/guix/current"
-  . "$GUIX_PROFILE/etc/profile"
 #+end_src
 ** editor
-#+begin_src bash :tangle .bash_profile
+#+begin_src bash
   if [ -z "$(which emacs)" ] ; then
       export EDITOR=$(which emacs)
   fi
 #+end_src
 ** programming
-#+begin_src bash :tangle .bash_profile
+#+begin_src bash
   export CC=gcc CXX=g++
   if [ -z "$(which sccache)" ] ; then
       export RUSTC_WRAPPER=sccache
@@ -30,18 +28,28 @@ to load env variables to the login shell rather then just the active shell
   if [ -d "/usr/lib/jvm/default" ] ; then
       export JAVA_HOME=/usr/lib/jvm/default
   fi
+  #+end_src
+  
+  #+begin_src bash :tangle no
   if [ -z "$(which gem)" ] ; then
       export GEM_HOME="$(gem env user_gemhome)"
   fi
 #+end_src
 ** format
 set locale format to =en_us utf-8=
-#+begin_src bash :tangle .bash_profile
+#+begin_src bash
   export LC_CTYPE=en_US.UTF-8
 #+end_src
+** guix
+#+begin_src bash :tangle no
+  GUIX_PROFILE="$HOME/.config/guix/current"
+    . "$GUIX_PROFILE/etc/profile"
+#+end_src
 ** path
-#+begin_src bash :tangle .bash_profile
-  export PATH="$HOME/sccache/target/release:$PATH"
+#+begin_src bash
+  if [ -d "$HOME/.cargo" ] ; then
+      export PATH="$HOME/.cargo/bin:$PATH"
+  fi
   if [ -d "$HOME/.emacs.d/bin" ] ; then
       export PATH="$HOME/.emacs.d/bin:$PATH"
   fi
@@ -88,7 +96,7 @@ shorten my most used =pacman= commands
 + =pacq=: query for matching packages
 + =cleanup=: remove orphaned packages
 
-#+begin_src bash :tangle no
+#+begin_src bash
   alias pac='sudo pacman -Syu'
   alias pacr='sudo pacman -Rs'
   alias paci='pacman -Si'
@@ -96,19 +104,7 @@ shorten my most used =pacman= commands
   alias cleanup='sudo pacman -Rns $(pacman -Qtdq)'
 #+end_src
 *** guix
-
-shorten my most used =pacman= commands
-+ =pac=: install and update
-+ =pacr=: remove
-+ =paci=: info
-+ =pacq=: query for matching packages
-+ =cleanup=: remove orphaned packages
-
-#+begin_src bash
-  alias pac='sudo pacman -Syu'
-  alias pacr='sudo pacman -Rs'
-  alias paci='pacman -Si'
-  alias pacq='pacman -Qs'
+#+begin_src bash :tangle no
   alias cleanup='sudo guix system delete-generations; guix package -d; guix gc'
 #+end_src
 *** ssh
@@ -190,7 +186,7 @@ run ~pkgfile -u~ to update package index
   source /usr/share/doc/pkgfile/command-not-found.bash
 #+end_src
 *** history
-#+begin_src bash :tangle .bashrc
+#+begin_src bash
   HISTSIZE=1000
   HISTFILESIZE=2000  
   HISTCONTROL=ignoreboth
@@ -215,11 +211,11 @@ tangle to =.inputrc= for other read-line programs
   complete -F _complete_alias "${!BASH_ALIASES[@]}"
 #+end_src
 *** ignore case on auto completion
-#+begin_src bash :tangle .bashrc
+#+begin_src bash
   bind "set completion-ignore-case on"
 #+end_src
 *** shopt
-#+begin_src bash :tangle .bashrc
+#+begin_src bash
   shopt -s autocd # change to named directory
   shopt -s cdspell # autocorrects cd misspellings
   shopt -s cmdhist # save multi-line commands in history as single line
@@ -229,7 +225,7 @@ tangle to =.inputrc= for other read-line programs
   shopt -s checkwinsize # checks term size when bash regains control
 #+end_src
 *** starship prompt
-#+begin_src bash :tangle .bashrc
+#+begin_src bash
   eval "$(starship init bash)"
 #+end_src
 

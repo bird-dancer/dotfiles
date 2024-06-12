@@ -1,3 +1,30 @@
+if [ -z "$(which emacs)" ] ; then
+    export EDITOR=$(which emacs)
+fi
+
+export CC=gcc CXX=g++
+if [ -z "$(which sccache)" ] ; then
+    export RUSTC_WRAPPER=sccache
+fi
+if [ -d "/usr/lib/jvm/default" ] ; then
+    export JAVA_HOME=/usr/lib/jvm/default
+fi
+
+export LC_CTYPE=en_US.UTF-8
+
+if [ -d "$HOME/.cargo" ] ; then
+    export PATH="$HOME/.cargo/bin:$PATH"
+fi
+if [ -d "$HOME/.emacs.d/bin" ] ; then
+    export PATH="$HOME/.emacs.d/bin:$PATH"
+fi
+if [ -d "$HOME/.local/bin" ] ; then
+    export PATH="$PATH:$HOME/.local/bin"
+fi
+if [ -d "$GEM_HOME/bin" ] ; then
+    export PATH="$PATH:$GEM_HOME/bin"
+fi
+
 alias docker_stop='sudo docker stop $(sudo docker ps -a -q)'
 alias docker_rm='sudo docker rm $(sudo docker ps -a -q)'
 
@@ -13,7 +40,7 @@ alias pac='sudo pacman -Syu'
 alias pacr='sudo pacman -Rs'
 alias paci='pacman -Si'
 alias pacq='pacman -Qs'
-alias cleanup='sudo guix system delete-generations; guix package -d; guix gc'
+alias cleanup='sudo pacman -Rns $(pacman -Qtdq)'
 
 eval $(ssh-agent) > /dev/null
 
