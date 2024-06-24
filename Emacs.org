@@ -137,6 +137,7 @@ remove the menu-bar tool-bar and scroll-bar as a measure to remove visual clutte
   ;(load-theme 'ef-cherie t)
   ;(load-theme 'ef-autumn t)
   ;(load-theme 'ef-dark t)
+  ;(load-theme 'ef-rosa t)
   ;(load-theme 'ef-spring t)
   ;(load-theme 'ef-melissa-light t)
   ;(load-theme 'ef-duo-light t)
@@ -151,8 +152,9 @@ picks a light color-theme when the sun is risen and a dark theme when the sun is
     :config
     (setq calendar-latitude 52.5)
     (setq calendar-longitude 13.4)
-    (setq circadian-themes '((:sunrise . ef-melissa-light)
-                             (:sunset  . ef-autumn)))
+    (setq circadian-themes '((:sunrise . ef-day)
+                             ;(:sunset  . ef-autumn)
+                             (:sunset . ef-melissa-light)))
     (circadian-setup))
 #+end_src
 ** fonts

@@ -48,8 +48,9 @@
   :config
   (setq calendar-latitude 52.5)
   (setq calendar-longitude 13.4)
-  (setq circadian-themes '((:sunrise . ef-melissa-light)
-                           (:sunset  . ef-autumn)))
+  (setq circadian-themes '((:sunrise . ef-day)
+                           ;(:sunset  . ef-autumn)
+                           (:sunset . ef-melissa-light)))
   (circadian-setup))
 
 ;(set-frame-font "Fantasque Sans Mono 12" nil t)
