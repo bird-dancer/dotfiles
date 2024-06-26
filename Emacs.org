@@ -834,7 +834,7 @@ automatically detect the appropriate tree-sitter mode dependent on the language 
 *** markdown
 #+begin_src emacs-lisp
   (use-package markdown-mode
-    :mode ("\\.md\\'" . markdown-view-mode)
+    :mode ("\\.md\\'" . markdown-mode)
     :init (setq markdown-command "multimarkdown"))
 #+end_src
 *** shell (disabled)

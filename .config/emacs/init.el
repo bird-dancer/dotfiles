@@ -428,7 +428,7 @@ Version: 2018-05-15 2023-08-11 2023-10-28"
   (global-treesit-auto-mode))
 
 (use-package markdown-mode
-  :mode ("\\.md\\'" . markdown-view-mode)
+  :mode ("\\.md\\'" . markdown-mode)
   :init (setq markdown-command "multimarkdown"))
 
 (use-package erblint)
