@@ -2,6 +2,7 @@
 [user]
 	name = Felix Dumbeck
 	email = felix@dumbeck.net
+	signingkey = /home/felix/.ssh/id_rsa.pub
 [color]
 	diff = auto
 	status = auto
@@ -19,3 +20,7 @@
 	user = bird-dancer	
 [sendemail]
 	verify = off
+[gpg]
+	format = ssh
+[commit]
+	gpgsign = true
