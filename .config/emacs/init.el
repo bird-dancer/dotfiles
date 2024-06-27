@@ -369,9 +369,7 @@ Version: 2018-05-15 2023-08-11 2023-10-28"
 (use-package jinx
   :hook (emacs-startup . global-jinx-mode)
   :bind (("M-$" . jinx-correct)
-         ("C-M-$" . jinx-languages)
-         ("M-p" . jinx-previous)
-         ("M-n" . jinx-next)))
+         ("C-M-$" . jinx-languages)))
 ;; (add-hook 'emacs-startup-hook #'global-jinx-mode)
 ;; (keymap-global-set "M-$" #'jinx-correct)
 ;; (keymap-global-set "C-M-$" #'jinx-languages)
