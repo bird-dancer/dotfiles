@@ -19,7 +19,7 @@
       auto-save-file-name-transforms `((".*", (expand-file-name "tmp/auto-saves/" user-emacs-directory) t)))
 
 (setq user-full-name "Felix Dumbeck"
-      user-mail-address "f.dumbeck@campus.tu-berlin.de")
+      user-mail-address "felix@dumbeck.net")
 
 (setq inhibit-startup-screen t)
 
@@ -78,6 +78,8 @@
   :config
   (which-key-mode)
   (setq which-key-idle-delay 1))
+
+(global-set-key (kbd "C-x C-j") 'join-line)
 
 (defun delete-current-file-make-backup ()
   "Delete current file, makes a backup~, close the buffer.
@@ -465,23 +467,6 @@ Version: 2018-05-15 2023-08-11 2023-10-28"
 (define-key eglot-mode-map (kbd "C-c c e") 'eglot-code-action-extract)
 (define-key eglot-mode-map (kbd "<f6>") 'xref-find-definitions)
 (define-key eglot-mode-map (kbd "M-.") 'xref-find-definitions)
-
-(use-package indent-bars
-  :load-path "~/.config/emacs/indent-bars/"
-  :config
-  (require 'indent-bars-ts) 		; not needed with straight
-  :custom
-  (indent-bars-treesit-support t)
-  (indent-bars-treesit-ignore-blank-lines-types '("module"))
-  ;; Add other languages as needed
-  (indent-bars-treesit-scope '((python function_definition class_definition for_statement
-                                       if_statement with_statement while_statement)))
-  ;; wrap may not be needed if no-descend-list is enough
-  ;;(indent-bars-treesit-wrap '((python argument_list parameters ; for python, as an example
-  ;;				      list list_comprehension
-  ;;				      dictionary dictionary_comprehension
-  ;;				      parenthesized_expression subscript)))
-  :hook ((python-base-mode yaml-mode) . indent-bars-mode))
 
 (use-package dape)
 

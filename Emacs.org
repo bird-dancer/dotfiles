@@ -71,7 +71,7 @@ prevent Emacs from adding custom settings to init.el and choose =custom.el= inst
 ** user info
 #+begin_src emacs-lisp
   (setq user-full-name "Felix Dumbeck"
-        user-mail-address "f.dumbeck@campus.tu-berlin.de")
+        user-mail-address "felix@dumbeck.net")
 #+end_src
 ** user interface
 *** show scratch buffer on startup
@@ -79,9 +79,7 @@ prevent Emacs from adding custom settings to init.el and choose =custom.el= inst
   (setq inhibit-startup-screen t)
 #+end_src
 *** flash when the bell rings
-
 to avoid Emacs making a sound on things like trying to scroll past the first line make it flash the screen instead
-
 #+begin_src emacs-lisp
   (setq visible-bell t)
 #+end_src
@@ -90,9 +88,7 @@ to avoid Emacs making a sound on things like trying to scroll past the first lin
   (setq use-dialog-box nil)
 #+end_src
 *** remove GUI elements
-
 remove the menu-bar tool-bar and scroll-bar as a measure to remove visual clutter
-
 #+begin_src emacs-lisp
   (menu-bar-mode 0)
   (tool-bar-mode 0)
@@ -210,6 +206,10 @@ it shows a table of all possible ways you can finish a shortcut after having sta
     (setq which-key-idle-delay 1))
 #+end_src
 ** various
+*** join-lines
+#+begin_src emacs-lisp
+  (global-set-key (kbd "C-x C-j") 'join-line)
+#+end_src
 *** delete current file
 from: [[http://xahlee.info/emacs/emacs/elisp_delete-current-file.html][Emacs: Delete Current File 🚀]]
 #+begin_src emacs-lisp
@@ -258,9 +258,7 @@ from: [[http://xahlee.info/emacs/emacs/elisp_delete-current-file.html][Emacs: De
   (save-place-mode t)
 #+end_src
 *** replace selection
-
 typed text replaces the selection if the selection is active, pressing delete or backspace deletes the selection
-
 #+begin_src emacs-lisp
   (delete-selection-mode)
 #+end_src
@@ -271,9 +269,7 @@ typed text replaces the selection if the selection is active, pressing delete or
   (setq global-auto-revert-non-file-buffers t)
 #+end_src
 *** yank (paste) when pressing C-z
-
 because it is very confusing when switching between qwerty and qwertz and the window gets minimized
-
 #+begin_src emacs-lisp
   (global-set-key (kbd "C-z") 'yank)
 #+end_src
@@ -444,9 +440,7 @@ extend the built in completion at point functionality
 #+end_src
 * org-mode
 ** defer startup
-
 for an improved Emacs startup time loading =org= is deferred until it is actually needed
-
 #+begin_src emacs-lisp
   (use-package org
     :defer t
@@ -469,9 +463,7 @@ when inserting a new link to a heading in the current document, an auto completi
   ;(define-key org-mode-map (kbd "C-c h") 'org-insert-link-headline)
 #+end_src
 *** export to latex
-
 when exporting org mode to latex, keep the comments
-
 #+begin_src emacs-lisp
   (defun transform-comments (backend)
     (while (re-search-forward "[:blank:]*# " nil t)
@@ -489,27 +481,20 @@ add contrib package for extra features
   (setq org-startup-folded t)
 #+end_src
 *** org-cliplink
-
 give pasted links the title provided by the meta-information of the website
-
 #+begin_src emacs-lisp
-  
   (use-package org-cliplink
     :bind ("C-x p i" . org-cliplink))
 #+end_src
 *** ox-hugo
-
 export org-mode files to HTML pages using hugo
-
 #+begin_src emacs-lisp
   (use-package ox-hugo
     :after org-mode
     :commands org-hugo-auto-export-mode)
 #+end_src
 *** drag-and-drop
-
 enable drag-and-drop support for images and files; inserts inline previews for images and an icon+link for other media types.
-
 #+begin_src emacs-lisp :tangle no
   (use-package org-download
     :defer t
@@ -917,25 +902,6 @@ add keybindings for when in eglot-mode (Emacs' built in language-server)
   (define-key eglot-mode-map (kbd "<f6>") 'xref-find-definitions)
   (define-key eglot-mode-map (kbd "M-.") 'xref-find-definitions)
 #+end_src
-** indentation guides
-#+begin_src emacs-lisp
-  (use-package indent-bars
-    :load-path "~/.config/emacs/indent-bars/"
-    :config
-    (require 'indent-bars-ts) 		; not needed with straight
-    :custom
-    (indent-bars-treesit-support t)
-    (indent-bars-treesit-ignore-blank-lines-types '("module"))
-    ;; Add other languages as needed
-    (indent-bars-treesit-scope '((python function_definition class_definition for_statement
-                                         if_statement with_statement while_statement)))
-    ;; wrap may not be needed if no-descend-list is enough
-    ;;(indent-bars-treesit-wrap '((python argument_list parameters ; for python, as an example
-    ;;				      list list_comprehension
-    ;;				      dictionary dictionary_comprehension
-    ;;				      parenthesized_expression subscript)))
-    :hook ((python-base-mode yaml-mode) . indent-bars-mode))
-#+end_src
 ** debugging
 #+begin_src emacs-lisp
   (use-package dape)
@@ -1022,10 +988,12 @@ make garbage-collection pauses faster by decreasing the threshold, increasing th
 + use tabs for indentation and make them "sticky"???
 + email
   + gnus
+  + rmail
   + mu4e: [[https://www.youtube.com/watch?v=yZRyEhi4y44&pp=ygULZW1hY3MgZW1haWw%3D][Streamline Your E-mail Management with mu4e - Emacs Mail - YouTube]]
 + handle passwords: [[https://www.youtube.com/watch?v=nZ_T7Q49B8Y][How to Encrypt Your Passwords with Emacs - YouTube]]
 * look into
 + [[https://github.com/Wilfred/deadgrep?tab=readme-ov-file][GitHub - Wilfred/deadgrep: fast, friendly searching with ripgrep and Emacs]]
++ wdired [[https://xenodium.com/emacs-git-rename-courtesy-of-dired/][Emacs: git rename, courtesy of dired]]
 + [[https://www.emacswiki.org/emacs/HippieExpand][EmacsWiki: Hippie Expand]]
 + [[https://github.com/emacs-sideline/sideline][GitHub - emacs-sideline/sideline: Show information on the side]]
 + for eshell [[https://github.com/xenodium/dotsies][GitHub - xenodium/dotsies: Dot files, Emacs config, etc]]
@@ -1050,7 +1018,6 @@ make garbage-collection pauses faster by decreasing the threshold, increasing th
 + editorconfig
 + look into: [[https://github.com/SystemCrafters/crafted-emacs][GitHub - SystemCrafters/crafted-emacs: A sensible base Emacs configuration.]]
 + instead of auto-ts-mode [[https://github.com/emacs-tree-sitter/tree-sitter-langs][GitHub - emacs-tree-sitter/tree-sitter-langs: Language bundle for Emacs's tre...]]
-+ ts-mode replaces c-mode so I can't change things like the cmode anymore
 + [[https://github.com/LionyxML/auto-dark-emacs][GitHub - LionyxML/auto-dark-emacs: Auto-Dark-Emacs is an auto changer between...]]
 + gcmh: dynamic garbage collection for improving speed
 + Combobulate: https://github.com/mickeynp/combobulate uses Tree-Sitter to provide a structured movement within your code [[https://www.masteringemacs.org/article/combobulate-structured-movement-editing-treesitter][Combobulate: Structured Movement and Editing with Tree-Sitter]]

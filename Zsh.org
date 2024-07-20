@@ -55,9 +55,7 @@ use ls deluxe (lsd) instead of ls and tree because it looks prettier
   alias tree='lsd --tree'
 #+end_src
 **** eza
-
 use exa instead of ls and tree because it looks prettier
-
 #+begin_src bash
   alias ls='eza --icons'
   alias la='eza -a --icons'
@@ -75,17 +73,13 @@ use bat instead of cat and tree because it looks prettier
   alias cat='bat'
 #+end_src
 *** =b= for =cd ..=
-
 =b= to go back one directory
-
 #+begin_src bash
   alias b='cd ..'
 #+end_src
 *** build stuff
 **** cmake
-
 clear build directory and build with debug flags enabled
-
 #+begin_src bash
   alias build='rm -rf build && cmake -B build -DCMAKE_BUILD_TYPE=Debug -DCMAKE_EXPORT_COMPILE_COMMANDS=1 && make -C'
 #+end_src
@@ -97,20 +91,16 @@ clear build directory and build with debug flags enabled
   alias comp='gcc -std=c17 -Wall -Wextra -fstack-protector -g3 -lm'
 #+end_src
 *** ssh
-
 remember my ssh-keys during a session
-
 #+begin_src bash
   eval $(ssh-agent) > /dev/null
 #+end_src
 *** pacman
-
 shorten my most used =pacman= commands
 + =pac=: install and update
 + =pacr=: remove
 + =paci=: info
 + =cleanup=: remove orphaned packages
-
 #+begin_src bash
   alias pac='sudo pacman -Syu'
   alias pacr='sudo pacman -Rs'
@@ -118,9 +108,7 @@ shorten my most used =pacman= commands
   alias cleanup='sudo pacman -Rns $(pacman -Qtdq)'
 #+end_src
 *** typos
-
 automatically correct common typos I make
-
 #+begin_src bash
   alias celar='clear'
   alias lcear='clear'
@@ -133,9 +121,7 @@ automatically correct common typos I make
   alias em='/usr/bin/emacs -nw'
 #+end_src
 *** ex
-
 extract/decompress all sorts of archives/compressed files by just typing =ex= /archive_name/
-
 #+begin_src bash
   ex (){
           if [ -f $1 ] ; then
