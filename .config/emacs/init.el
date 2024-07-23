@@ -37,14 +37,16 @@
 
 (global-visual-line-mode t)
 
-;(global-display-line-numbers-mode t) ;; enable line numbers
+;; (global-display-line-numbers-mode t) ;; enable line numbers globally
 (add-hook 'prog-mode-hook #'display-line-numbers-mode)
+(add-hook 'text-mode-hook #'display-line-numbers-mode)
 (add-hook 'org-mode-hook #'display-line-numbers-mode)
 (setq display-line-numbers-type 'relative) ;; make line numbers relative
 
-(use-package ef-themes :defer)
+(use-package ef-themes :defer t)
 
 (use-package circadian
+  :if (display-graphic-p)
   :config
   (setq calendar-latitude 52.5)
   (setq calendar-longitude 13.4)
@@ -53,9 +55,10 @@
                            (:sunset . ef-melissa-light)))
   (circadian-setup))
 
+(when (display-graphic-p)
+  (set-frame-font "Comic Shanns 13" nil t))
 ;(set-frame-font "Fantasque Sans Mono 12" nil t)
 ;(set-frame-font "Comic Mono 12" nil t)
-(set-frame-font "Comic Shanns 13" nil t)
 ;(add-to-list 'default-frame-alist '(font . "Comic Mono 11"))
 
 (use-package all-the-icons
@@ -64,14 +67,16 @@
 (use-package doom-modeline
   :init (doom-modeline-mode t))
 
-(use-package elfeed)
-(global-set-key (kbd "C-x w") 'elfeed)
-(setq elfeed-feeds
-      '("http://nullprogram.com/feed/"
-        "https://mccd.space/feed.xml"
-        "https://dthompson.us/feed.xml"
-        "https://planet.emacslife.com/atom.xml"
-        "https://archlinux.org/feeds/news/"))
+(use-package elfeed
+  :defer t
+  :bind ("C-x w" . 'elfeed)
+  :config
+  (setq elfeed-feeds
+        '("http://nullprogram.com/feed/"
+          "https://mccd.space/feed.xml"
+          "https://dthompson.us/feed.xml"
+          "https://planet.emacslife.com/atom.xml"
+          "https://archlinux.org/feeds/news/")))
 
 (use-package which-key
   :diminish which-key-mode
@@ -137,10 +142,12 @@ Version: 2018-05-15 2023-08-11 2023-10-28"
 (global-set-key (kbd "C-x C-k") 'kill-buffer-and-close-window)
 
 (use-package vertico
+  :ensure t
+  ;; :init
+  ;; (vertico-mode)
+  :hook (after-init . 'vertico-mode)
   :custom
-  (vertico-cycle t)
-  :init
-  (vertico-mode))
+  (vertico-cycle t))
 
 (use-package marginalia
   :after vertico
@@ -157,7 +164,7 @@ Version: 2018-05-15 2023-08-11 2023-10-28"
 
 (use-package orderless
   :after vertico
-  :init
+  :config
   (setq completion-styles '(orderless basic)
         completion-category-defaults nil
         completion-category-overrides '((file (styles partial-completion)))))
@@ -182,15 +189,14 @@ Version: 2018-05-15 2023-08-11 2023-10-28"
   ;; (corfu-preselect 'prompt)      ;; Preselect the prompt
   ;; (corfu-on-exact-match nil)     ;; Configure handling of exact matches
   ;; (corfu-scroll-margin 5)        ;; Use scroll margin
-  :init
+  :config
   (global-corfu-mode)
   (corfu-history-mode)
   (corfu-popupinfo-mode)
-  :config
   (setq corfu-popupinfo-delay nil))
 
 (use-package nerd-icons-corfu
-  :init
+  :config
   (add-to-list 'corfu-margin-formatters #'nerd-icons-corfu-formatter))
 
 (add-hook 'eshell-mode-hook
@@ -218,7 +224,7 @@ Version: 2018-05-15 2023-08-11 2023-10-28"
          ("C-c p ^" . cape-tex)
          ("C-c p &" . cape-sgml)
          ("C-c p r" . cape-rfc1345))
-  :init
+  :config
   ;; Add to the global default value of `completion-at-point-functions' which is
   ;; used by `completion-at-point'.  The order of the functions matters, the
   ;; first function returning a result wins.  Note that the list of buffer-local
@@ -234,11 +240,12 @@ Version: 2018-05-15 2023-08-11 2023-10-28"
   (add-to-list 'completion-at-point-functions #'cape-abbrev)
   (add-to-list 'completion-at-point-functions #'cape-dict)
   (add-to-list 'completion-at-point-functions #'cape-emoji)
-  ;;(add-to-list 'completion-at-point-functions #'cape-elisp-symbol)
+  (add-to-list 'completion-at-point-functions #'cape-elisp-symbol)
   ;;(add-to-list 'completion-at-point-functions #'cape-line)
   )
 
 (use-package org
+  :ensure nil
   :defer t
   :commands (org-mode))
 
@@ -262,6 +269,7 @@ Version: 2018-05-15 2023-08-11 2023-10-28"
 (setq org-startup-folded t)
 
 (use-package org-cliplink
+  :after org-mode
   :bind ("C-x p i" . org-cliplink))
 
 (use-package ox-hugo
@@ -282,12 +290,13 @@ Version: 2018-05-15 2023-08-11 2023-10-28"
            (local-set-key (kbd "M-N") 'org-move-subtree-down)))
 
 (setq org-startup-indented t
-      ;org-pretty-entities t
+      org-pretty-entities t
       org-hide-emphasis-markers t
       org-startup-with-inline-images t
       org-image-actual-width '(300))
 
 (use-package org-appear
+  :after org-mode
   :hook (org-mode . org-appear-mode))
 
 (custom-set-faces
@@ -411,14 +420,11 @@ Version: 2018-05-15 2023-08-11 2023-10-28"
 (minibuffer-electric-default-mode 1)
 
 (use-package magit
+  :bind ("C-x g" . 'magit)
   :commands magit)
 
 (use-package keychain-environment
-  :after magit)
-
-(use-package diff-hl
-  :init (global-diff-hl-mode)
-  :hook (dired-mode . diff-hl-dired-mode))
+  :hook ((magit . 'keychain-environment)))
 
 (use-package treesit-auto
   :custom
@@ -429,17 +435,23 @@ Version: 2018-05-15 2023-08-11 2023-10-28"
 
 (use-package markdown-mode
   :mode ("\\.md\\'" . markdown-mode)
-  :init (setq markdown-command "multimarkdown"))
+  :config (setq markdown-command "multimarkdown"))
 
-(use-package erblint)
+(use-package erblint
+  :hook (ruby-ts-mode . erblint-mode))
 
-(use-package flymake-eslint)
+(use-package flymake-eslint
+  :hook (javascript-mode . 'flymake-eslint-enable))
 
-(use-package elm-mode)
-(setq elm-mode-hook '(elm-indent-simple-mode))
-(add-hook 'elm-mode-hook 'elm-format-on-save-mode)
+(use-package elm-mode
+  :defer t
+  :mode ("\\.elm\\'". 'elm-mode)
+  :config
+  (setq elm-mode-hook '(elm-indent-simple-mode))
+  (add-hook 'elm-mode-hook 'elm-format-on-save-mode))
 
 (use-package web-mode
+  :defer t
   :config
   (add-to-list 'auto-mode-alist '("\\.html?\\'" . web-mode))
   (add-to-list 'auto-mode-alist '("\\.phtml\\'" . web-mode))
@@ -450,7 +462,7 @@ Version: 2018-05-15 2023-08-11 2023-10-28"
   (add-to-list 'auto-mode-alist '("\\.mustache\\'" . web-mode))
   (add-to-list 'auto-mode-alist '("\\.djhtml\\'" . web-mode)))
 
-(add-to-list 'auto-mode-alist '("Makefile" . makefile-mode))
+(add-to-list 'auto-mode-alist '("\\Makefile\\'" . makefile-mode))
 
 ;(define-key flymake-mode-map (kbd "M-n") 'flymake-goto-next-error)
 ;(define-key flymake-mode-map (kbd "M-p") 'flymake-goto-prev-error)
@@ -472,10 +484,10 @@ Version: 2018-05-15 2023-08-11 2023-10-28"
 
 ;(setq dap-auto-configure-features '(sessions locals controls tooltip))
 
-(use-package restclient)
+(use-package restclient
+  :defer t)
 
 (use-package all-the-icons-dired
-  :defer t
   :after all-the-icons
   :hook (dired-mode . all-the-icons-dired-mode))
 
@@ -485,15 +497,9 @@ Version: 2018-05-15 2023-08-11 2023-10-28"
 
 (setq dired-dwim-target t)
 
-
-
 (global-set-key (kbd "M-RET") 'eshell)
 
-(use-package htmlize
-  :defer t)
-
 (use-package pdf-tools
-  :defer t
   :mode ("\\.pdf\\'" . pdf-view-mode))
 
 (setq gc-cons-threshold (* 2 1000 1000))

@@ -5,25 +5,17 @@
 #+auto_tangle: t
 
 * preface
-
 simple "performant" GNU Emacs 29.1+ [[https://leanpub.com/lit-config/read][literate config]] that uses as much built in stuff as possible and builds upon that where necessary
-
 Works for me
-
 * increase startup performance
 ** increase garbage collection threshold
-
 make garbage-collection less active by increasing its threshold during startup so Emacs starts up faster
-
 #+begin_src emacs-lisp
   (setq gc-cons-threshold (* 50 1000 1000))
 #+end_src
 ** measure startup performance
-
 in order to measure the time it takes for Emacs to startup use ~emacs-init-time~
-
 see what packages are loaded at startup (*only have it enabled when debugging!*):
-
 #+begin_src emacs-lisp :tangle no
   (setq use-package-verbose t)
 #+end_src
@@ -38,30 +30,21 @@ Setup package repositories
   (setq use-package-always-ensure t)
 #+end_src
 * keep .config/emacs clean
-
 stop transient files from being created in the Emacs config folder
-
 ** change location of the custom file
-
 prevent Emacs from adding custom settings to init.el and choose =custom.el= instead
-
 #+begin_src emacs-lisp
   (setq custom-file (locate-user-emacs-file "custom.el"))
   (load custom-file 'noerror 'nomessage)
 #+end_src
 ** auto generated files in tmp directory
-
 *** keep backup files in a temporary directory
-
 #+begin_src emacs-lisp
   (setq backup-dir (expand-file-name "tmp/backups/" user-emacs-directory))
   (setq backup-directory-alist `(("." . , backup-dir)))
   (setq delete-old-versions t)
 #+end_src
-
-  
 *** keep  auto-save files in a temporary directory
-
 #+begin_src emacs-lisp
   (make-directory (expand-file-name "tmp/auto-saves/" user-emacs-directory) t)
   (setq auto-save-list-file-prefix (expand-file-name "tmp/auto-saves/sessions/" user-emacs-directory)
@@ -109,8 +92,9 @@ remove the menu-bar tool-bar and scroll-bar as a measure to remove visual clutte
 #+end_src
 **** show relative line numbers
 #+begin_src emacs-lisp
-  ;(global-display-line-numbers-mode t) ;; enable line numbers
+  ;; (global-display-line-numbers-mode t) ;; enable line numbers globally
   (add-hook 'prog-mode-hook #'display-line-numbers-mode)
+  (add-hook 'text-mode-hook #'display-line-numbers-mode)
   (add-hook 'org-mode-hook #'display-line-numbers-mode)
   (setq display-line-numbers-type 'relative) ;; make line numbers relative
 #+end_src
@@ -127,7 +111,7 @@ remove the menu-bar tool-bar and scroll-bar as a measure to remove visual clutte
 #+end_src
 *** ef-themes
 #+begin_src emacs-lisp
-  (use-package ef-themes :defer)
+  (use-package ef-themes :defer t)
 #+end_src
 #+begin_src emacs-lisp :tangle no
   ;(load-theme 'ef-cherie t)
@@ -139,12 +123,13 @@ remove the menu-bar tool-bar and scroll-bar as a measure to remove visual clutte
   ;(load-theme 'ef-duo-light t)
   ;(load-theme 'ef-duo-dark t)
   ;(load-theme 'ef-night t)
+   ;(load-theme 'ef-bio t)
 #+end_src
 *** auto pick theme
 picks a light color-theme when the sun is risen and a dark theme when the sun is set
-
 #+begin_src emacs-lisp
   (use-package circadian
+    :if (display-graphic-p)
     :config
     (setq calendar-latitude 52.5)
     (setq calendar-longitude 13.4)
@@ -156,9 +141,10 @@ picks a light color-theme when the sun is risen and a dark theme when the sun is
 ** fonts
 *** general font
 #+begin_src emacs-lisp
+  (when (display-graphic-p)
+    (set-frame-font "Comic Shanns 13" nil t))
   ;(set-frame-font "Fantasque Sans Mono 12" nil t)
   ;(set-frame-font "Comic Mono 12" nil t)
-  (set-frame-font "Comic Shanns 13" nil t)
   ;(add-to-list 'default-frame-alist '(font . "Comic Mono 11"))
 #+end_src
 *** icon font
@@ -167,37 +153,34 @@ picks a light color-theme when the sun is risen and a dark theme when the sun is
     :if (display-graphic-p))
 #+end_src
 ** mode-line
-
 show the mode status line from doom Emacs at the bottom to provide more information while looking nicer
-
 #+begin_src emacs-lisp
   (use-package doom-modeline
     :init (doom-modeline-mode t))
 #+end_src
-
 make it so mode line can be hidden by calling =hide-mode-line=
-
 #+begin_src emacs-lisp :tangle no
   (use-package hide-mode-line
+    :defer t
     :commands (hide-mode-line-mode))
 #+end_src
 ** elf-feed
 subscribe to rss-feeds
 #+begin_src emacs-lisp
-  (use-package elfeed)
-  (global-set-key (kbd "C-x w") 'elfeed)
-  (setq elfeed-feeds
-        '("http://nullprogram.com/feed/"
-          "https://mccd.space/feed.xml"
-          "https://dthompson.us/feed.xml"
-          "https://planet.emacslife.com/atom.xml"
-          "https://archlinux.org/feeds/news/"))
+  (use-package elfeed
+    :defer t
+    :bind ("C-x w" . 'elfeed)
+    :config
+    (setq elfeed-feeds
+          '("http://nullprogram.com/feed/"
+            "https://mccd.space/feed.xml"
+            "https://dthompson.us/feed.xml"
+            "https://planet.emacslife.com/atom.xml"
+            "https://archlinux.org/feeds/news/")))
 #+end_src
 ** which-key
-
 which-key is great for getting an overview of what keybindings are available based on the prefix keys you entered.
 it shows a table of all possible ways you can finish a shortcut after having started one
-
 #+begin_src emacs-lisp
   (use-package which-key
     :diminish which-key-mode
@@ -206,7 +189,7 @@ it shows a table of all possible ways you can finish a shortcut after having sta
     (setq which-key-idle-delay 1))
 #+end_src
 ** various
-*** join-lines
+*** join-lines with =C-x C-j=
 #+begin_src emacs-lisp
   (global-set-key (kbd "C-x C-j") 'join-line)
 #+end_src
@@ -274,9 +257,7 @@ because it is very confusing when switching between qwerty and qwertz and the wi
   (global-set-key (kbd "C-z") 'yank)
 #+end_src
 *** kill buffer and close window
-
 kill the current buffer and close its window/frame with =C-x C-k=
-
 #+begin_src emacs-lisp
   (defun kill-buffer-and-close-window ()
     "Kill the current buffer and close its window."
@@ -288,61 +269,48 @@ kill the current buffer and close its window/frame with =C-x C-k=
 * completion System
 ** minibuffer completion
 *** vertico
-
 performant and minimalist vertical completion UI based on the default completion system for minibuffers
-
 **** buffer auto-completion with vertico
-
 #+begin_src emacs-lisp
   (use-package vertico
+    :ensure t
+    ;; :init
+    ;; (vertico-mode)
+    :hook (after-init . 'vertico-mode)
     :custom
-    (vertico-cycle t)
-    :init
-    (vertico-mode))
+    (vertico-cycle t))
 #+end_src
-
 **** candidate meta information with marginalia
-
 show meta information about vertico completion options (eg. file size, last edited)
-
 #+begin_src emacs-lisp
   (use-package marginalia
     :after vertico
     :init
     (marginalia-mode))
 #+end_src
-
 **** vertico show candidate icons
-
 icons for completion options
-
 #+begin_src emacs-lisp
   (use-package all-the-icons-completion
     :after (all-the-icons marginalia)
     :init (all-the-icons-completion-mode)
     :hook (marginalia-mode . all-the-icons-completion-marginalia-setup))
 #+end_src
-
 **** set command history length
-
 #+begin_src emacs-lisp
   (setq history-length 50)
   (savehist-mode t)
 #+end_src
-
 **** Improve Candidate Filtering with Orderless
-
 improve vertico and corfu completions by allowing matches to search terms differently ordered
-
 #+begin_src emacs-lisp
   (use-package orderless
     :after vertico
-    :init
+    :config
     (setq completion-styles '(orderless basic)
           completion-category-defaults nil
           completion-category-overrides '((file (styles partial-completion)))))
 #+end_src
-
 *** consult
 #+begin_src emacs-lisp
   (use-package consult
@@ -354,9 +322,7 @@ improve vertico and corfu completions by allowing matches to search terms differ
 #+end_src
 ** normal buffer completion
 *** corfu
-
 in-buffer completion UI on top of the built-in completion framework
-
 **** main config
 #+begin_src emacs-lisp
   (use-package corfu
@@ -372,18 +338,17 @@ in-buffer completion UI on top of the built-in completion framework
     ;; (corfu-preselect 'prompt)      ;; Preselect the prompt
     ;; (corfu-on-exact-match nil)     ;; Configure handling of exact matches
     ;; (corfu-scroll-margin 5)        ;; Use scroll margin
-    :init
+    :config
     (global-corfu-mode)
     (corfu-history-mode)
     (corfu-popupinfo-mode)
-    :config
     (setq corfu-popupinfo-delay nil))
 #+end_src
 **** nerd-icons-corfu
 add nerd-font icons to corfu completion candidates
 #+begin_src emacs-lisp
   (use-package nerd-icons-corfu
-    :init
+    :config
     (add-to-list 'corfu-margin-formatters #'nerd-icons-corfu-formatter))
 #+end_src
 **** enable auto-completions in eshell
@@ -394,9 +359,7 @@ add nerd-font icons to corfu completion candidates
               (corfu-mode)))
 #+end_src
 *** cape
-
 extend the built in completion at point functionality
-
 #+begin_src emacs-lisp
   (use-package cape
     ;; Bind dedicated completion commands
@@ -418,7 +381,7 @@ extend the built in completion at point functionality
            ("C-c p ^" . cape-tex)
            ("C-c p &" . cape-sgml)
            ("C-c p r" . cape-rfc1345))
-    :init
+    :config
     ;; Add to the global default value of `completion-at-point-functions' which is
     ;; used by `completion-at-point'.  The order of the functions matters, the
     ;; first function returning a result wins.  Note that the list of buffer-local
@@ -434,7 +397,7 @@ extend the built in completion at point functionality
     (add-to-list 'completion-at-point-functions #'cape-abbrev)
     (add-to-list 'completion-at-point-functions #'cape-dict)
     (add-to-list 'completion-at-point-functions #'cape-emoji)
-    ;;(add-to-list 'completion-at-point-functions #'cape-elisp-symbol)
+    (add-to-list 'completion-at-point-functions #'cape-elisp-symbol)
     ;;(add-to-list 'completion-at-point-functions #'cape-line)
     )
 #+end_src
@@ -443,6 +406,7 @@ extend the built in completion at point functionality
 for an improved Emacs startup time loading =org= is deferred until it is actually needed
 #+begin_src emacs-lisp
   (use-package org
+    :ensure nil
     :defer t
     :commands (org-mode))
 #+end_src
@@ -484,6 +448,7 @@ add contrib package for extra features
 give pasted links the title provided by the meta-information of the website
 #+begin_src emacs-lisp
   (use-package org-cliplink
+    :after org-mode
     :bind ("C-x p i" . org-cliplink))
 #+end_src
 *** ox-hugo
@@ -526,29 +491,25 @@ disabled because it conflicts with the [[jinx spellchecking, using enchant]] sho
              (lambda ()
              (local-set-key (kbd "M-N") 'org-move-subtree-down)))
 #+end_src
-
 ** improve looks
 *** general
 #+begin_src emacs-lisp
   (setq org-startup-indented t
-        ;org-pretty-entities t
+        org-pretty-entities t
         org-hide-emphasis-markers t
         org-startup-with-inline-images t
         org-image-actual-width '(300))
 #+end_src
-*** how hidden emphasis markers
-
+*** show hidden emphasis markers
 show style emphasis markers such as the * in =*bold*= when hovering over the word
-
 #+begin_src emacs-lisp
   (use-package org-appear
+    :after org-mode
     :hook (org-mode . org-appear-mode))
 #+end_src
 *** fonts and bullets
 **** org-superstar (disabled)
-
 make bullet points and headings look nicer
-
 #+begin_src emacs-lisp :tangle no
   (use-package org-superstar
     ;:after org-mode
@@ -563,20 +524,6 @@ make bullet points and headings look nicer
    '(org-level-4 ((t (:height 1.1))))
    '(org-document-title ((t (:height 1.5)))))
 #+end_src
-** table of contents
-
-auto generate a table of contents and update on save
-
-#+begin_src emacs-lisp :tangle no
-  (use-package toc-org
-    :after org-mode
-    :command tor-org-enable
-    :hook (org-mode . toc-org-mode))
-  (use-package org-make-toc
-    :after org-mode
-    :hook (org-mode . org-make-toc-mode))
-#+end_src
-
 ** org-babel
 *** block templates
 these templates enable you to type things like =<el= and then hit Tab to expand the template.
@@ -596,15 +543,12 @@ these templates enable you to type things like =<el= and then hit Tab to expand 
   (add-to-list 'org-structure-template-alist '("tex" . "src latex"))
   (add-to-list 'org-structure-template-alist '("rs" . "src rust"))
 #+end_src
-
 *** execute source code blocks without confirmation
 #+begin_src emacs-lisp
   (setq org-confirm-babel-evaluate nil)
 #+end_src
 *** org-auto-tangle
-
 when ~#+auto_tangle: t~ is set in the beginning of an org-file, tangle all code blocks that are set to tangle when saving
-
 #+begin_src emacs-lisp
   (use-package org-auto-tangle
     :defer t
@@ -615,10 +559,6 @@ when ~#+auto_tangle: t~ is set in the beginning of an org-file, tangle all code 
 #+begin_src emacs-lisp :tangle no
   (use-package ob-rust
     :after org-mode)
-#+end_src
-**** guile
-#+begin_src emacs-lisp :tangle no
- (use-package geiser-guile)
 #+end_src
 **** shells (sh, bash, zsh, fish, etc.)
 #+begin_src emacs-lisp
@@ -658,9 +598,9 @@ make it so the agenda always starts today and we can see two weeks from today in
 *** set org-agenda files
 the files that org-agenda will visit to search for timestamps to use when creating the agenda
 #+begin_src emacs-lisp
-    (setq org-agenda-files
-          '("~/uni/uni.org"
-            "~/uni/personal.org"))
+  (setq org-agenda-files
+        '("~/uni/uni.org"
+          "~/uni/personal.org"))
 #+end_src
 * editing configuration
 ** folding
@@ -754,9 +694,7 @@ match brackets and other delimiters by color to see the current scope more easil
   (require 'smartparens-config))
 #+end_src
 *** electric behavior
-
 auto indent,  via electric-mode
-
 #+begin_src emacs-lisp
   ;(electric-pair-mode t)
   (electric-indent-mode t)
@@ -765,33 +703,27 @@ auto indent,  via electric-mode
   (minibuffer-electric-default-mode 1)
 #+end_src
 * development
-** projectile
 ** git
 *** magit
 #+begin_src emacs-lisp
   (use-package magit
+    :bind ("C-x g" . 'magit)
     :commands magit)
 #+end_src
-
 to prevent being asked to type the ssh-key password on every action make it so magit knows the ssh-key-agents location:
-
 #+begin_src emacs-lisp
-    (use-package keychain-environment
-      :after magit)
+  (use-package keychain-environment
+    :hook ((magit . 'keychain-environment)))
 #+end_src
 *** diff-hl
-
 highlight uncommitted, changed lines on the side of a buffer
-
-#+begin_src emacs-lisp
+#+begin_src emacs-lisp :tangle no
   (use-package diff-hl
-    :init (global-diff-hl-mode)
-    :hook (dired-mode . diff-hl-dired-mode))
+    :hook ((text-mode . 'diff-hl-mode)
+           (dired-mode . diff-hl-dired-mode)))
 #+end_src
 ** tree-sitter
-
 automatically detect the appropriate tree-sitter mode dependent on the language mode and file type
-
 #+begin_src emacs-lisp
   (use-package treesit-auto
     :custom
@@ -818,12 +750,10 @@ automatically detect the appropriate tree-sitter mode dependent on the language 
 #+begin_src emacs-lisp
   (use-package markdown-mode
     :mode ("\\.md\\'" . markdown-mode)
-    :init (setq markdown-command "multimarkdown"))
+    :config (setq markdown-command "multimarkdown"))
 #+end_src
 *** shell (disabled)
-
 enable shellcheck using flymake for checking correctness and scanning common mistakes in shell-code
-
 #+begin_src emacs-lisp :tangle no
   (use-package flymake-shellcheck
     :hook (bash-ts-mode . flymake-shellcheck-mode))
@@ -846,21 +776,27 @@ enable shellcheck using flymake for checking correctness and scanning common mis
 #+end_src
 *** ruby
 #+begin_src emacs-lisp
-  (use-package erblint)
+  (use-package erblint
+    :hook (ruby-ts-mode . erblint-mode))
 #+end_src
 *** javascript
 #+begin_src emacs-lisp
-  (use-package flymake-eslint)
+  (use-package flymake-eslint
+    :hook (javascript-mode . 'flymake-eslint-enable))
 #+end_src
 *** elm-mode
 #+begin_src emacs-lisp
-  (use-package elm-mode)
-  (setq elm-mode-hook '(elm-indent-simple-mode))
-  (add-hook 'elm-mode-hook 'elm-format-on-save-mode)
+  (use-package elm-mode
+    :defer t
+    :mode ("\\.elm\\'". 'elm-mode)
+    :config
+    (setq elm-mode-hook '(elm-indent-simple-mode))
+    (add-hook 'elm-mode-hook 'elm-format-on-save-mode))
 #+end_src
 *** webmode
 #+begin_src emacs-lisp
   (use-package web-mode
+    :defer t
     :config
     (add-to-list 'auto-mode-alist '("\\.html?\\'" . web-mode))
     (add-to-list 'auto-mode-alist '("\\.phtml\\'" . web-mode))
@@ -872,11 +808,9 @@ enable shellcheck using flymake for checking correctness and scanning common mis
     (add-to-list 'auto-mode-alist '("\\.djhtml\\'" . web-mode)))
 #+end_src
 *** makefile
-
 auto enable makefile-mode for Makefiles
-
 #+begin_src emacs-lisp
-  (add-to-list 'auto-mode-alist '("Makefile" . makefile-mode))
+  (add-to-list 'auto-mode-alist '("\\Makefile\\'" . makefile-mode))
 #+end_src
 ** flymake
 finding syntax errors on the fly, also works with eglot and spellcheck (it also might be worth checking out [[[https://www.flycheck.org] Flycheck]])
@@ -912,13 +846,13 @@ add keybindings for when in eglot-mode (Emacs' built in language-server)
 ** restclient
 manually explore and test HTTP REST webservices
 #+begin_src emacs-lisp
-  (use-package restclient)
+  (use-package restclient
+    :defer t)
 #+end_src
 ** dired
 *** show file icons
 #+begin_src emacs-lisp
   (use-package all-the-icons-dired
-    :defer t
     :after all-the-icons
     :hook (dired-mode . all-the-icons-dired-mode))
 #+end_src
@@ -934,47 +868,27 @@ manually explore and test HTTP REST webservices
 #+begin_src emacs-lisp
   (setq dired-dwim-target t)
 #+end_src
-** email
-email with notmuch
-#+begin_src emacs-lisp
-  
-#+end_src
 ** vterm
 complete terminal in Emacs
 #+begin_src emacs-lisp :tangle no
   (use-package vterm
+    :defer t
     :commands vterm)
 #+end_src
 ** eshell
-
 set M-RET shortcut for opening eshell
-
 #+begin_src emacs-lisp
   (global-set-key (kbd "M-RET") 'eshell)
 #+end_src
-** htmlize
-
-display current buffer as html
-
-#+begin_src emacs-lisp
-  (use-package htmlize
-    :defer t)
-#+end_src
 ** pdf-tools
-
 better interaction with pdf
-
 #+begin_src emacs-lisp
   (use-package pdf-tools
-    :defer t
     :mode ("\\.pdf\\'" . pdf-view-mode))
 #+end_src
 ** emacs-everywhere (not working)
-
 use ~emacsclient --eval "(emacs-everywhere)"~ from another window when writing text to open this text in an Emacs buffer. Type =C-c C-c= to reinsert the edited text into the text field.
-
 *Warning!* this does currently not work under Wayland
-
 #+begin_src emacs-lisp :tangle no
   (use-package emacs-everywhere)
 #+end_src
