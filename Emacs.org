@@ -17,6 +17,7 @@ make garbage-collection less active by increasing its threshold during startup s
 in order to measure the time it takes for Emacs to startup use ~emacs-init-time~
 see what packages are loaded at startup (*only have it enabled when debugging!*):
 #+begin_src emacs-lisp :tangle no
+  (setq debug-on-error t)
   (setq use-package-verbose t)
 #+end_src
 * package management
@@ -24,7 +25,7 @@ Setup package repositories
 #+begin_src emacs-lisp
   (require 'package)
   (add-to-list 'package-archives '("melpa" . "https://melpa.org/packages/") t)
-  ;(add-to-list 'package-archives '("melpa-stable" . "https://stable.melpa.org/packages/") t)
+  ;; (add-to-list 'package-archives '("melpa-stable" . "https://stable.melpa.org/packages/") t)
   (package-initialize)
   (require 'use-package-ensure) ;; make all use-package :ensure t
   (setq use-package-always-ensure t)
@@ -106,24 +107,24 @@ remove the menu-bar tool-bar and scroll-bar as a measure to remove visual clutte
   (use-package zenburn-theme)
   (use-package anti-zenburn-theme)
   (use-package hc-zenburn-theme)
-  ;(load-theme 'gruvbox-dark-hard t)
-  ;(load-theme 'gruvbox-light-soft t)
+  ;; (load-theme 'gruvbox-dark-hard t)
+  ;; (load-theme 'gruvbox-light-soft t)
 #+end_src
 *** ef-themes
 #+begin_src emacs-lisp
   (use-package ef-themes :defer t)
 #+end_src
 #+begin_src emacs-lisp :tangle no
-  ;(load-theme 'ef-cherie t)
-  ;(load-theme 'ef-autumn t)
-  ;(load-theme 'ef-dark t)
-  ;(load-theme 'ef-rosa t)
-  ;(load-theme 'ef-spring t)
-  ;(load-theme 'ef-melissa-light t)
-  ;(load-theme 'ef-duo-light t)
-  ;(load-theme 'ef-duo-dark t)
-  ;(load-theme 'ef-night t)
-   ;(load-theme 'ef-bio t)
+  ;; (load-theme 'ef-cherie t)
+  ;; (load-theme 'ef-autumn t)
+  ;; (load-theme 'ef-dark t)
+  ;; (load-theme 'ef-rosa t)
+  ;; (load-theme 'ef-spring t)
+  ;; (load-theme 'ef-melissa-light t)
+  ;; (load-theme 'ef-duo-light t)
+  ;; (load-theme 'ef-duo-dark t)
+  ;; (load-theme 'ef-night t)
+  ;; (load-theme 'ef-bio t)
 #+end_src
 *** auto pick theme
 picks a light color-theme when the sun is risen and a dark theme when the sun is set
@@ -134,7 +135,7 @@ picks a light color-theme when the sun is risen and a dark theme when the sun is
     (setq calendar-latitude 52.5)
     (setq calendar-longitude 13.4)
     (setq circadian-themes '((:sunrise . ef-day)
-                             ;(:sunset  . ef-autumn)
+                             ;; (:sunset  . ef-autumn)
                              (:sunset . ef-melissa-light)))
     (circadian-setup))
 #+end_src
@@ -143,9 +144,9 @@ picks a light color-theme when the sun is risen and a dark theme when the sun is
 #+begin_src emacs-lisp
   (when (display-graphic-p)
     (set-frame-font "Comic Shanns 13" nil t))
-  ;(set-frame-font "Fantasque Sans Mono 12" nil t)
-  ;(set-frame-font "Comic Mono 12" nil t)
-  ;(add-to-list 'default-frame-alist '(font . "Comic Mono 11"))
+  ;; (set-frame-font "Fantasque Sans Mono 12" nil t)
+  ;; (set-frame-font "Comic Mono 12" nil t)
+  ;; (add-to-list 'default-frame-alist '(font . "Comic Mono 11"))
 #+end_src
 *** icon font
 #+begin_src emacs-lisp
@@ -168,8 +169,7 @@ make it so mode line can be hidden by calling =hide-mode-line=
 subscribe to rss-feeds
 #+begin_src emacs-lisp
   (use-package elfeed
-    :defer t
-    :bind ("C-x w" . 'elfeed)
+    :bind ("C-x w" . elfeed)
     :config
     (setq elfeed-feeds
           '("http://nullprogram.com/feed/"
@@ -266,19 +266,49 @@ kill the current buffer and close its window/frame with =C-x C-k=
     (delete-window))
   (global-set-key (kbd "C-x C-k") 'kill-buffer-and-close-window)
 #+end_src
-* completion System
+* completion system
 ** minibuffer completion
 *** vertico
 performant and minimalist vertical completion UI based on the default completion system for minibuffers
 **** buffer auto-completion with vertico
 #+begin_src emacs-lisp
   (use-package vertico
-    :ensure t
-    ;; :init
-    ;; (vertico-mode)
-    :hook (after-init . 'vertico-mode)
     :custom
-    (vertico-cycle t))
+    (vertico-scroll-margin 0) ;; Different scroll margin
+    (vertico-count 10) ;; Show more candidatesm
+    ;; (vertico-resize t) ;; Grow and shrink the Vertico minibuffer
+    (vertico-cycle t) ;; Enable cycling for `vertico-next/previous'
+    :init
+    (vertico-mode))
+#+end_src
+**** useful general emacs config
+TODO: look into necessity
+#+begin_src emacs-lisp
+  ;; A few more useful configurations...
+  (use-package emacs
+    :ensure nil
+    :custom
+    (enable-recursive-minibuffers t)	;Support opening new minibuffers from inside existing minibuffers.
+    ;; Emacs 28 and newer: Hide commands in M-x which do not work in the current
+    ;; mode.  Vertico commands are hidden in normal buffers. This setting is
+    ;; useful beyond Vertico.
+    (read-extended-command-predicate #'command-completion-default-include-p)
+    :init
+    ;; Add prompt indicator to `completing-read-multiple'.
+    ;; We display [CRM<separator>], e.g., [CRM,] if the separator is a comma.
+    (defun crm-indicator (args)
+      (cons (format "[CRM%s] %s"
+                    (replace-regexp-in-string
+                     "\\`\\[.*?]\\*\\|\\[.*?]\\*\\'" ""
+                     crm-separator)
+                    (car args))
+            (cdr args)))
+    (advice-add #'completing-read-multiple :filter-args #'crm-indicator)
+
+    ;; Do not allow the cursor in the minibuffer prompt
+    (setq minibuffer-prompt-properties
+          '(read-only t cursor-intangible t face minibuffer-prompt))
+    (add-hook 'minibuffer-setup-hook #'cursor-intangible-mode))
 #+end_src
 **** candidate meta information with marginalia
 show meta information about vertico completion options (eg. file size, last edited)
@@ -290,7 +320,7 @@ show meta information about vertico completion options (eg. file size, last edit
 #+end_src
 **** vertico show candidate icons
 icons for completion options
-#+begin_src emacs-lisp
+#+begin_src emacs-lisp :tangle no
   (use-package all-the-icons-completion
     :after (all-the-icons marginalia)
     :init (all-the-icons-completion-mode)
@@ -300,6 +330,12 @@ icons for completion options
 #+begin_src emacs-lisp
   (setq history-length 50)
   (savehist-mode t)
+#+end_src
+Persist history over Emacs restarts. Vertico sorts by history position.
+#+begin_src emacs-lisp :tangle no
+  (use-package savehist
+    :init
+    (savehist-mode))
 #+end_src
 **** Improve Candidate Filtering with Orderless
 improve vertico and corfu completions by allowing matches to search terms differently ordered
@@ -312,11 +348,12 @@ improve vertico and corfu completions by allowing matches to search terms differ
           completion-category-overrides '((file (styles partial-completion)))))
 #+end_src
 *** consult
+for seeing "occurrence-previews" when searching
 #+begin_src emacs-lisp
   (use-package consult
-    :bind ("C-c r" . 'consult-ripgrep)
+    :bind (("C-c r" . consult-ripgrep)
+           ("C-s" . consult-line))
     :config
-    (keymap-global-set "C-s" 'consult-line)
     (keymap-set minibuffer-local-map "C-r" 'consult-history)
     (setq completion-in-region-function #'consult-completion-in-region))
 #+end_src
@@ -338,11 +375,19 @@ in-buffer completion UI on top of the built-in completion framework
     ;; (corfu-preselect 'prompt)      ;; Preselect the prompt
     ;; (corfu-on-exact-match nil)     ;; Configure handling of exact matches
     ;; (corfu-scroll-margin 5)        ;; Use scroll margin
-    :config
+    :init
     (global-corfu-mode)
     (corfu-history-mode)
     (corfu-popupinfo-mode)
+    :config
     (setq corfu-popupinfo-delay nil))
+#+end_src
+**** corfu-terminal
+#+begin_src emacs-lisp
+  (use-package corfu-terminal
+    :if (not (display-graphic-p))
+    :init
+    (corfu-terminal-mode t))
 #+end_src
 **** nerd-icons-corfu
 add nerd-font icons to corfu completion candidates
@@ -358,6 +403,8 @@ add nerd-font icons to corfu completion candidates
               (setq-local corfu-auto nil)
               (corfu-mode)))
 #+end_src
+**** look into:
++ [[https://code.bsdgeek.org/adam/corfu-candidate-overlay][adam/corfu-candidate-overlay: Show first Corfu's completion candidate in an o...]]
 *** cape
 extend the built in completion at point functionality
 #+begin_src emacs-lisp
@@ -381,7 +428,7 @@ extend the built in completion at point functionality
            ("C-c p ^" . cape-tex)
            ("C-c p &" . cape-sgml)
            ("C-c p r" . cape-rfc1345))
-    :config
+    :init
     ;; Add to the global default value of `completion-at-point-functions' which is
     ;; used by `completion-at-point'.  The order of the functions matters, the
     ;; first function returning a result wins.  Note that the list of buffer-local
@@ -397,7 +444,7 @@ extend the built in completion at point functionality
     (add-to-list 'completion-at-point-functions #'cape-abbrev)
     (add-to-list 'completion-at-point-functions #'cape-dict)
     (add-to-list 'completion-at-point-functions #'cape-emoji)
-    (add-to-list 'completion-at-point-functions #'cape-elisp-symbol)
+    ;; (add-to-list 'completion-at-point-functions #'cape-elisp-symbol)
     ;;(add-to-list 'completion-at-point-functions #'cape-line)
     )
 #+end_src
@@ -406,8 +453,7 @@ extend the built in completion at point functionality
 for an improved Emacs startup time loading =org= is deferred until it is actually needed
 #+begin_src emacs-lisp
   (use-package org
-    :ensure nil
-    :defer t
+    :ensure nil				;load built in org-mode
     :commands (org-mode))
 #+end_src
 ** functionality
@@ -424,15 +470,15 @@ when inserting a new link to a heading in the current document, an auto completi
     "Insert internal link to HEADER entry in current file."
     (interactive (list (completing-read "Link: " (org-get-headings) nil nil)))
     (org-insert-link nil header))
-  ;(define-key org-mode-map (kbd "C-c h") 'org-insert-link-headline)
+  ;; (define-key org-mode-map (kbd "C-c h") 'org-insert-link-headline)
 #+end_src
 *** export to latex
-when exporting org mode to latex, keep the comments
+keep the comments, when exporting org mode to latex
 #+begin_src emacs-lisp
   (defun transform-comments (backend)
     (while (re-search-forward "[:blank:]*# " nil t)
       (replace-match "#+LATEX: % ")))
-    (add-hook 'org-export-before-parsing-hook #'transform-comments)
+  (add-hook 'org-export-before-parsing-hook #'transform-comments)
 #+end_src
 *** org-contrib
 add contrib package for extra features
@@ -479,17 +525,17 @@ disabled because it conflicts with the [[jinx spellchecking, using enchant]] sho
 *** replace S-M-arrow-key with S-M-{n,p,b,f}
 #+begin_src emacs-lisp
   (add-hook 'org-mode-hook
-             (lambda ()
-               (local-set-key (kbd "M-F") 'org-shiftmetaright)))
+            (lambda ()
+              (local-set-key (kbd "M-F") 'org-shiftmetaright)))
   (add-hook 'org-mode-hook
-             (lambda ()
-             (local-set-key (kbd "M-B") 'org-shiftmetaleft)))
+            (lambda ()
+              (local-set-key (kbd "M-B") 'org-shiftmetaleft)))
   (add-hook 'org-mode-hook
-             (lambda ()
-               (local-set-key (kbd "M-P") 'org-move-subtree-up)))
+            (lambda ()
+              (local-set-key (kbd "M-P") 'org-move-subtree-up)))
   (add-hook 'org-mode-hook
-             (lambda ()
-             (local-set-key (kbd "M-N") 'org-move-subtree-down)))
+            (lambda ()
+              (local-set-key (kbd "M-N") 'org-move-subtree-down)))
 #+end_src
 ** improve looks
 *** general
@@ -504,7 +550,7 @@ disabled because it conflicts with the [[jinx spellchecking, using enchant]] sho
 show style emphasis markers such as the * in =*bold*= when hovering over the word
 #+begin_src emacs-lisp
   (use-package org-appear
-    :after org-mode
+    ;; :after org-mode
     :hook (org-mode . org-appear-mode))
 #+end_src
 *** fonts and bullets
@@ -512,7 +558,6 @@ show style emphasis markers such as the * in =*bold*= when hovering over the wor
 make bullet points and headings look nicer
 #+begin_src emacs-lisp :tangle no
   (use-package org-superstar
-    ;:after org-mode
     :hook (org-mode . org-superstar-mode))
 #+end_src
 **** increase heading and title size 
@@ -639,7 +684,7 @@ use flyspell, the default spellcheck
   (use-package flyspell-correct
     :after flyspell
     :bind (:map flyspell-mode-map ("C-;" . flyspell-correct-wrapper)))
-    (define-key flyspell-mode-map (kbd "C-M-i") #'flyspell-correct-word)
+  (define-key flyspell-mode-map (kbd "C-M-i") #'flyspell-correct-word)
 #+end_src
 *** jinx spellchecking, using enchant
 requires (lib-)enchant using hunspell dictionaries
@@ -653,33 +698,29 @@ requires (lib-)enchant using hunspell dictionaries
   ;; (keymap-global-set "C-M-$" #'jinx-languages)
   ;; (keymap-global-set "M-p" #'jinx-previous)
   ;; (keymap-global-set "M-n" #'jinx-next)
-  #+end_src
+#+end_src
 ** highlight TODO
-
 highlight TODO FIXME etc.
-
 #+begin_src emacs-lisp
   (use-package hl-todo
-      :hook ((prog-mode . hl-todo-mode)
-             (org-mode . hl-todo-mode))
-      :config
-      ;(keymap-set hl-todo-mode-map "C-c p" #'hl-todo-previous)
-      ;(keymap-set hl-todo-mode-map "C-c n" #'hl-todo-next)
-      ;(keymap-set hl-todo-mode-map "C-c o" #'hl-todo-occur)
-      ;(keymap-set hl-todo-mode-map "C-c i" #'hl-todo-insert)
-      )
+    :hook ((prog-mode . hl-todo-mode)
+           (org-mode . hl-todo-mode))
+    :config
+    ;; (keymap-set hl-todo-mode-map "C-c p" #'hl-todo-previous)
+    ;; (keymap-set hl-todo-mode-map "C-c n" #'hl-todo-next)
+    ;; (keymap-set hl-todo-mode-map "C-c o" #'hl-todo-occur)
+    ;; (keymap-set hl-todo-mode-map "C-c i" #'hl-todo-insert)
+    )
 
-    (setq hl-todo-keyword-faces
-          '(("TODO"   . "#FF0000")
-            ("FIXME"  . "#FF0000")
-            ("DEBUG"  . "#A020F0")
-            ("GOTCHA" . "#FF4500")
-            ("STUB"   . "#1E90FF")))
+  (setq hl-todo-keyword-faces
+        '(("TODO"   . "#FF0000")
+          ("FIXME"  . "#FF0000")
+          ("DEBUG"  . "#A020F0")
+          ("GOTCHA" . "#FF4500")
+          ("STUB"   . "#1E90FF")))
 #+end_src
 ** rainbow delimiters
-
 match brackets and other delimiters by color to see the current scope more easily
-
 #+begin_src emacs-lisp
   (use-package rainbow-delimiters
     :hook (prog-mode . rainbow-delimiters-mode))
@@ -688,32 +729,33 @@ match brackets and other delimiters by color to see the current scope more easil
 *** smartparens
 #+begin_src emacs-lisp
   (use-package smartparens-mode
-  :ensure smartparens  ;; install the package
-  :hook (prog-mode text-mode markdown-mode) ;; add `smartparens-mode` to these hooks
-  :config
-  (require 'smartparens-config))
+    :ensure smartparens  ;; install the package
+    :hook (prog-mode text-mode markdown-mode) ;; add `smartparens-mode` to these hooks
+    :config
+    (require 'smartparens-config))
 #+end_src
 *** electric behavior
 auto indent,  via electric-mode
 #+begin_src emacs-lisp
-  ;(electric-pair-mode t)
+  ;; (electric-pair-mode t)
   (electric-indent-mode t)
-  ;(electric-quote-mode t)
+  ;; (electric-quote-mode t)
   (setq minibuffer-default-prompt-format " [%s]") ; Emacs 29
   (minibuffer-electric-default-mode 1)
 #+end_src
 * development
 ** git
 *** magit
+TODO: add checkout shortcut
 #+begin_src emacs-lisp
   (use-package magit
-    :bind ("C-x g" . 'magit)
-    :commands magit)
+    :bind ("C-x g" . magit))
+  ;; :commands 'magit)
 #+end_src
-to prevent being asked to type the ssh-key password on every action make it so magit knows the ssh-key-agents location:
+to prevent being asked to type the ssh/gpg-key password on every action, make sure magit knows the ssh-key-agents location via =keychain-evnvironment=:
 #+begin_src emacs-lisp
   (use-package keychain-environment
-    :hook ((magit . 'keychain-environment)))
+    :hook ((magit . keychain-environment)))
 #+end_src
 *** diff-hl
 highlight uncommitted, changed lines on the side of a buffer
@@ -733,19 +775,6 @@ automatically detect the appropriate tree-sitter mode dependent on the language 
     (global-treesit-auto-mode))
 #+end_src
 ** languages
-*** typst (not working)
-#+begin_src emacs-lisp :tangle no
-    (use-package typst-ts-mode
-  ;:type git :host sourcehut :repo "meow_king/typst-ts-mode"
-  :straight (your-package :type git :host git.sr.ht :repo "meow_king/typst-ts-mode")
-  :custom
-  ;; don't add "--open" if you'd like `watch` to be an error detector
-  (typst-ts-mode-watch-options "--open")
-
-  ;; experimental settings (I'm the main dev, so I enable these)
-  (typst-ts-mode-enable-raw-blocks-highlight t)
-  (typst-ts-mode-highlight-raw-blocks-at-startup t))
-#+end_src
 *** markdown
 #+begin_src emacs-lisp
   (use-package markdown-mode
@@ -815,15 +844,13 @@ auto enable makefile-mode for Makefiles
 ** flymake
 finding syntax errors on the fly, also works with eglot and spellcheck (it also might be worth checking out [[[https://www.flycheck.org] Flycheck]])
 #+begin_src emacs-lisp
-  ;(define-key flymake-mode-map (kbd "M-n") 'flymake-goto-next-error)
-  ;(define-key flymake-mode-map (kbd "M-p") 'flymake-goto-prev-error)
+  ;; (define-key flymake-mode-map (kbd "M-n") 'flymake-goto-next-error)
+  ;; (define-key flymake-mode-map (kbd "M-p") 'flymake-goto-prev-error)
   (global-set-key (kbd "M-n") 'flymake-goto-next-error)
   (global-set-key (kbd "M-p") 'flymake-goto-prev-error)
 #+end_src
 ** eglot
-
 add keybindings for when in eglot-mode (Emacs' built in language-server)
-
 #+begin_src emacs-lisp
   (require 'eglot)
   (define-key eglot-mode-map (kbd "C-c c r") 'eglot-rename)
@@ -837,10 +864,9 @@ add keybindings for when in eglot-mode (Emacs' built in language-server)
   (define-key eglot-mode-map (kbd "M-.") 'xref-find-definitions)
 #+end_src
 ** debugging
-#+begin_src emacs-lisp
+#+begin_src emacs-lisp :tangle no
   (use-package dape)
-  
-  ;(setq dap-auto-configure-features '(sessions locals controls tooltip))
+  ;; (setq dap-auto-configure-features '(sessions locals controls tooltip))
 #+end_src
 * applications
 ** restclient

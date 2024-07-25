@@ -2,7 +2,7 @@
 
 (require 'package)
 (add-to-list 'package-archives '("melpa" . "https://melpa.org/packages/") t)
-;(add-to-list 'package-archives '("melpa-stable" . "https://stable.melpa.org/packages/") t)
+;; (add-to-list 'package-archives '("melpa-stable" . "https://stable.melpa.org/packages/") t)
 (package-initialize)
 (require 'use-package-ensure) ;; make all use-package :ensure t
 (setq use-package-always-ensure t)
@@ -51,15 +51,15 @@
   (setq calendar-latitude 52.5)
   (setq calendar-longitude 13.4)
   (setq circadian-themes '((:sunrise . ef-day)
-                           ;(:sunset  . ef-autumn)
+                           ;; (:sunset  . ef-autumn)
                            (:sunset . ef-melissa-light)))
   (circadian-setup))
 
 (when (display-graphic-p)
   (set-frame-font "Comic Shanns 13" nil t))
-;(set-frame-font "Fantasque Sans Mono 12" nil t)
-;(set-frame-font "Comic Mono 12" nil t)
-;(add-to-list 'default-frame-alist '(font . "Comic Mono 11"))
+;; (set-frame-font "Fantasque Sans Mono 12" nil t)
+;; (set-frame-font "Comic Mono 12" nil t)
+;; (add-to-list 'default-frame-alist '(font . "Comic Mono 11"))
 
 (use-package all-the-icons
   :if (display-graphic-p))
@@ -68,8 +68,7 @@
   :init (doom-modeline-mode t))
 
 (use-package elfeed
-  :defer t
-  :bind ("C-x w" . 'elfeed)
+  :bind ("C-x w" . elfeed)
   :config
   (setq elfeed-feeds
         '("http://nullprogram.com/feed/"
@@ -142,22 +141,44 @@ Version: 2018-05-15 2023-08-11 2023-10-28"
 (global-set-key (kbd "C-x C-k") 'kill-buffer-and-close-window)
 
 (use-package vertico
-  :ensure t
-  ;; :init
-  ;; (vertico-mode)
-  :hook (after-init . 'vertico-mode)
   :custom
-  (vertico-cycle t))
+  (vertico-scroll-margin 0) ;; Different scroll margin
+  (vertico-count 10) ;; Show more candidatesm
+  ;; (vertico-resize t) ;; Grow and shrink the Vertico minibuffer
+  (vertico-cycle t) ;; Enable cycling for `vertico-next/previous'
+  :init
+  (vertico-mode))
+
+;; A few more useful configurations...
+(use-package emacs
+  :ensure nil
+  :custom
+  (enable-recursive-minibuffers t)	;Support opening new minibuffers from inside existing minibuffers.
+  ;; Emacs 28 and newer: Hide commands in M-x which do not work in the current
+  ;; mode.  Vertico commands are hidden in normal buffers. This setting is
+  ;; useful beyond Vertico.
+  (read-extended-command-predicate #'command-completion-default-include-p)
+  :init
+  ;; Add prompt indicator to `completing-read-multiple'.
+  ;; We display [CRM<separator>], e.g., [CRM,] if the separator is a comma.
+  (defun crm-indicator (args)
+    (cons (format "[CRM%s] %s"
+                  (replace-regexp-in-string
+                   "\\`\\[.*?]\\*\\|\\[.*?]\\*\\'" ""
+                   crm-separator)
+                  (car args))
+          (cdr args)))
+  (advice-add #'completing-read-multiple :filter-args #'crm-indicator)
+
+  ;; Do not allow the cursor in the minibuffer prompt
+  (setq minibuffer-prompt-properties
+        '(read-only t cursor-intangible t face minibuffer-prompt))
+  (add-hook 'minibuffer-setup-hook #'cursor-intangible-mode))
 
 (use-package marginalia
   :after vertico
   :init
   (marginalia-mode))
-
-(use-package all-the-icons-completion
-  :after (all-the-icons marginalia)
-  :init (all-the-icons-completion-mode)
-  :hook (marginalia-mode . all-the-icons-completion-marginalia-setup))
 
 (setq history-length 50)
 (savehist-mode t)
@@ -170,9 +191,9 @@ Version: 2018-05-15 2023-08-11 2023-10-28"
         completion-category-overrides '((file (styles partial-completion)))))
 
 (use-package consult
-  :bind ("C-c r" . 'consult-ripgrep)
+  :bind (("C-c r" . consult-ripgrep)
+         ("C-s" . consult-line))
   :config
-  (keymap-global-set "C-s" 'consult-line)
   (keymap-set minibuffer-local-map "C-r" 'consult-history)
   (setq completion-in-region-function #'consult-completion-in-region))
 
@@ -189,11 +210,17 @@ Version: 2018-05-15 2023-08-11 2023-10-28"
   ;; (corfu-preselect 'prompt)      ;; Preselect the prompt
   ;; (corfu-on-exact-match nil)     ;; Configure handling of exact matches
   ;; (corfu-scroll-margin 5)        ;; Use scroll margin
-  :config
+  :init
   (global-corfu-mode)
   (corfu-history-mode)
   (corfu-popupinfo-mode)
+  :config
   (setq corfu-popupinfo-delay nil))
+
+(use-package corfu-terminal
+  :if (not (display-graphic-p))
+  :init
+  (corfu-terminal-mode t))
 
 (use-package nerd-icons-corfu
   :config
@@ -224,7 +251,7 @@ Version: 2018-05-15 2023-08-11 2023-10-28"
          ("C-c p ^" . cape-tex)
          ("C-c p &" . cape-sgml)
          ("C-c p r" . cape-rfc1345))
-  :config
+  :init
   ;; Add to the global default value of `completion-at-point-functions' which is
   ;; used by `completion-at-point'.  The order of the functions matters, the
   ;; first function returning a result wins.  Note that the list of buffer-local
@@ -240,13 +267,12 @@ Version: 2018-05-15 2023-08-11 2023-10-28"
   (add-to-list 'completion-at-point-functions #'cape-abbrev)
   (add-to-list 'completion-at-point-functions #'cape-dict)
   (add-to-list 'completion-at-point-functions #'cape-emoji)
-  (add-to-list 'completion-at-point-functions #'cape-elisp-symbol)
+  ;; (add-to-list 'completion-at-point-functions #'cape-elisp-symbol)
   ;;(add-to-list 'completion-at-point-functions #'cape-line)
   )
 
 (use-package org
-  :ensure nil
-  :defer t
+  :ensure nil				;load built in org-mode
   :commands (org-mode))
 
 (defun unpropertize (string)
@@ -259,12 +285,12 @@ Version: 2018-05-15 2023-08-11 2023-10-28"
   "Insert internal link to HEADER entry in current file."
   (interactive (list (completing-read "Link: " (org-get-headings) nil nil)))
   (org-insert-link nil header))
-;(define-key org-mode-map (kbd "C-c h") 'org-insert-link-headline)
+;; (define-key org-mode-map (kbd "C-c h") 'org-insert-link-headline)
 
 (defun transform-comments (backend)
   (while (re-search-forward "[:blank:]*# " nil t)
     (replace-match "#+LATEX: % ")))
-  (add-hook 'org-export-before-parsing-hook #'transform-comments)
+(add-hook 'org-export-before-parsing-hook #'transform-comments)
 
 (setq org-startup-folded t)
 
@@ -277,17 +303,17 @@ Version: 2018-05-15 2023-08-11 2023-10-28"
   :commands org-hugo-auto-export-mode)
 
 (add-hook 'org-mode-hook
-           (lambda ()
-             (local-set-key (kbd "M-F") 'org-shiftmetaright)))
+          (lambda ()
+            (local-set-key (kbd "M-F") 'org-shiftmetaright)))
 (add-hook 'org-mode-hook
-           (lambda ()
-           (local-set-key (kbd "M-B") 'org-shiftmetaleft)))
+          (lambda ()
+            (local-set-key (kbd "M-B") 'org-shiftmetaleft)))
 (add-hook 'org-mode-hook
-           (lambda ()
-             (local-set-key (kbd "M-P") 'org-move-subtree-up)))
+          (lambda ()
+            (local-set-key (kbd "M-P") 'org-move-subtree-up)))
 (add-hook 'org-mode-hook
-           (lambda ()
-           (local-set-key (kbd "M-N") 'org-move-subtree-down)))
+          (lambda ()
+            (local-set-key (kbd "M-N") 'org-move-subtree-down)))
 
 (setq org-startup-indented t
       org-pretty-entities t
@@ -296,7 +322,7 @@ Version: 2018-05-15 2023-08-11 2023-10-28"
       org-image-actual-width '(300))
 
 (use-package org-appear
-  :after org-mode
+  ;; :after org-mode
   :hook (org-mode . org-appear-mode))
 
 (custom-set-faces
@@ -388,43 +414,43 @@ Version: 2018-05-15 2023-08-11 2023-10-28"
 ;; (keymap-global-set "M-n" #'jinx-next)
 
 (use-package hl-todo
-    :hook ((prog-mode . hl-todo-mode)
-           (org-mode . hl-todo-mode))
-    :config
-    ;(keymap-set hl-todo-mode-map "C-c p" #'hl-todo-previous)
-    ;(keymap-set hl-todo-mode-map "C-c n" #'hl-todo-next)
-    ;(keymap-set hl-todo-mode-map "C-c o" #'hl-todo-occur)
-    ;(keymap-set hl-todo-mode-map "C-c i" #'hl-todo-insert)
-    )
+  :hook ((prog-mode . hl-todo-mode)
+         (org-mode . hl-todo-mode))
+  :config
+  ;; (keymap-set hl-todo-mode-map "C-c p" #'hl-todo-previous)
+  ;; (keymap-set hl-todo-mode-map "C-c n" #'hl-todo-next)
+  ;; (keymap-set hl-todo-mode-map "C-c o" #'hl-todo-occur)
+  ;; (keymap-set hl-todo-mode-map "C-c i" #'hl-todo-insert)
+  )
 
-  (setq hl-todo-keyword-faces
-        '(("TODO"   . "#FF0000")
-          ("FIXME"  . "#FF0000")
-          ("DEBUG"  . "#A020F0")
-          ("GOTCHA" . "#FF4500")
-          ("STUB"   . "#1E90FF")))
+(setq hl-todo-keyword-faces
+      '(("TODO"   . "#FF0000")
+        ("FIXME"  . "#FF0000")
+        ("DEBUG"  . "#A020F0")
+        ("GOTCHA" . "#FF4500")
+        ("STUB"   . "#1E90FF")))
 
 (use-package rainbow-delimiters
   :hook (prog-mode . rainbow-delimiters-mode))
 
 (use-package smartparens-mode
-:ensure smartparens  ;; install the package
-:hook (prog-mode text-mode markdown-mode) ;; add `smartparens-mode` to these hooks
-:config
-(require 'smartparens-config))
+  :ensure smartparens  ;; install the package
+  :hook (prog-mode text-mode markdown-mode) ;; add `smartparens-mode` to these hooks
+  :config
+  (require 'smartparens-config))
 
-;(electric-pair-mode t)
+;; (electric-pair-mode t)
 (electric-indent-mode t)
-;(electric-quote-mode t)
+;; (electric-quote-mode t)
 (setq minibuffer-default-prompt-format " [%s]") ; Emacs 29
 (minibuffer-electric-default-mode 1)
 
 (use-package magit
-  :bind ("C-x g" . 'magit)
-  :commands magit)
+  :bind ("C-x g" . magit))
+;; :commands 'magit)
 
 (use-package keychain-environment
-  :hook ((magit . 'keychain-environment)))
+  :hook ((magit . keychain-environment)))
 
 (use-package treesit-auto
   :custom
@@ -464,8 +490,8 @@ Version: 2018-05-15 2023-08-11 2023-10-28"
 
 (add-to-list 'auto-mode-alist '("\\Makefile\\'" . makefile-mode))
 
-;(define-key flymake-mode-map (kbd "M-n") 'flymake-goto-next-error)
-;(define-key flymake-mode-map (kbd "M-p") 'flymake-goto-prev-error)
+;; (define-key flymake-mode-map (kbd "M-n") 'flymake-goto-next-error)
+;; (define-key flymake-mode-map (kbd "M-p") 'flymake-goto-prev-error)
 (global-set-key (kbd "M-n") 'flymake-goto-next-error)
 (global-set-key (kbd "M-p") 'flymake-goto-prev-error)
 
@@ -479,10 +505,6 @@ Version: 2018-05-15 2023-08-11 2023-10-28"
 (define-key eglot-mode-map (kbd "C-c c e") 'eglot-code-action-extract)
 (define-key eglot-mode-map (kbd "<f6>") 'xref-find-definitions)
 (define-key eglot-mode-map (kbd "M-.") 'xref-find-definitions)
-
-(use-package dape)
-
-;(setq dap-auto-configure-features '(sessions locals controls tooltip))
 
 (use-package restclient
   :defer t)
