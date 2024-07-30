@@ -1,11 +1,11 @@
+export LANGUAGE=en_US
+
 if [ -z "$(which emacs)" ] ; then
     export EDITOR=$(which emacs)
 fi
 
 export CC=gcc CXX=g++
-if [ -z "$(which sccache)" ] ; then
-    export RUSTC_WRAPPER=sccache
-fi
+
 if [ -d "/usr/lib/jvm/default" ] ; then
     export JAVA_HOME=/usr/lib/jvm/default
 fi
@@ -25,8 +25,8 @@ if [ -d "$GEM_HOME/bin" ] ; then
     export PATH="$PATH:$GEM_HOME/bin"
 fi
 
-alias docker_stop='sudo docker stop $(sudo docker ps -a -q)'
-alias docker_rm='sudo docker rm $(sudo docker ps -a -q)'
+alias docker_stop='[ -n "$(sudo docker ps -a -q)" ] && sudo docker stop $(sudo docker ps -a -q) || echo "No containers to stop"'
+alias docker_rm='[ -n "$(sudo docker ps -a -q)" ] && sudo docker rm $(sudo docker ps -a -q) || echo "No containers to remove"'
 
 alias em='/usr/bin/emacs -nw'
 
@@ -90,9 +90,9 @@ export TERM="xterm-256color"
 
 source /usr/share/doc/pkgfile/command-not-found.bash
 
-HISTSIZE=1000
-HISTFILESIZE=2000  
-HISTCONTROL=ignoreboth
+export HISTSIZE=1000
+export HISTFILESIZE=2000  
+export HISTCONTROL=ignoreboth:erasedups
 
 bind '"\e[A": history-search-backward'
 bind '"\e[B": history-search-forward'
