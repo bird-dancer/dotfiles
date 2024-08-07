@@ -776,7 +776,7 @@ to prevent being asked to type the ssh/gpg-key password on every action, make su
 #+end_src
 *** diff-hl
 highlight uncommitted, changed lines on the side of a buffer
-#+begin_src emacs-lisp :tangle no
+#+begin_src emacs-lisp
   (use-package diff-hl
     :hook ((text-mode . diff-hl-mode)
            (org-mode . diff-hl-mode)

@@ -464,6 +464,12 @@ Version: 2018-05-15 2023-08-11 2023-10-28"
 (use-package keychain-environment
   :hook ((magit . keychain-environment)))
 
+(use-package diff-hl
+  :hook ((text-mode . diff-hl-mode)
+         (org-mode . diff-hl-mode)
+         (prog-mode . diff-hl-mode)
+         (dired-mode . diff-hl-dired-mode)))
+
 (use-package treesit-auto
   :custom
   (treesit-auto-install 'prompt)
