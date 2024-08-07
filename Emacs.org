@@ -83,10 +83,6 @@ remove the menu-bar tool-bar and scroll-bar as a measure to remove visual clutte
 #+begin_src emacs-lisp
   (global-hl-line-mode t)
 #+end_src
-**** prettify symbols
-#+begin_src emacs-lisp
-  (global-prettify-symbols-mode t)
-#+end_src
 **** enable line wrapping
 #+begin_src emacs-lisp
   (global-visual-line-mode t)
@@ -99,8 +95,12 @@ remove the menu-bar tool-bar and scroll-bar as a measure to remove visual clutte
   (add-hook 'org-mode-hook #'display-line-numbers-mode)
   (setq display-line-numbers-type 'relative) ;; make line numbers relative
 #+end_src
-** theme
-*** cool themes (not used)
+*** prettify symbols
+#+begin_src emacs-lisp
+  (global-prettify-symbols-mode t)
+#+end_src
+*** theme
+**** cool themes (not used)
 #+begin_src emacs-lisp :tangle no
   (use-package gruvbox-theme :defer)
   (use-package jazz-theme :defer)
@@ -110,8 +110,8 @@ remove the menu-bar tool-bar and scroll-bar as a measure to remove visual clutte
   ;; (load-theme 'gruvbox-dark-hard t)
   ;; (load-theme 'gruvbox-light-soft t)
 #+end_src
-*** ef-themes
-#+begin_src emacs-lisp
+**** ef-themes
+#+begin_src emacs-lisp :tangle no
   (use-package ef-themes :defer t)
 #+end_src
 #+begin_src emacs-lisp :tangle no
@@ -126,7 +126,7 @@ remove the menu-bar tool-bar and scroll-bar as a measure to remove visual clutte
   ;; (load-theme 'ef-night t)
   ;; (load-theme 'ef-bio t)
 #+end_src
-*** auto pick theme
+**** auto pick theme
 picks a light color-theme when the sun is risen and a dark theme when the sun is set
 #+begin_src emacs-lisp
   (use-package circadian
@@ -134,24 +134,31 @@ picks a light color-theme when the sun is risen and a dark theme when the sun is
     :config
     (setq calendar-latitude 52.5)
     (setq calendar-longitude 13.4)
-    (setq circadian-themes '((:sunrise . ef-day)
+    (setq circadian-themes '(
+                             (:sunrise . modus-operandi)
+                             ;; (:sunrise  . ef-day)
                              ;; (:sunset  . ef-autumn)
-                             (:sunset . ef-melissa-light)))
+                             (:sunset . modus-vivendi)
+                             ))
     (circadian-setup))
 #+end_src
-** fonts
-*** general font
+*** fonts
+**** general font
 #+begin_src emacs-lisp
-  (when (display-graphic-p)
-    (set-frame-font "Comic Shanns 13" nil t))
+  ;; (when (display-graphic-p))
+  (set-frame-font "Comic Shanns Mono 13" nil t)
   ;; (set-frame-font "Fantasque Sans Mono 12" nil t)
   ;; (set-frame-font "Comic Mono 12" nil t)
   ;; (add-to-list 'default-frame-alist '(font . "Comic Mono 11"))
 #+end_src
-*** icon font
+**** icon font
 #+begin_src emacs-lisp
   (use-package all-the-icons
     :if (display-graphic-p))
+#+end_src
+*** cursor style
+#+begin_src emacs-lisp
+  (setq-default cursor-type 'bar)
 #+end_src
 ** mode-line
 show the mode status line from doom Emacs at the bottom to provide more information while looking nicer
@@ -193,6 +200,7 @@ it shows a table of all possible ways you can finish a shortcut after having sta
 #+begin_src emacs-lisp
   (global-set-key (kbd "C-x C-j") 'join-line)
 #+end_src
+
 *** delete current file
 from: [[http://xahlee.info/emacs/emacs/elisp_delete-current-file.html][Emacs: Delete Current File 🚀]]
 #+begin_src emacs-lisp
@@ -494,7 +502,6 @@ add contrib package for extra features
 give pasted links the title provided by the meta-information of the website
 #+begin_src emacs-lisp
   (use-package org-cliplink
-    :after org-mode
     :bind ("C-x p i" . org-cliplink))
 #+end_src
 *** ox-hugo
@@ -690,9 +697,20 @@ use flyspell, the default spellcheck
 requires (lib-)enchant using hunspell dictionaries
 #+begin_src emacs-lisp
   (use-package jinx
+    :if (not (file-directory-p "~/.guix-profile/share/emacs/site-lisp")) ;only install if non guix system
     :hook (emacs-startup . global-jinx-mode)
     :bind (("M-$" . jinx-correct)
            ("C-M-$" . jinx-languages)))
+
+  ;; use emacs-jinx package from guix if available
+  (use-package jinx
+    :if (file-directory-p "~/.guix-profile/share/emacs/site-lisp") ;only install if non guix system
+    :ensure nil
+    :load-path "~/.guix-profile/share/emacs/site-lisp/jinx-1.9/"
+    :hook (emacs-startup . global-jinx-mode)
+    :bind (("M-$" . jinx-correct)
+           ("C-M-$" . jinx-languages)))
+
   ;; (add-hook 'emacs-startup-hook #'global-jinx-mode)
   ;; (keymap-global-set "M-$" #'jinx-correct)
   ;; (keymap-global-set "C-M-$" #'jinx-languages)
@@ -703,21 +721,19 @@ requires (lib-)enchant using hunspell dictionaries
 highlight TODO FIXME etc.
 #+begin_src emacs-lisp
   (use-package hl-todo
-    :hook ((prog-mode . hl-todo-mode)
-           (org-mode . hl-todo-mode))
-    :config
-    ;; (keymap-set hl-todo-mode-map "C-c p" #'hl-todo-previous)
-    ;; (keymap-set hl-todo-mode-map "C-c n" #'hl-todo-next)
-    ;; (keymap-set hl-todo-mode-map "C-c o" #'hl-todo-occur)
-    ;; (keymap-set hl-todo-mode-map "C-c i" #'hl-todo-insert)
-    )
-
-  (setq hl-todo-keyword-faces
-        '(("TODO"   . "#FF0000")
-          ("FIXME"  . "#FF0000")
-          ("DEBUG"  . "#A020F0")
-          ("GOTCHA" . "#FF4500")
-          ("STUB"   . "#1E90FF")))
+      :hook ((prog-mode . hl-todo-mode)
+             (org-mode . hl-todo-mode))
+      :config
+      ;; (keymap-set hl-todo-mode-map "C-c p" #'hl-todo-previous)
+      ;; (keymap-set hl-todo-mode-map "C-c n" #'hl-todo-next)
+      ;; (keymap-set hl-todo-mode-map "C-c o" #'hl-todo-occur)
+      ;; (keymap-set hl-todo-mode-map "C-c i" #'hl-todo-insert)
+      (setq hl-todo-keyword-faces
+            '(("TODO"   . "#FF0000")
+              ("FIXME"  . "#FF0000")
+              ("DEBUG"  . "#A020F0")
+              ("GOTCHA" . "#FF4500")
+              ("STUB"   . "#1E90FF"))))
 #+end_src
 ** rainbow delimiters
 match brackets and other delimiters by color to see the current scope more easily
@@ -749,7 +765,8 @@ auto indent,  via electric-mode
 TODO: add checkout shortcut
 #+begin_src emacs-lisp
   (use-package magit
-    :bind ("C-x g" . magit))
+    :bind (("C-x g" . magit)
+           ("C-x c" . magit-clone-shallow)))
   ;; :commands 'magit)
 #+end_src
 to prevent being asked to type the ssh/gpg-key password on every action, make sure magit knows the ssh-key-agents location via =keychain-evnvironment=:
@@ -761,7 +778,9 @@ to prevent being asked to type the ssh/gpg-key password on every action, make su
 highlight uncommitted, changed lines on the side of a buffer
 #+begin_src emacs-lisp :tangle no
   (use-package diff-hl
-    :hook ((text-mode . 'diff-hl-mode)
+    :hook ((text-mode . diff-hl-mode)
+           (org-mode . diff-hl-mode)
+           (prog-mode . diff-hl-mode)
            (dired-mode . diff-hl-dired-mode)))
 #+end_src
 ** tree-sitter
@@ -931,7 +950,11 @@ make garbage-collection pauses faster by decreasing the threshold, increasing th
   + rmail
   + mu4e: [[https://www.youtube.com/watch?v=yZRyEhi4y44&pp=ygULZW1hY3MgZW1haWw%3D][Streamline Your E-mail Management with mu4e - Emacs Mail - YouTube]]
 + handle passwords: [[https://www.youtube.com/watch?v=nZ_T7Q49B8Y][How to Encrypt Your Passwords with Emacs - YouTube]]
+  [[https://github.com/daviwil/dotfiles/blob/master/.emacs.d/modules/dw-auth.el][dotfiles/.emacs.d/modules/dw-auth.el at master · daviwil/dotfiles · GitHub]]
 * look into
++ [[https://www.youtube.com/watch?v=PMWwM8QJAtU][Emacs From Scratch #10 - Effortless File Management with Dired - YouTube]]
++ =nov.el= for reading books
++ irc: [[https://www.youtube.com/watch?v=qWHTZIYTA4s&list=PLEoMzSkcN8oMMcPnYlNbQkUInjUxB75wE&pp=iAQB][Chat Like the 90's in Emacs with ERC - YouTube]]
 + [[https://github.com/Wilfred/deadgrep?tab=readme-ov-file][GitHub - Wilfred/deadgrep: fast, friendly searching with ripgrep and Emacs]]
 + wdired [[https://xenodium.com/emacs-git-rename-courtesy-of-dired/][Emacs: git rename, courtesy of dired]]
 + [[https://www.emacswiki.org/emacs/HippieExpand][EmacsWiki: Hippie Expand]]

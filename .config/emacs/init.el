@@ -33,8 +33,6 @@
 
 (global-hl-line-mode t)
 
-(global-prettify-symbols-mode t)
-
 (global-visual-line-mode t)
 
 ;; (global-display-line-numbers-mode t) ;; enable line numbers globally
@@ -43,26 +41,31 @@
 (add-hook 'org-mode-hook #'display-line-numbers-mode)
 (setq display-line-numbers-type 'relative) ;; make line numbers relative
 
-(use-package ef-themes :defer t)
+(global-prettify-symbols-mode t)
 
 (use-package circadian
   :if (display-graphic-p)
   :config
   (setq calendar-latitude 52.5)
   (setq calendar-longitude 13.4)
-  (setq circadian-themes '((:sunrise . ef-day)
+  (setq circadian-themes '(
+                           (:sunrise . modus-operandi)
+                           ;; (:sunrise  . ef-day)
                            ;; (:sunset  . ef-autumn)
-                           (:sunset . ef-melissa-light)))
+                           (:sunset . modus-vivendi)
+                           ))
   (circadian-setup))
 
-(when (display-graphic-p)
-  (set-frame-font "Comic Shanns 13" nil t))
+;; (when (display-graphic-p))
+(set-frame-font "Comic Shanns Mono 13" nil t)
 ;; (set-frame-font "Fantasque Sans Mono 12" nil t)
 ;; (set-frame-font "Comic Mono 12" nil t)
 ;; (add-to-list 'default-frame-alist '(font . "Comic Mono 11"))
 
 (use-package all-the-icons
   :if (display-graphic-p))
+
+(setq-default cursor-type 'bar)
 
 (use-package doom-modeline
   :init (doom-modeline-mode t))
@@ -295,7 +298,6 @@ Version: 2018-05-15 2023-08-11 2023-10-28"
 (setq org-startup-folded t)
 
 (use-package org-cliplink
-  :after org-mode
   :bind ("C-x p i" . org-cliplink))
 
 (use-package ox-hugo
@@ -404,9 +406,20 @@ Version: 2018-05-15 2023-08-11 2023-10-28"
 (global-set-key (kbd "C-c C-<") 'mc/mark-all-like-this)
 
 (use-package jinx
+  :if (not (file-directory-p "~/.guix-profile/share/emacs/site-lisp")) ;only install if non guix system
   :hook (emacs-startup . global-jinx-mode)
   :bind (("M-$" . jinx-correct)
          ("C-M-$" . jinx-languages)))
+
+;; use emacs-jinx package from guix if available
+(use-package jinx
+  :if (file-directory-p "~/.guix-profile/share/emacs/site-lisp") ;only install if non guix system
+  :ensure nil
+  :load-path "~/.guix-profile/share/emacs/site-lisp/jinx-1.9/"
+  :hook (emacs-startup . global-jinx-mode)
+  :bind (("M-$" . jinx-correct)
+         ("C-M-$" . jinx-languages)))
+
 ;; (add-hook 'emacs-startup-hook #'global-jinx-mode)
 ;; (keymap-global-set "M-$" #'jinx-correct)
 ;; (keymap-global-set "C-M-$" #'jinx-languages)
@@ -414,21 +427,19 @@ Version: 2018-05-15 2023-08-11 2023-10-28"
 ;; (keymap-global-set "M-n" #'jinx-next)
 
 (use-package hl-todo
-  :hook ((prog-mode . hl-todo-mode)
-         (org-mode . hl-todo-mode))
-  :config
-  ;; (keymap-set hl-todo-mode-map "C-c p" #'hl-todo-previous)
-  ;; (keymap-set hl-todo-mode-map "C-c n" #'hl-todo-next)
-  ;; (keymap-set hl-todo-mode-map "C-c o" #'hl-todo-occur)
-  ;; (keymap-set hl-todo-mode-map "C-c i" #'hl-todo-insert)
-  )
-
-(setq hl-todo-keyword-faces
-      '(("TODO"   . "#FF0000")
-        ("FIXME"  . "#FF0000")
-        ("DEBUG"  . "#A020F0")
-        ("GOTCHA" . "#FF4500")
-        ("STUB"   . "#1E90FF")))
+    :hook ((prog-mode . hl-todo-mode)
+           (org-mode . hl-todo-mode))
+    :config
+    ;; (keymap-set hl-todo-mode-map "C-c p" #'hl-todo-previous)
+    ;; (keymap-set hl-todo-mode-map "C-c n" #'hl-todo-next)
+    ;; (keymap-set hl-todo-mode-map "C-c o" #'hl-todo-occur)
+    ;; (keymap-set hl-todo-mode-map "C-c i" #'hl-todo-insert)
+    (setq hl-todo-keyword-faces
+          '(("TODO"   . "#FF0000")
+            ("FIXME"  . "#FF0000")
+            ("DEBUG"  . "#A020F0")
+            ("GOTCHA" . "#FF4500")
+            ("STUB"   . "#1E90FF"))))
 
 (use-package rainbow-delimiters
   :hook (prog-mode . rainbow-delimiters-mode))
@@ -446,7 +457,8 @@ Version: 2018-05-15 2023-08-11 2023-10-28"
 (minibuffer-electric-default-mode 1)
 
 (use-package magit
-  :bind ("C-x g" . magit))
+  :bind (("C-x g" . magit)
+         ("C-x c" . magit-clone-shallow)))
 ;; :commands 'magit)
 
 (use-package keychain-environment
