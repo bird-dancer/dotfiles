@@ -374,16 +374,6 @@ Persist history over Emacs restarts. Vertico sorts by history position.
     :init
     (savehist-mode))
 #+end_src
-**** Improve Candidate Filtering with Orderless
-improve vertico and corfu completions by allowing matches to search terms differently ordered
-#+begin_src emacs-lisp
-  (use-package orderless
-    :after vertico
-    :config
-    (setq completion-styles '(orderless basic)
-          completion-category-defaults nil
-          completion-category-overrides '((file (styles partial-completion)))))
-#+end_src
 *** consult
 for seeing "occurrence-previews" when searching
 #+begin_src emacs-lisp
@@ -414,10 +404,28 @@ in-buffer completion UI on top of the built-in completion framework
     ;; (corfu-scroll-margin 5)        ;; Use scroll margin
     :init
     (global-corfu-mode)
-    (corfu-history-mode)
-    (corfu-popupinfo-mode)
+    (corfu-history-mode))
+#+end_src
+**** corfu-popupinfo-mode
+show documentation and optionally source code in pop up buffer next to auto-completion
+"M-n" #'corfu-doc-scroll-up
+"M-p" #'corfu-doc-scroll-down)
+#+begin_src emacs-lisp :tangle no
+  (use-package corfu-info
+    :after corfu
+    :ensure nil
+    :hook (corfu-mode . corfu-info-mode))
+#+end_src
+#+begin_src emacs-lisp
+  (use-package corfu-popupinfo
+    :after corfu
+    :ensure nil
+    :hook (corfu-mode . corfu-popupinfo-mode)
+    :custom
+    (corfu-popupinfo-delay '(0.6 . 0.4))
+    (corfu-popupinfo-hide nil)
     :config
-    (setq corfu-popupinfo-delay nil))
+    (corfu-popupinfo-mode))
 #+end_src
 **** corfu-terminal
 #+begin_src emacs-lisp
@@ -484,6 +492,15 @@ extend the built in completion at point functionality
     ;; (add-to-list 'completion-at-point-functions #'cape-elisp-symbol)
     ;;(add-to-list 'completion-at-point-functions #'cape-line)
     )
+#+end_src
+** Improve Candidate Filtering with Orderless
+improve vertico and corfu completions by allowing matches to search terms differently ordered
+#+begin_src emacs-lisp
+  (use-package orderless
+    :config
+    (setq completion-styles '(orderless basic)
+          completion-category-defaults nil
+          completion-category-overrides '((file (styles partial-completion)))))
 #+end_src
 * org-mode
 ** defer startup
@@ -750,19 +767,19 @@ requires (lib-)enchant using hunspell dictionaries
 highlight TODO FIXME etc.
 #+begin_src emacs-lisp
   (use-package hl-todo
-      :hook ((prog-mode . hl-todo-mode)
-             (org-mode . hl-todo-mode))
-      :config
-      ;; (keymap-set hl-todo-mode-map "C-c p" #'hl-todo-previous)
-      ;; (keymap-set hl-todo-mode-map "C-c n" #'hl-todo-next)
-      ;; (keymap-set hl-todo-mode-map "C-c o" #'hl-todo-occur)
-      ;; (keymap-set hl-todo-mode-map "C-c i" #'hl-todo-insert)
-      (setq hl-todo-keyword-faces
-            '(("TODO"   . "#FF0000")
-              ("FIXME"  . "#FF0000")
-              ("DEBUG"  . "#A020F0")
-              ("GOTCHA" . "#FF4500")
-              ("STUB"   . "#1E90FF"))))
+    :hook ((prog-mode . hl-todo-mode)
+           (org-mode . hl-todo-mode))
+    :config
+    ;; (keymap-set hl-todo-mode-map "C-c p" #'hl-todo-previous)
+    ;; (keymap-set hl-todo-mode-map "C-c n" #'hl-todo-next)
+    ;; (keymap-set hl-todo-mode-map "C-c o" #'hl-todo-occur)
+    ;; (keymap-set hl-todo-mode-map "C-c i" #'hl-todo-insert)
+    (setq hl-todo-keyword-faces
+          '(("TODO"   . "#FF0000")
+            ("FIXME"  . "#FF0000")
+            ("DEBUG"  . "#A020F0")
+            ("GOTCHA" . "#FF4500")
+            ("STUB"   . "#1E90FF"))))
 #+end_src
 ** rainbow delimiters
 match brackets and other delimiters by color to see the current scope more easily
@@ -980,6 +997,7 @@ make garbage-collection pauses faster by decreasing the threshold, increasing th
   + mu4e: [[https://www.youtube.com/watch?v=yZRyEhi4y44&pp=ygULZW1hY3MgZW1haWw%3D][Streamline Your E-mail Management with mu4e - Emacs Mail - YouTube]]
 + handle passwords: [[https://www.youtube.com/watch?v=nZ_T7Q49B8Y][How to Encrypt Your Passwords with Emacs - YouTube]]
   [[https://github.com/daviwil/dotfiles/blob/master/.emacs.d/modules/dw-auth.el][dotfiles/.emacs.d/modules/dw-auth.el at master · daviwil/dotfiles · GitHub]]
++ inline git blame
 * look into
 + [[https://www.youtube.com/watch?v=PMWwM8QJAtU][Emacs From Scratch #10 - Effortless File Management with Dired - YouTube]]
 + =nov.el= for reading books

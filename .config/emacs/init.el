@@ -209,13 +209,6 @@ Version: 2018-05-15 2023-08-11 2023-10-28"
 (setq history-length 50)
 (savehist-mode t)
 
-(use-package orderless
-  :after vertico
-  :config
-  (setq completion-styles '(orderless basic)
-        completion-category-defaults nil
-        completion-category-overrides '((file (styles partial-completion)))))
-
 (use-package consult
   :bind (("C-c r" . consult-ripgrep)
          ("C-s" . consult-line))
@@ -238,10 +231,17 @@ Version: 2018-05-15 2023-08-11 2023-10-28"
   ;; (corfu-scroll-margin 5)        ;; Use scroll margin
   :init
   (global-corfu-mode)
-  (corfu-history-mode)
-  (corfu-popupinfo-mode)
+  (corfu-history-mode))
+
+(use-package corfu-popupinfo
+  :after corfu
+  :ensure nil
+  :hook (corfu-mode . corfu-popupinfo-mode)
+  :custom
+  (corfu-popupinfo-delay '(0.6 . 0.4))
+  (corfu-popupinfo-hide nil)
   :config
-  (setq corfu-popupinfo-delay nil))
+  (corfu-popupinfo-mode))
 
 (use-package corfu-terminal
   :if (not (display-graphic-p))
@@ -296,6 +296,12 @@ Version: 2018-05-15 2023-08-11 2023-10-28"
   ;; (add-to-list 'completion-at-point-functions #'cape-elisp-symbol)
   ;;(add-to-list 'completion-at-point-functions #'cape-line)
   )
+
+(use-package orderless
+  :config
+  (setq completion-styles '(orderless basic)
+        completion-category-defaults nil
+        completion-category-overrides '((file (styles partial-completion)))))
 
 (use-package org
   :ensure nil				;load built in org-mode
@@ -450,19 +456,19 @@ Version: 2018-05-15 2023-08-11 2023-10-28"
 ;; (keymap-global-set "M-n" #'jinx-next)
 
 (use-package hl-todo
-    :hook ((prog-mode . hl-todo-mode)
-           (org-mode . hl-todo-mode))
-    :config
-    ;; (keymap-set hl-todo-mode-map "C-c p" #'hl-todo-previous)
-    ;; (keymap-set hl-todo-mode-map "C-c n" #'hl-todo-next)
-    ;; (keymap-set hl-todo-mode-map "C-c o" #'hl-todo-occur)
-    ;; (keymap-set hl-todo-mode-map "C-c i" #'hl-todo-insert)
-    (setq hl-todo-keyword-faces
-          '(("TODO"   . "#FF0000")
-            ("FIXME"  . "#FF0000")
-            ("DEBUG"  . "#A020F0")
-            ("GOTCHA" . "#FF4500")
-            ("STUB"   . "#1E90FF"))))
+  :hook ((prog-mode . hl-todo-mode)
+         (org-mode . hl-todo-mode))
+  :config
+  ;; (keymap-set hl-todo-mode-map "C-c p" #'hl-todo-previous)
+  ;; (keymap-set hl-todo-mode-map "C-c n" #'hl-todo-next)
+  ;; (keymap-set hl-todo-mode-map "C-c o" #'hl-todo-occur)
+  ;; (keymap-set hl-todo-mode-map "C-c i" #'hl-todo-insert)
+  (setq hl-todo-keyword-faces
+        '(("TODO"   . "#FF0000")
+          ("FIXME"  . "#FF0000")
+          ("DEBUG"  . "#A020F0")
+          ("GOTCHA" . "#FF4500")
+          ("STUB"   . "#1E90FF"))))
 
 (use-package rainbow-delimiters
   :hook (prog-mode . rainbow-delimiters-mode))
