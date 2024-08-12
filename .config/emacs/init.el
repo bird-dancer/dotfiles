@@ -553,6 +553,8 @@ Version: 2018-05-15 2023-08-11 2023-10-28"
 (define-key eglot-mode-map (kbd "<f6>") 'xref-find-definitions)
 (define-key eglot-mode-map (kbd "M-.") 'xref-find-definitions)
 
+(setq compilation-scroll-output 'first-error)
+
 (use-package restclient
   :defer t)
 
