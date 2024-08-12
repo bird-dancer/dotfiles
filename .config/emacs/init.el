@@ -143,6 +143,29 @@ Version: 2018-05-15 2023-08-11 2023-10-28"
   (delete-window))
 (global-set-key (kbd "C-x C-k") 'kill-buffer-and-close-window)
 
+(defun convert-region-decimal-to-hexadecimal (start end)
+  "Convert a region from decimal to hexadecimal."
+  (interactive "r")
+  (save-excursion
+    (goto-char start)
+    (while (< (point) end)
+      (let ((num (thing-at-point 'word)))
+        (when (string-match-p "^[0-9]+$" num)
+          (delete-region (point) (+ (point) (length num)))
+          (insert (format "0x%x" (string-to-number num)))))
+      (forward-word))))
+(defun convert-region-hexadecimal-to-decimal (start end)
+  "Convert a region from hexadecimal to decimal."
+  (interactive "r")
+  (save-excursion
+    (goto-char start)
+    (while (< (point) end)
+      (let ((num (thing-at-point 'word)))
+        (when (string-match-p "^0x[0-9a-fA-F]+$" num)
+          (delete-region (point) (+ (point) (length num)))
+          (insert (format "%d" (string-to-number num 16)))))
+      (forward-word))))
+
 (use-package vertico
   :custom
   (vertico-scroll-margin 0) ;; Different scroll margin

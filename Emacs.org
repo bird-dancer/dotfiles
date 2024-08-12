@@ -274,6 +274,35 @@ kill the current buffer and close its window/frame with =C-x C-k=
     (delete-window))
   (global-set-key (kbd "C-x C-k") 'kill-buffer-and-close-window)
 #+end_src
+*** convert region from and to hexadecimal
+#+begin_src emacs-lisp
+  (defun convert-region-decimal-to-hexadecimal (start end)
+    "Convert a region from decimal to hexadecimal."
+    (interactive "r")
+    (save-excursion
+      (goto-char start)
+      (while (< (point) end)
+        (let ((num (thing-at-point 'word)))
+          (when (string-match-p "^[0-9]+$" num)
+            (delete-region (point) (+ (point) (length num)))
+            (insert (format "0x%x" (string-to-number num)))))
+        (forward-word))))
+  (defun convert-region-hexadecimal-to-decimal (start end)
+    "Convert a region from hexadecimal to decimal."
+    (interactive "r")
+    (save-excursion
+      (goto-char start)
+      (while (< (point) end)
+        (let ((num (thing-at-point 'word)))
+          (when (string-match-p "^0x[0-9a-fA-F]+$" num)
+            (delete-region (point) (+ (point) (length num)))
+            (insert (format "%d" (string-to-number num 16)))))
+        (forward-word))))
+#+end_src
+#+begin_src emacs-lisp :tangle no
+  (global-set-key (kbd "C-c h") 'convert-region-decimal-to-hexadecimal)
+  (global-set-key (kbd "C-c d") 'convert-region-hexadecimal-to-decimal)
+#+end_src
 * completion system
 ** minibuffer completion
 *** vertico
