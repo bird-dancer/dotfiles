@@ -68,6 +68,9 @@ set locale format to =en_us utf-8=
   if [ -d "$GEM_HOME/bin" ] ; then
       export PATH="$PATH:$GEM_HOME/bin"
   fi
+  if [ -d "$HOME/go/bin" ] ; then
+      export PATH="$PATH:$HOME/go/bin"
+  fi
 #+end_src
 * bashrc
 ** aliases

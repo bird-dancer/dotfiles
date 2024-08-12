@@ -24,6 +24,9 @@ fi
 if [ -d "$GEM_HOME/bin" ] ; then
     export PATH="$PATH:$GEM_HOME/bin"
 fi
+if [ -d "$HOME/go/bin" ] ; then
+    export PATH="$PATH:$HOME/go/bin"
+fi
 
 alias docker_stop='[ -n "$(sudo docker ps -a -q)" ] && sudo docker stop $(sudo docker ps -a -q) || echo "No containers to stop"'
 alias docker_rm='[ -n "$(sudo docker ps -a -q)" ] && sudo docker rm $(sudo docker ps -a -q) || echo "No containers to remove"'
@@ -114,3 +117,7 @@ shopt -s expand_aliases # expand aliases
 shopt -s checkwinsize # checks term size when bash regains control
 
 eval "$(starship init bash)"
+
+export PATH="$PATH:/home/felix/.config/.foundry/bin"
+
+export PATH="$PATH:/home/felix/.config/.foundry/bin"
