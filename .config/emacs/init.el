@@ -43,6 +43,14 @@
 
 (global-prettify-symbols-mode t)
 
+(setq modus-themes-fringes 'intense)
+(setq modus-themes-fringes nil)
+(setq modus-themes-mode-line '(borderless))
+(add-hook 'enable-theme-functions
+          (lambda (&rest _) (set-face-foreground
+                             'vertical-border (face-background 'default))))
+(load-theme 'modus-operandi t)
+
 (use-package circadian
   :if (display-graphic-p)
   :config

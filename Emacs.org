@@ -126,6 +126,16 @@ remove the menu-bar tool-bar and scroll-bar as a measure to remove visual clutte
   ;; (load-theme 'ef-night t)
   ;; (load-theme 'ef-bio t)
 #+end_src
+**** modus theme modifications
+#+begin_src emacs-lisp
+  (setq modus-themes-fringes 'intense)
+  (setq modus-themes-fringes nil)
+  (setq modus-themes-mode-line '(borderless))
+  (add-hook 'enable-theme-functions
+            (lambda (&rest _) (set-face-foreground
+                               'vertical-border (face-background 'default))))
+  (load-theme 'modus-operandi t)
+#+end_src
 **** auto pick theme
 picks a light color-theme when the sun is risen and a dark theme when the sun is set
 #+begin_src emacs-lisp
@@ -287,7 +297,8 @@ kill the current buffer and close its window/frame with =C-x C-k=
             (delete-region (point) (+ (point) (length num)))
             (insert (format "0x%x" (string-to-number num)))))
         (forward-word))))
-
+#+end_src
+#+begin_src emacs-lisp
   (defun convert-region-hexadecimal-to-decimal (start end)
     "Convert a region from hexadecimal to decimal."
     (interactive "r")
