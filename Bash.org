@@ -88,7 +88,7 @@ because the aliases are used in the rest of the config they are first
 #+end_src
 *** emacs
 #+begin_src bash
-  alias em='/usr/bin/emacs -nw'
+  alias em='emacs -nw'
 #+end_src
 *** typos
 automatically correct common typos I make

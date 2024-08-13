@@ -31,7 +31,7 @@ fi
 alias docker_stop='[ -n "$(sudo docker ps -a -q)" ] && sudo docker stop $(sudo docker ps -a -q) || echo "No containers to stop"'
 alias docker_rm='[ -n "$(sudo docker ps -a -q)" ] && sudo docker rm $(sudo docker ps -a -q) || echo "No containers to remove"'
 
-alias em='/usr/bin/emacs -nw'
+alias em='emacs -nw'
 
 alias celar='clear'
 alias lcear='clear'
@@ -117,7 +117,3 @@ shopt -s expand_aliases # expand aliases
 shopt -s checkwinsize # checks term size when bash regains control
 
 eval "$(starship init bash)"
-
-export PATH="$PATH:/home/felix/.config/.foundry/bin"
-
-export PATH="$PATH:/home/felix/.config/.foundry/bin"
