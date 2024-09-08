@@ -43,24 +43,35 @@
 
 (global-prettify-symbols-mode t)
 
-(setq modus-themes-fringes 'intense)
-(setq modus-themes-fringes nil)
+(use-package ef-themes)
+
 (setq modus-themes-mode-line '(borderless))
+
+(setq modus-themes-common-palette-overrides
+      '((border-mode-line-active unspecified)
+        (border-mode-line-inactive unspecified)))
+
+(setq modus-themes-fringes nil)
 (add-hook 'enable-theme-functions
           (lambda (&rest _) (set-face-foreground
                              'vertical-border (face-background 'default))))
-(load-theme 'modus-operandi t)
 
+(require 'ef-themes)
 (use-package circadian
   :if (display-graphic-p)
   :config
   (setq calendar-latitude 52.5)
   (setq calendar-longitude 13.4)
   (setq circadian-themes '(
-                           (:sunrise . modus-operandi)
+                           ;; (:sunrise . modus-operandi-tinted) ;emacs 30
+                           ;; (:sunrise . modus-operandi)
                            ;; (:sunrise  . ef-day)
-                           ;; (:sunset  . ef-autumn)
-                           (:sunset . modus-vivendi)
+                           (:sunset  . ef-autumn)
+                           ;; (:sunset . modus-vivendi)
+                           (:sunrise . tsdh-light)
+                           ;; (:sunset . deeper-blue)
+                           ;; (:sunset . wheatgrass)
+                           ;; (:sunset . manoj-dark)
                            ))
   (circadian-setup))
 
@@ -78,17 +89,8 @@
 (use-package doom-modeline
   :init (doom-modeline-mode t))
 
-(use-package elfeed
-  :bind ("C-x w" . elfeed)
-  :config
-  (setq elfeed-feeds
-        '("http://nullprogram.com/feed/"
-          "https://mccd.space/feed.xml"
-          "https://dthompson.us/feed.xml"
-          "https://planet.emacslife.com/atom.xml"
-          "https://archlinux.org/feeds/news/")))
-
 (use-package which-key
+  ;; :ensure nil				;included in emacs 30+
   :diminish which-key-mode
   :config
   (which-key-mode)
@@ -106,6 +108,7 @@ Backup filename is “‹name›~‹dateTimeStamp›~”. Existing file of the s
 URL `http://xahlee.info/emacs/emacs/elisp_delete-current-file.html'
 Version: 2018-05-15 2023-08-11 2023-10-28"
   (interactive)
+  (make-directory backup-dir t)
   (when (eq major-mode 'dired-mode)
     (user-error "%s: In dired. Nothing is done." real-this-command))
   (let ((xfname buffer-file-name)
@@ -120,8 +123,7 @@ Version: 2018-05-15 2023-08-11 2023-10-28"
           (save-buffer xfname)
           (rename-file xfname xbackupPath t)
           (kill-buffer xbuffname)
-          (message "File deleted. Backup at
-%s" xbackupPath)
+          (message "File deleted. Backup at %s" xbackupPath)
           (when (boundp 'xah-recently-closed-buffers)
             (push (cons nil xbackupPath) xah-recently-closed-buffers)))
       (progn
@@ -436,22 +438,24 @@ Version: 2018-05-15 2023-08-11 2023-10-28"
   (kill-line 0))
 (global-set-key (kbd "C-S-k") 'kill-line-backward)
 
-(use-package multiple-cursors)
-(global-set-key (kbd "C-;") 'mc/edit-lines)
-(global-set-key (kbd "C-S-c C-S-c") 'mc/edit-lines)
-(global-set-key (kbd "C->") 'mc/mark-next-like-this)
-(global-set-key (kbd "C-<") 'mc/mark-previous-like-this)
-(global-set-key (kbd "C-c C-<") 'mc/mark-all-like-this)
+(use-package multiple-cursors
+  :bind (("C-;" . mc/edit-lines)
+         ("C-S-c C-S-c" . mc/edit-lines)
+         ("C->" . mc/mark-next-like-this)
+         ("C-<" . mc/mark-previous-like-this)
+         ("C-c C-<" . mc/mark-all-like-this))
+  :init
+  (setq  mc/match-cursor-style nil))
 
 (use-package jinx
-  :if (not (file-directory-p "~/.guix-profile/share/emacs/site-lisp")) ;only install if non guix system
+  :if (not (file-directory-p "~/.guix-profile/share/emacs/site-lisp")) ;only install on non guix system
   :hook (emacs-startup . global-jinx-mode)
   :bind (("M-$" . jinx-correct)
          ("C-M-$" . jinx-languages)))
 
 ;; use emacs-jinx package from guix if available
 (use-package jinx
-  :if (file-directory-p "~/.guix-profile/share/emacs/site-lisp") ;only install if non guix system
+  :if (file-directory-p "~/.guix-profile/share/emacs/site-lisp") ;only install on guix system
   :ensure nil
   :load-path "~/.guix-profile/share/emacs/site-lisp/jinx-1.9/"
   :hook (emacs-startup . global-jinx-mode)
@@ -497,7 +501,6 @@ Version: 2018-05-15 2023-08-11 2023-10-28"
 (use-package magit
   :bind (("C-x g" . magit)
          ("C-x c" . magit-clone-shallow)))
-;; :commands 'magit)
 
 (use-package keychain-environment
   :hook ((magit . keychain-environment)))
@@ -519,19 +522,6 @@ Version: 2018-05-15 2023-08-11 2023-10-28"
   :mode ("\\.md\\'" . markdown-mode)
   :config (setq markdown-command "multimarkdown"))
 
-(use-package erblint
-  :hook (ruby-ts-mode . erblint-mode))
-
-(use-package flymake-eslint
-  :hook (javascript-mode . 'flymake-eslint-enable))
-
-(use-package elm-mode
-  :defer t
-  :mode ("\\.elm\\'". 'elm-mode)
-  :config
-  (setq elm-mode-hook '(elm-indent-simple-mode))
-  (add-hook 'elm-mode-hook 'elm-format-on-save-mode))
-
 (use-package web-mode
   :defer t
   :config
@@ -552,6 +542,7 @@ Version: 2018-05-15 2023-08-11 2023-10-28"
 (global-set-key (kbd "M-p") 'flymake-goto-prev-error)
 
 (require 'eglot)
+(setq eglot-events-buffer-size 0) ;disable logging and improve perfomance
 (define-key eglot-mode-map (kbd "C-c c r") 'eglot-rename)
 (define-key eglot-mode-map (kbd "C-c c o") 'eglot-code-action-organize-imports)
 (define-key eglot-mode-map (kbd "C-c c h") 'eldoc)
@@ -577,9 +568,36 @@ Version: 2018-05-15 2023-08-11 2023-10-28"
 
 (setq dired-dwim-target t)
 
+(use-package elfeed
+  :bind ("C-x w" . elfeed)
+  :config
+  (setq elfeed-feeds
+        '("http://nullprogram.com/feed/"
+          "https://mccd.space/feed.xml"
+          "https://dthompson.us/feed.xml"
+          "https://planet.emacslife.com/atom.xml"
+          "https://archlinux.org/feeds/news/")))
+
 (global-set-key (kbd "M-RET") 'eshell)
 
 (use-package pdf-tools
+  :if (not (file-directory-p "~/.guix-profile/share/emacs/site-lisp")) ;only install on non guix system
   :mode ("\\.pdf\\'" . pdf-view-mode))
+(use-package pdf-tools
+  :if (file-directory-p "~/.guix-profile/share/emacs/site-lisp") ;only install on guix system
+  :ensure nil
+  :load-path "~/.guix-profile/share/emacs/site-lisp/pdf-tools-1.1.0"
+  :mode ("\\.pdf\\'" . pdf-view-mode))
+
+(use-package notmuch
+  :commands notmuch
+  :bind (:map global-map ("C-c m" . notmuch)
+              :map notmuch-hello-mode-map ("G" . mbsync)
+              :map notmuch-search-mode-map ("G" . mbsync)))
+
+(use-package mbsync
+  :commands mbsync
+  :config
+  (add-hook 'mbsync-exit-hook 'notmuch-poll-and-refresh-this-buffer))
 
 (setq gc-cons-threshold (* 2 1000 1000))

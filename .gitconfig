@@ -26,3 +26,4 @@
 	gpgsign = true
 [credential]
 	helper = store
+	#credentialStore = gpg

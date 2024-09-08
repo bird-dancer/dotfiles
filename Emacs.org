@@ -7,13 +7,28 @@
 * preface
 simple "performant" GNU Emacs 29.1+ [[https://leanpub.com/lit-config/read][literate config]] that uses as much built in stuff as possible and builds upon that where necessary
 Works for me
-* increase startup performance
-** increase garbage collection threshold
+* startup
+** splash screen
+#+begin_src emacs-lisp :tangle no
+     ___           ___           ___           ___           ___
+    /\  \         /\  \         /\  \         /\  \         /\  \
+   /::\  \       /||\  \       /::\  \       /::\  \       /||\  \
+  /:/\:\  \     /|/\|\  \     /:/\:\  \     /:/\:\  \     /|/\|\  \
+ /::\~\:\  \   /|/ /||\  \   /::\~\:\  \   /:/  \:\  \   _\|\~\|\  \
+/:/\:\ \:\__\ /|/ /|/\|\__\ /:/\:\ \:\__\ /:/__/ \:\__\ /\ \|\ \|\__\
+\:\~\:\ \/__/ \/_/|/ /|/  / \/__\:\/:/  / \:\  \  \/__/ \|\ \|\ \/__/
+ \:\ \:\__\     /|/ /|/  /       \::/  /   \:\  \        \|\ \|\__\
+  \:\ \/__/     \/_/|/  /        /:/  /     \:\  \        \|\/|/  /
+   \:\__\         /|/  /        /:/  /       \:\__\        \||/  /
+    \/__/         \/__/         \/__/         \/__/         \/__/
+#+end_src
+** increase startup performance
+*** increase garbage collection threshold
 make garbage-collection less active by increasing its threshold during startup so Emacs starts up faster
 #+begin_src emacs-lisp
   (setq gc-cons-threshold (* 50 1000 1000))
 #+end_src
-** measure startup performance
+*** measure startup performance
 in order to measure the time it takes for Emacs to startup use ~emacs-init-time~
 see what packages are loaded at startup (*only have it enabled when debugging!*):
 #+begin_src emacs-lisp :tangle no
@@ -111,8 +126,8 @@ remove the menu-bar tool-bar and scroll-bar as a measure to remove visual clutte
   ;; (load-theme 'gruvbox-light-soft t)
 #+end_src
 **** ef-themes
-#+begin_src emacs-lisp :tangle no
-  (use-package ef-themes :defer t)
+#+begin_src emacs-lisp
+  (use-package ef-themes)
 #+end_src
 #+begin_src emacs-lisp :tangle no
   ;; (load-theme 'ef-cherie t)
@@ -127,28 +142,43 @@ remove the menu-bar tool-bar and scroll-bar as a measure to remove visual clutte
   ;; (load-theme 'ef-bio t)
 #+end_src
 **** modus theme modifications
+make modeline and frames boderless
+for emacs 29:
 #+begin_src emacs-lisp
-  (setq modus-themes-fringes 'intense)
-  (setq modus-themes-fringes nil)
   (setq modus-themes-mode-line '(borderless))
+#+end_src
+for emacs 30:
+#+begin_src emacs-lisp
+  (setq modus-themes-common-palette-overrides
+        '((border-mode-line-active unspecified)
+          (border-mode-line-inactive unspecified)))
+#+end_src
+
+#+begin_src emacs-lisp
+  (setq modus-themes-fringes nil)
   (add-hook 'enable-theme-functions
             (lambda (&rest _) (set-face-foreground
                                'vertical-border (face-background 'default))))
-  (load-theme 'modus-operandi t)
 #+end_src
 **** auto pick theme
 picks a light color-theme when the sun is risen and a dark theme when the sun is set
 #+begin_src emacs-lisp
+  (require 'ef-themes)
   (use-package circadian
     :if (display-graphic-p)
     :config
     (setq calendar-latitude 52.5)
     (setq calendar-longitude 13.4)
     (setq circadian-themes '(
-                             (:sunrise . modus-operandi)
+                             ;; (:sunrise . modus-operandi-tinted) ;emacs 30
+                             ;; (:sunrise . modus-operandi)
                              ;; (:sunrise  . ef-day)
-                             ;; (:sunset  . ef-autumn)
-                             (:sunset . modus-vivendi)
+                             (:sunset  . ef-autumn)
+                             ;; (:sunset . modus-vivendi)
+                             (:sunrise . tsdh-light)
+                             ;; (:sunset . deeper-blue)
+                             ;; (:sunset . wheatgrass)
+                             ;; (:sunset . manoj-dark)
                              ))
     (circadian-setup))
 #+end_src
@@ -182,24 +212,12 @@ make it so mode line can be hidden by calling =hide-mode-line=
     :defer t
     :commands (hide-mode-line-mode))
 #+end_src
-** elf-feed
-subscribe to rss-feeds
-#+begin_src emacs-lisp
-  (use-package elfeed
-    :bind ("C-x w" . elfeed)
-    :config
-    (setq elfeed-feeds
-          '("http://nullprogram.com/feed/"
-            "https://mccd.space/feed.xml"
-            "https://dthompson.us/feed.xml"
-            "https://planet.emacslife.com/atom.xml"
-            "https://archlinux.org/feeds/news/")))
-#+end_src
 ** which-key
 which-key is great for getting an overview of what keybindings are available based on the prefix keys you entered.
 it shows a table of all possible ways you can finish a shortcut after having started one
 #+begin_src emacs-lisp
   (use-package which-key
+    ;; :ensure nil				;included in emacs 30+
     :diminish which-key-mode
     :config
     (which-key-mode)
@@ -211,7 +229,7 @@ it shows a table of all possible ways you can finish a shortcut after having sta
   (global-set-key (kbd "C-x C-j") 'join-line)
 #+end_src
 
-*** delete current file
+*** delete current file with C-x x x x
 from: [[http://xahlee.info/emacs/emacs/elisp_delete-current-file.html][Emacs: Delete Current File 🚀]]
 #+begin_src emacs-lisp
   (defun delete-current-file-make-backup ()
@@ -224,6 +242,7 @@ from: [[http://xahlee.info/emacs/emacs/elisp_delete-current-file.html][Emacs: De
   URL `http://xahlee.info/emacs/emacs/elisp_delete-current-file.html'
   Version: 2018-05-15 2023-08-11 2023-10-28"
     (interactive)
+    (make-directory backup-dir t)
     (when (eq major-mode 'dired-mode)
       (user-error "%s: In dired. Nothing is done." real-this-command))
     (let ((xfname buffer-file-name)
@@ -238,8 +257,7 @@ from: [[http://xahlee.info/emacs/emacs/elisp_delete-current-file.html][Emacs: De
             (save-buffer xfname)
             (rename-file xfname xbackupPath t)
             (kill-buffer xbuffname)
-            (message "File deleted. Backup at
-  %s" xbackupPath)
+            (message "File deleted. Backup at %s" xbackupPath)
             (when (boundp 'xah-recently-closed-buffers)
               (push (cons nil xbackupPath) xah-recently-closed-buffers)))
         (progn
@@ -317,8 +335,7 @@ kill the current buffer and close its window/frame with =C-x C-k=
 #+end_src
 * completion system
 ** minibuffer completion
-*** vertico
-performant and minimalist vertical completion UI based on the default completion system for minibuffers
+*** vertico: performant and minimalist vertical completion UI based on the default completion system for minibuffers
 **** buffer auto-completion with vertico
 #+begin_src emacs-lisp
   (use-package vertico
@@ -386,8 +403,7 @@ Persist history over Emacs restarts. Vertico sorts by history position.
     :init
     (savehist-mode))
 #+end_src
-*** consult
-for seeing "occurrence-previews" when searching
+*** consult: for seeing "occurrence-previews" when searching
 #+begin_src emacs-lisp
   (use-package consult
     :bind (("C-c r" . consult-ripgrep)
@@ -397,8 +413,7 @@ for seeing "occurrence-previews" when searching
     (setq completion-in-region-function #'consult-completion-in-region))
 #+end_src
 ** normal buffer completion
-*** corfu
-in-buffer completion UI on top of the built-in completion framework
+*** corfu: in-buffer completion UI on top of the built-in completion framework
 **** main config
 #+begin_src emacs-lisp
   (use-package corfu
@@ -462,8 +477,7 @@ add nerd-font icons to corfu completion candidates
 #+end_src
 **** look into:
 + [[https://code.bsdgeek.org/adam/corfu-candidate-overlay][adam/corfu-candidate-overlay: Show first Corfu's completion candidate in an o...]]
-*** cape
-extend the built in completion at point functionality
+*** cape: extend the built in completion at point functionality
 #+begin_src emacs-lisp
   (use-package cape
     ;; Bind dedicated completion commands
@@ -578,7 +592,7 @@ enable drag-and-drop support for images and files; inserts inline previews for i
 #+end_src
 ** navigation
 *** use M-p and M-n to go up and down org levels (disabled)
-disabled because it conflicts with the [[jinx spellchecking, using enchant]] shortcuts
+disabled because it conflicts with the [[flymake]] shortcuts
 #+begin_src emacs-lisp :tangle no
   (add-hook 'org-mode-hook
             (lambda ()
@@ -735,12 +749,14 @@ position of the pointer to the beginning of the line with =C-S-k=
 #+end_src
 ** multiple cursors
 #+begin_src emacs-lisp
-  (use-package multiple-cursors)
-  (global-set-key (kbd "C-;") 'mc/edit-lines)
-  (global-set-key (kbd "C-S-c C-S-c") 'mc/edit-lines)
-  (global-set-key (kbd "C->") 'mc/mark-next-like-this)
-  (global-set-key (kbd "C-<") 'mc/mark-previous-like-this)
-  (global-set-key (kbd "C-c C-<") 'mc/mark-all-like-this)
+  (use-package multiple-cursors
+    :bind (("C-;" . mc/edit-lines)
+           ("C-S-c C-S-c" . mc/edit-lines)
+           ("C->" . mc/mark-next-like-this)
+           ("C-<" . mc/mark-previous-like-this)
+           ("C-c C-<" . mc/mark-all-like-this))
+    :init
+    (setq  mc/match-cursor-style nil))
 #+end_src
 ** spellcheck
 *** flyspell (not active)
@@ -755,14 +771,14 @@ use flyspell, the default spellcheck
 requires (lib-)enchant using hunspell dictionaries
 #+begin_src emacs-lisp
   (use-package jinx
-    :if (not (file-directory-p "~/.guix-profile/share/emacs/site-lisp")) ;only install if non guix system
+    :if (not (file-directory-p "~/.guix-profile/share/emacs/site-lisp")) ;only install on non guix system
     :hook (emacs-startup . global-jinx-mode)
     :bind (("M-$" . jinx-correct)
            ("C-M-$" . jinx-languages)))
 
   ;; use emacs-jinx package from guix if available
   (use-package jinx
-    :if (file-directory-p "~/.guix-profile/share/emacs/site-lisp") ;only install if non guix system
+    :if (file-directory-p "~/.guix-profile/share/emacs/site-lisp") ;only install on guix system
     :ensure nil
     :load-path "~/.guix-profile/share/emacs/site-lisp/jinx-1.9/"
     :hook (emacs-startup . global-jinx-mode)
@@ -825,7 +841,6 @@ TODO: add checkout shortcut
   (use-package magit
     :bind (("C-x g" . magit)
            ("C-x c" . magit-clone-shallow)))
-  ;; :commands 'magit)
 #+end_src
 to prevent being asked to type the ssh/gpg-key password on every action, make sure magit knows the ssh-key-agents location via =keychain-evnvironment=:
 #+begin_src emacs-lisp
@@ -881,17 +896,12 @@ enable shellcheck using flymake for checking correctness and scanning common mis
     "Keymap for Rust major mode.")
 #+end_src
 *** ruby
-#+begin_src emacs-lisp
+#+begin_src emacs-lisp :tangle no
   (use-package erblint
     :hook (ruby-ts-mode . erblint-mode))
 #+end_src
-*** javascript
-#+begin_src emacs-lisp
-  (use-package flymake-eslint
-    :hook (javascript-mode . 'flymake-eslint-enable))
-#+end_src
 *** elm-mode
-#+begin_src emacs-lisp
+#+begin_src emacs-lisp :tangle no
   (use-package elm-mode
     :defer t
     :mode ("\\.elm\\'". 'elm-mode)
@@ -930,6 +940,7 @@ finding syntax errors on the fly, also works with eglot and spellcheck (it also 
 add keybindings for when in eglot-mode (Emacs' built in language-server)
 #+begin_src emacs-lisp
   (require 'eglot)
+  (setq eglot-events-buffer-size 0) ;disable logging and improve perfomance
   (define-key eglot-mode-map (kbd "C-c c r") 'eglot-rename)
   (define-key eglot-mode-map (kbd "C-c c o") 'eglot-code-action-organize-imports)
   (define-key eglot-mode-map (kbd "C-c c h") 'eldoc)
@@ -976,6 +987,19 @@ manually explore and test HTTP REST webservices
 #+begin_src emacs-lisp
   (setq dired-dwim-target t)
 #+end_src
+** elf-feed
+subscribe to rss-feeds
+#+begin_src emacs-lisp
+  (use-package elfeed
+    :bind ("C-x w" . elfeed)
+    :config
+    (setq elfeed-feeds
+          '("http://nullprogram.com/feed/"
+            "https://mccd.space/feed.xml"
+            "https://dthompson.us/feed.xml"
+            "https://planet.emacslife.com/atom.xml"
+            "https://archlinux.org/feeds/news/")))
+#+end_src
 ** vterm
 complete terminal in Emacs
 #+begin_src emacs-lisp :tangle no
@@ -992,6 +1016,12 @@ set M-RET shortcut for opening eshell
 better interaction with pdf
 #+begin_src emacs-lisp
   (use-package pdf-tools
+    :if (not (file-directory-p "~/.guix-profile/share/emacs/site-lisp")) ;only install on non guix system
+    :mode ("\\.pdf\\'" . pdf-view-mode))
+  (use-package pdf-tools
+    :if (file-directory-p "~/.guix-profile/share/emacs/site-lisp") ;only install on guix system
+    :ensure nil
+    :load-path "~/.guix-profile/share/emacs/site-lisp/pdf-tools-1.1.0"
     :mode ("\\.pdf\\'" . pdf-view-mode))
 #+end_src
 ** emacs-everywhere (not working)
@@ -999,6 +1029,22 @@ use ~emacsclient --eval "(emacs-everywhere)"~ from another window when writing t
 *Warning!* this does currently not work under Wayland
 #+begin_src emacs-lisp :tangle no
   (use-package emacs-everywhere)
+#+end_src
+** email
+*** filtering with notmuch
+#+begin_src emacs-lisp
+  (use-package notmuch
+    :commands notmuch
+    :bind (:map global-map ("C-c m" . notmuch)
+                :map notmuch-hello-mode-map ("G" . mbsync)
+                :map notmuch-search-mode-map ("G" . mbsync)))
+#+end_src
+*** syncing with mbsync
+#+begin_src emacs-lisp
+  (use-package mbsync
+    :commands mbsync
+    :config
+    (add-hook 'mbsync-exit-hook 'notmuch-poll-and-refresh-this-buffer))
 #+end_src
 * runtime performance
 make garbage-collection pauses faster by decreasing the threshold, increasing the runtime performance

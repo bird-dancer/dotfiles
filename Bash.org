@@ -106,7 +106,7 @@ shorten my most used =pacman= commands
 + =paci=: info
 + =pacq=: query for matching packages
 + =cleanup=: remove orphaned packages
-#+begin_src bash
+#+begin_src bash :tangle no
   alias pac='sudo pacman -Syu'
   alias pacr='sudo pacman -Rs'
   alias paci='pacman -Si'

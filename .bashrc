@@ -39,12 +39,6 @@ alias lcear='clear'
 alias clea='clear'
 alias cleat='clear'
 
-alias pac='sudo pacman -Syu'
-alias pacr='sudo pacman -Rs'
-alias paci='pacman -Si'
-alias pacq='pacman -Qs'
-alias cleanup='sudo pacman -Rns $(pacman -Qtdq)'
-
 eval $(ssh-agent) > /dev/null
 
 alias build='rm -rf build && cmake -B build -DCMAKE_BUILD_TYPE=Debug -DCMAKE_EXPORT_COMPILE_COMMANDS=1 && make -C'
