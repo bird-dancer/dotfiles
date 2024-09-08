@@ -99,31 +99,28 @@
 (global-set-key (kbd "C-x C-j") 'join-line)
 
 (defun delete-current-file-make-backup ()
-  "Delete current file, makes a backup~, close the buffer.
+  "Makes a backup~, delete current file, close the buffer.
+Backup filename is “‹name›~‹dateTimeStamp›~”.
+Overwrite existing file.
 If buffer is not a file, copy content to `kill-ring', delete buffer.
-If buffer is a file, the file's directory is shown with cursor at the next file.
-
-Backup filename is “‹name›~‹dateTimeStamp›~”. Existing file of the same name is overwritten. If buffer is not a file, the backup file name starts with “xx_”.
-
+If buffer is not a file, the backup file name starts with “xx_”.
+Call `xah-open-last-closed' to open the backup file.
 URL `http://xahlee.info/emacs/emacs/elisp_delete-current-file.html'
-Version: 2018-05-15 2023-08-11 2023-10-28"
+Version: 2018-05-15 2024-04-21 2024-04-23"
   (interactive)
-  (make-directory backup-dir t)
   (when (eq major-mode 'dired-mode)
     (user-error "%s: In dired. Nothing is done." real-this-command))
   (let ((xfname buffer-file-name)
-        (xbuffname (buffer-name))
-        xbackupPath)
-    (setq xbackupPath
-          (concat
-           backup-dir
-           (format "~%s~" (format-time-string "%Y-%m-%d_%H%M%S"))))
+        (xbuffname (buffer-name)))
     (if xfname
-        (progn
+        (let ((xbackupPath
+              (concat
+               backup-dir
+               (format "%s~%s~" (replace-regexp-in-string "/" "!" xfname) (format-time-string "%Y-%m-%d_%H%M%S")))))
           (save-buffer xfname)
-          (rename-file xfname xbackupPath t)
           (kill-buffer xbuffname)
-          (message "File deleted. Backup at %s" xbackupPath)
+          (rename-file xfname xbackupPath t)
+          (message "File deleted. Backup at: %s. Call `xah-open-last-closed' to open." xbackupPath)
           (when (boundp 'xah-recently-closed-buffers)
             (push (cons nil xbackupPath) xah-recently-closed-buffers)))
       (progn
@@ -132,7 +129,7 @@ Version: 2018-05-15 2023-08-11 2023-10-28"
         (kill-buffer xbuffname)
         (message "non-file buffer killed. buffer text copied to `kill-ring'."))))
   (when (eq major-mode 'dired-mode) (revert-buffer)))
-(global-set-key (kbd "C-x x x") 'delete-current-file-make-backup)
+  (global-set-key (kbd "C-x x x") 'delete-current-file-make-backup)
 
 (recentf-mode t)
 
@@ -557,6 +554,9 @@ Version: 2018-05-15 2023-08-11 2023-10-28"
 
 (use-package restclient
   :defer t)
+
+(use-package nov
+  :commands nov)
 
 (use-package all-the-icons-dired
   :after all-the-icons
