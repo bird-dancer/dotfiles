@@ -14,6 +14,8 @@
 (setq backup-directory-alist `(("." . , backup-dir)))
 (setq delete-old-versions t)
 
+(setq trash-directory (expand-file-name "~/Trash/" user-emacs-directory))
+
 (make-directory (expand-file-name "tmp/auto-saves/" user-emacs-directory) t)
 (setq auto-save-list-file-prefix (expand-file-name "tmp/auto-saves/sessions/" user-emacs-directory)
       auto-save-file-name-transforms `((".*", (expand-file-name "tmp/auto-saves/" user-emacs-directory) t)))
@@ -98,38 +100,12 @@
 
 (global-set-key (kbd "C-x C-j") 'join-line)
 
-(defun delete-current-file-make-backup ()
-  "Makes a backup~, delete current file, close the buffer.
-Backup filename is “‹name›~‹dateTimeStamp›~”.
-Overwrite existing file.
-If buffer is not a file, copy content to `kill-ring', delete buffer.
-If buffer is not a file, the backup file name starts with “xx_”.
-Call `xah-open-last-closed' to open the backup file.
-URL `http://xahlee.info/emacs/emacs/elisp_delete-current-file.html'
-Version: 2018-05-15 2024-04-21 2024-04-23"
+(defun move-current-file-to-trash ()
   (interactive)
   (when (eq major-mode 'dired-mode)
     (user-error "%s: In dired. Nothing is done." real-this-command))
-  (let ((xfname buffer-file-name)
-        (xbuffname (buffer-name)))
-    (if xfname
-        (let ((xbackupPath
-              (concat
-               backup-dir
-               (format "%s~%s~" (replace-regexp-in-string "/" "!" xfname) (format-time-string "%Y-%m-%d_%H%M%S")))))
-          (save-buffer xfname)
-          (kill-buffer xbuffname)
-          (rename-file xfname xbackupPath t)
-          (message "File deleted. Backup at: %s. Call `xah-open-last-closed' to open." xbackupPath)
-          (when (boundp 'xah-recently-closed-buffers)
-            (push (cons nil xbackupPath) xah-recently-closed-buffers)))
-      (progn
-        (widen)
-        (kill-new (buffer-string))
-        (kill-buffer xbuffname)
-        (message "non-file buffer killed. buffer text copied to `kill-ring'."))))
-  (when (eq major-mode 'dired-mode) (revert-buffer)))
-  (global-set-key (kbd "C-x x x") 'delete-current-file-make-backup)
+  (move-file-to-trash buffer-file-name))
+(global-set-key (kbd "C-x x x") 'move-current-file-to-trash)
 
 (recentf-mode t)
 
@@ -506,7 +482,8 @@ Version: 2018-05-15 2024-04-21 2024-04-23"
   :hook ((text-mode . diff-hl-mode)
          (org-mode . diff-hl-mode)
          (prog-mode . diff-hl-mode)
-         (dired-mode . diff-hl-dired-mode)))
+         ;; (dired-mode . diff-hl-dired-mode)
+         ))
 
 (use-package treesit-auto
   :custom
@@ -600,4 +577,4 @@ Version: 2018-05-15 2024-04-21 2024-04-23"
   :config
   (add-hook 'mbsync-exit-hook 'notmuch-poll-and-refresh-this-buffer))
 
-(setq gc-cons-threshold (* 2 1000 1000))
+(setq gc-cons-threshold (* 10 1000 1000))
