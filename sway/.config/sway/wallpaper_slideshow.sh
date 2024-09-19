@@ -1,7 +1,7 @@
 #!/bin/sh
 PID=`pidof swaybg`
 while true; do
-    swaybg -i $(find ~/pictures/wallpapers/ -type f | shuf -n1) -m fill &
+    swaybg -i $(find ~/Pictures/wallpapers/ -type f | shuf -n1) -m fill &
     sleep 1
     kill $PID
     PID=`pidof swaybg`
