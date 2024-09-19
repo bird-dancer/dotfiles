@@ -8,69 +8,12 @@ this bash config uses =bash-complete= and has no further requirements. The conte
 * profile
 to load env variables to the login shell rather then just the active shell
 ** load bashrc to bash_profile
-#+begin_src bash :tangle .bash_profile
+#+begin_src bash :tangle no
   [[ -r ~/.bashrc ]] && . ~/.bashrc
 #+end_src
 ** language
-#+begin_src bash
+#+begin_src bash :tangle .profile
   export LANGUAGE=en_US
-#+end_src
-** editor
-#+begin_src bash
-  if [ -z "$(which emacs)" ] ; then
-      export EDITOR=$(which emacs)
-  fi
-#+end_src
-** programming
-*** c
-#+begin_src bash
-  export CC=gcc CXX=g++
-#+end_src
-*** rust
-#+begin_src bash :tangle no
-  if [ -z "$(which sccache)" ] ; then
-      export RUSTC_WRAPPER=sccache
-  fi
-  #+end_src
-*** java
-  #+begin_src bash
-  if [ -d "/usr/lib/jvm/default" ] ; then
-      export JAVA_HOME=/usr/lib/jvm/default
-  fi
-  #+end_src
-*** ruby
-  #+begin_src bash :tangle no
-  if [ -z "$(which gem)" ] ; then
-      export GEM_HOME="$(gem env user_gemhome)"
-  fi
-#+end_src
-*** format
-set locale format to =en_us utf-8=
-#+begin_src bash
-  export LC_CTYPE=en_US.UTF-8
-#+end_src
-*** guix
-#+begin_src bash :tangle no
-  GUIX_PROFILE="$HOME/.config/guix/current"
-  . "$GUIX_PROFILE/etc/profile"
-#+end_src
-*** path
-#+begin_src bash
-  if [ -d "$HOME/.cargo" ] ; then
-      export PATH="$HOME/.cargo/bin:$PATH"
-  fi
-  if [ -d "$HOME/.emacs.d/bin" ] ; then
-      export PATH="$HOME/.emacs.d/bin:$PATH"
-  fi
-  if [ -d "$HOME/.local/bin" ] ; then
-      export PATH="$PATH:$HOME/.local/bin"
-  fi
-  if [ -d "$GEM_HOME/bin" ] ; then
-      export PATH="$PATH:$GEM_HOME/bin"
-  fi
-  if [ -d "$HOME/go/bin" ] ; then
-      export PATH="$PATH:$HOME/go/bin"
-  fi
 #+end_src
 * bashrc
 ** aliases
@@ -239,6 +182,63 @@ tangle to =.inputrc= for other read-line programs
   eval "$(starship init bash)"
 #+end_src
 
+** programming
+*** c
+#+begin_src bash
+  export CC=gcc CXX=g++
+#+end_src
+*** rust
+#+begin_src bash :tangle no
+  if [ -z "$(which sccache)" ] ; then
+      export RUSTC_WRAPPER=sccache
+  fi
+  #+end_src
+*** java
+  #+begin_src bash
+  if [ -d "/usr/lib/jvm/default" ] ; then
+      export JAVA_HOME=/usr/lib/jvm/default
+  fi
+  #+end_src
+*** ruby
+  #+begin_src bash :tangle no
+  if [ -z "$(which gem)" ] ; then
+      export GEM_HOME="$(gem env user_gemhome)"
+  fi
+#+end_src
+*** format
+set locale format to =en_us utf-8=
+#+begin_src bash
+  export LC_CTYPE=en_US.UTF-8
+#+end_src
+*** guix
+#+begin_src bash :tangle no
+  GUIX_PROFILE="$HOME/.config/guix/current"
+  . "$GUIX_PROFILE/etc/profile"
+#+end_src
+*** path
+#+begin_src bash
+  if [ -d "$HOME/.cargo" ] ; then
+      export PATH="$HOME/.cargo/bin:$PATH"
+  fi
+  if [ -d "$HOME/.emacs.d/bin" ] ; then
+      export PATH="$HOME/.emacs.d/bin:$PATH"
+  fi
+  if [ -d "$HOME/.local/bin" ] ; then
+      export PATH="$PATH:$HOME/.local/bin"
+  fi
+  if [ -d "$GEM_HOME/bin" ] ; then
+      export PATH="$PATH:$GEM_HOME/bin"
+  fi
+  if [ -d "$HOME/go/bin" ] ; then
+      export PATH="$PATH:$HOME/go/bin"
+  fi
+#+end_src
+** editor
+#+begin_src bash
+  if [ -z "$(which emacs)" ] ; then
+      export EDITOR=$(which emacs)
+  fi
+#+end_src
 * look into
 + blesh
 + liquidprompt
