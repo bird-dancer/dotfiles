@@ -78,7 +78,7 @@
   (circadian-setup))
 
 ;; (when (display-graphic-p))
-(set-frame-font "Comic Shanns Mono 13" nil t)
+(set-frame-font "Comic Shanns 13" nil t)
 ;; (set-frame-font "Fantasque Sans Mono 12" nil t)
 ;; (set-frame-font "Comic Mono 12" nil t)
 ;; (add-to-list 'default-frame-alist '(font . "Comic Mono 11"))
@@ -89,7 +89,11 @@
 (setq-default cursor-type 'bar)
 
 (use-package doom-modeline
-  :init (doom-modeline-mode t))
+  :init (doom-modeline-mode t)
+  :config
+  (display-battery-mode)
+  (setq display-time-24hr-format t)
+  (display-time))
 
 (use-package which-key
   ;; :ensure nil				;included in emacs 30+

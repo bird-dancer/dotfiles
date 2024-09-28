@@ -190,7 +190,7 @@ picks a light color-theme when the sun is risen and a dark theme when the sun is
 **** general font
 #+begin_src emacs-lisp
   ;; (when (display-graphic-p))
-  (set-frame-font "Comic Shanns Mono 13" nil t)
+  (set-frame-font "Comic Shanns 13" nil t)
   ;; (set-frame-font "Fantasque Sans Mono 12" nil t)
   ;; (set-frame-font "Comic Mono 12" nil t)
   ;; (add-to-list 'default-frame-alist '(font . "Comic Mono 11"))
@@ -208,7 +208,11 @@ picks a light color-theme when the sun is risen and a dark theme when the sun is
 show the mode status line from doom Emacs at the bottom to provide more information while looking nicer
 #+begin_src emacs-lisp
   (use-package doom-modeline
-    :init (doom-modeline-mode t))
+    :init (doom-modeline-mode t)
+    :config
+    (display-battery-mode)
+    (setq display-time-24hr-format t)
+    (display-time))
 #+end_src
 make it so mode line can be hidden by calling =hide-mode-line=
 #+begin_src emacs-lisp :tangle no
