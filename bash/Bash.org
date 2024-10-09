@@ -16,6 +16,10 @@ to load env variables to the login shell rather then just the active shell
   export LANGUAGE=en_US
 #+end_src
 * bashrc
+** include system wide bashrc
+#+begin_src bash
+  [[ -r /etc/bash.bashrc ]] && . /etc/bash.bashrc
+#+end_src
 ** aliases
 because the aliases are used in the rest of the config they are first
 *** load aliases from =~./bash_aliases=
@@ -59,6 +63,15 @@ shorten my most used =pacman= commands
 *** guix
 #+begin_src bash :tangle no
   alias cleanup='sudo guix system delete-generations; guix package -d; guix gc'
+#+end_src
+*** zypper
+#+begin_src bash
+  alias zinf='zypper info --provides --recommends --requires --suggests'
+  alias zse='zypper search'
+  alias zin='sudo zypper install'
+  alias zrm='sudo zypper remove -u'
+  alias zup='sudo zypper update'
+  alias zre='sudo zypper refresh'
 #+end_src
 *** ssh
 remember my ssh-keys during a session
@@ -135,7 +148,7 @@ usage: ex <file>
 *** command not found
 requires pkgfile
 run ~pkgfile -u~ to update package index
-#+begin_src bash
+#+begin_src bash :tangle no
   source /usr/share/doc/pkgfile/command-not-found.bash
 #+end_src
 *** history
@@ -157,8 +170,8 @@ tangle to =.inputrc= for other read-line programs
   [[ $PS1 && -f /usr/share/bash-completion/bash_completion ]] && \
       . /usr/share/bash-completion/bash_completion
 #+end_src
-**** enable completion for aliases
-#+begin_src bash
+*** enable completion for aliases
+#+begin_src bash :tangle no
   source /usr/share/bash-complete-alias/complete_alias
   #source /run/current-system/usr/share/bash-complete-alias/complete_alias
   complete -F _complete_alias "${!BASH_ALIASES[@]}"
@@ -235,9 +248,9 @@ set locale format to =en_us utf-8=
 #+end_src
 ** editor
 #+begin_src bash
-  if [ -z "$(which emacs)" ] ; then
-      export EDITOR=$(which emacs)
-  fi
+  # if [ -z "$(which emacs)" ] ; then
+  export EDITOR=$(which emacs)
+  # fi
 #+end_src
 * look into
 + blesh

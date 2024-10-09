@@ -1,3 +1,5 @@
+[[ -r /etc/bash.bashrc ]] && . /etc/bash.bashrc
+
 alias docker_stop='[ -n "$(sudo docker ps -a -q)" ] && sudo docker stop $(sudo docker ps -a -q) || echo "No containers to stop"'
 alias docker_rm='[ -n "$(sudo docker ps -a -q)" ] && sudo docker rm $(sudo docker ps -a -q) || echo "No containers to remove"'
 
@@ -8,6 +10,13 @@ alias lcear='clear'
 alias lcear='clear'
 alias clea='clear'
 alias cleat='clear'
+
+alias zinf='zypper info --provides --recommends --requires --suggests'
+alias zse='zypper search'
+alias zin='sudo zypper install'
+alias zrm='sudo zypper remove -u'
+alias zup='sudo zypper update'
+alias zre='sudo zypper refresh'
 
 eval $(ssh-agent) > /dev/null
 
@@ -55,8 +64,6 @@ export XDG_RUNTIME_DIR=/run/user/$(id -u)
 
 export TERM="xterm-256color"
 
-source /usr/share/doc/pkgfile/command-not-found.bash
-
 export HISTSIZE=1000
 export HISTFILESIZE=2000  
 export HISTCONTROL=ignoreboth:erasedups
@@ -65,10 +72,6 @@ bind '"\e[A": history-search-backward'
 bind '"\e[B": history-search-forward'
 #bind '"^[^M-f": history-search-backward'
 #bind '"\e\C-m": history-search-forward'
-
-source /usr/share/bash-complete-alias/complete_alias
-#source /run/current-system/usr/share/bash-complete-alias/complete_alias
-complete -F _complete_alias "${!BASH_ALIASES[@]}"
 
 bind "set completion-ignore-case on"
 
@@ -106,6 +109,6 @@ if [ -d "$HOME/go/bin" ] ; then
     export PATH="$PATH:$HOME/go/bin"
 fi
 
-if [ -z "$(which emacs)" ] ; then
-    export EDITOR=$(which emacs)
-fi
+# if [ -z "$(which emacs)" ] ; then
+export EDITOR=$(which emacs)
+# fi
