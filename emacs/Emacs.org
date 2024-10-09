@@ -264,6 +264,10 @@ typed text replaces the selection if the selection is active, pressing delete or
   ;; revert dired and other buffers
   (setq global-auto-revert-non-file-buffers t)
 #+end_src
+*** save system clipboard before yanking
+#+begin_src emacs-lisp
+  (setq save-interprogram-paste-before-kill t)
+#+end_src
 *** yank (paste) when pressing C-z
 because it is very confusing when switching between qwerty and qwertz and the window gets minimized
 #+begin_src emacs-lisp

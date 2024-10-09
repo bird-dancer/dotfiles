@@ -121,6 +121,8 @@
 ;; revert dired and other buffers
 (setq global-auto-revert-non-file-buffers t)
 
+(setq save-interprogram-paste-before-kill t)
+
 (global-set-key (kbd "C-z") 'yank)
 
 (defun kill-buffer-and-close-window ()
