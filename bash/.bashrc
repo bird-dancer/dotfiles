@@ -73,6 +73,9 @@ bind '"\e[B": history-search-forward'
 #bind '"^[^M-f": history-search-backward'
 #bind '"\e\C-m": history-search-forward'
 
+source ~/.dotfiles/complete-alias/complete_alias
+complete -F _complete_alias "${!BASH_ALIASES[@]}"
+
 bind "set completion-ignore-case on"
 
 shopt -s autocd # change to named directory

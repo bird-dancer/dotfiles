@@ -170,10 +170,9 @@ tangle to =.inputrc= for other read-line programs
   [[ $PS1 && -f /usr/share/bash-completion/bash_completion ]] && \
       . /usr/share/bash-completion/bash_completion
 #+end_src
-*** enable completion for aliases
-#+begin_src bash :tangle no
-  source /usr/share/bash-complete-alias/complete_alias
-  #source /run/current-system/usr/share/bash-complete-alias/complete_alias
+*** auto complete aliases
+#+begin_src bash
+  source ~/.dotfiles/complete-alias/complete_alias
   complete -F _complete_alias "${!BASH_ALIASES[@]}"
 #+end_src
 *** ignore case on auto completion
