@@ -264,7 +264,8 @@ typed text replaces the selection if the selection is active, pressing delete or
   ;; revert dired and other buffers
   (setq global-auto-revert-non-file-buffers t)
 #+end_src
-*** save system clipboard before yanking
+*** dont overwrite system clipboard
+save system clipboard before yanking
 #+begin_src emacs-lisp
   (setq save-interprogram-paste-before-kill t)
 #+end_src
@@ -886,7 +887,7 @@ enable shellcheck using flymake for checking correctness and scanning common mis
 #+begin_src emacs-lisp :tangle no
   (use-package elm-mode
     :defer t
-    :mode ("\\.elm\\'". 'elm-mode)
+    :mode ("\\.elm\\'". elm-mode)
     :config
     (setq elm-mode-hook '(elm-indent-simple-mode))
     (add-hook 'elm-mode-hook 'elm-format-on-save-mode))
@@ -950,11 +951,6 @@ manually explore and test HTTP REST webservices
   (use-package restclient
     :defer t)
 #+end_src
-** read epub ebooks
-#+begin_src emacs-lisp
-  (use-package nov
-    :commands nov)
-#+end_src
 ** dired
 *** show file icons
 #+begin_src emacs-lisp
@@ -986,6 +982,14 @@ subscribe to rss-feeds
             "https://dthompson.us/feed.xml"
             "https://planet.emacslife.com/atom.xml"
             "https://archlinux.org/feeds/news/")))
+#+end_src
+** nov.el
+read ebooks in ebpub format
+#+begin_src emacs-lisp
+  (use-package nov
+    :mode ("\\.epub\\'" . nov-mode))
+  ;; (add-to-list 'auto-mode-alist '("\\.epub\\'" . nov-mode))
+  ;; :commands nov)
 #+end_src
 ** vterm
 complete terminal in Emacs

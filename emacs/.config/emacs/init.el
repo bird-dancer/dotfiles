@@ -538,9 +538,6 @@
 (use-package restclient
   :defer t)
 
-(use-package nov
-  :commands nov)
-
 (use-package all-the-icons-dired
   :after all-the-icons
   :hook (dired-mode . all-the-icons-dired-mode))
@@ -560,6 +557,11 @@
           "https://dthompson.us/feed.xml"
           "https://planet.emacslife.com/atom.xml"
           "https://archlinux.org/feeds/news/")))
+
+(use-package nov
+  :mode ("\\.epub\\'" . nov-mode))
+;; (add-to-list 'auto-mode-alist '("\\.epub\\'" . nov-mode))
+;; :commands nov)
 
 (global-set-key (kbd "M-RET") 'eshell)
 
