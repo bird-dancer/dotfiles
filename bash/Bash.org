@@ -46,7 +46,8 @@ automatically correct common typos I make
   alias clea='clear'
   alias cleat='clear'
 #+end_src
-*** pacman
+*** package managers
+**** pacman
 shorten my most used =pacman= commands
 + =pac=: install and update
 + =pacr=: remove
@@ -60,12 +61,12 @@ shorten my most used =pacman= commands
   alias pacq='pacman -Qs'
   alias cleanup='sudo pacman -Rns $(pacman -Qtdq)'
 #+end_src
-*** guix
+**** guix
 #+begin_src bash :tangle no
   alias cleanup='sudo guix system delete-generations; guix package -d; guix gc'
 #+end_src
-*** zypper
-#+begin_src bash
+**** zypper
+#+begin_src bash :tangle no
   alias zinf='zypper info --provides --recommends --requires --suggests'
   alias zse='zypper search'
   alias zin='sudo zypper install'
@@ -104,7 +105,6 @@ clear build directory and build with debug flags enabled
 #+end_src
 *** grep
 #+begin_src bash
-  #alias grep='rg'
   alias grep='grep --color=auto'
 #+end_src
 *** extract

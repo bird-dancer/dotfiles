@@ -32,7 +32,6 @@ alias ls='ls -F --color=auto'
 alias la='ls -AF --color=auto'
 alias ll='ls -lAghF --color=auto'
 
-#alias grep='rg'
 alias grep='grep --color=auto'
 
 ex ()
