@@ -261,6 +261,10 @@ it shows a table of all possible ways you can finish a shortcut after having sta
 #+begin_src emacs-lisp
   (save-place-mode t)
 #+end_src
+*** always delete directories recursivly without asking
+#+begin_src emacs-lisp
+  (setq dired-recursive-deletes 'always)
+#+end_src
 *** replace selection
 typed text replaces the selection if the selection is active, pressing delete or backspace deletes the selection
 #+begin_src emacs-lisp
@@ -542,8 +546,7 @@ when inserting a new link to a heading in the current document, an auto completi
     (org-insert-link nil header))
   ;; (define-key org-mode-map (kbd "C-c h") 'org-insert-link-headline)
 #+end_src
-*** export to latex
-keep the comments, when exporting org mode to latex
+*** when exporting org mode to latex, keep the comments
 #+begin_src emacs-lisp
   (defun transform-comments (backend)
     (while (re-search-forward "[:blank:]*# " nil t)
@@ -581,16 +584,6 @@ enable drag-and-drop support for images and files; inserts inline previews for i
     :hook (org-mode #'org-download-mode))
 #+end_src
 ** navigation
-*** use M-p and M-n to go up and down org levels (disabled)
-disabled because it conflicts with the [[flymake]] shortcuts
-#+begin_src emacs-lisp :tangle no
-  (add-hook 'org-mode-hook
-            (lambda ()
-              (local-set-key (kbd "M-p") 'org-up-element)))
-  (add-hook 'org-mode-hook
-            (lambda ()
-              (local-set-key (kbd "M-n") 'org-down-element)))
-#+end_src
 *** replace S-M-arrow-key with S-M-{n,p,b,f}
 #+begin_src emacs-lisp
   (add-hook 'org-mode-hook
@@ -619,7 +612,6 @@ disabled because it conflicts with the [[flymake]] shortcuts
 show style emphasis markers such as the * in =*bold*= when hovering over the word
 #+begin_src emacs-lisp
   (use-package org-appear
-    ;; :after org-mode
     :hook (org-mode . org-appear-mode))
 #+end_src
 *** fonts and bullets
@@ -645,7 +637,6 @@ these templates enable you to type things like =<el= and then hit Tab to expand 
   (require 'org-tempo)
   (add-to-list 'org-structure-template-alist '("sh" . "src sh"))
   (add-to-list 'org-structure-template-alist '("ba" . "src bash"))
-  (add-to-list 'org-structure-template-alist '("zs" . "src zsh"))
   (add-to-list 'org-structure-template-alist '("el" . "src emacs-lisp"))
   (add-to-list 'org-structure-template-alist '("li" . "src lisp"))
   (add-to-list 'org-structure-template-alist '("sc" . "src scheme"))
@@ -749,17 +740,9 @@ position of the pointer to the beginning of the line with =C-S-k=
     (setq  mc/match-cursor-style nil))
 #+end_src
 ** spellcheck
-*** flyspell (not active)
-use flyspell, the default spellcheck
-#+begin_src emacs-lisp :tangle no
-  (use-package flyspell-correct
-    :after flyspell
-    :bind (:map flyspell-mode-map ("C-;" . flyspell-correct-wrapper)))
-  (define-key flyspell-mode-map (kbd "C-M-i") #'flyspell-correct-word)
-#+end_src
-*** jinx spellchecking, using enchant
-requires (lib-)enchant using hunspell dictionaries
+jinx spellchecking, requires (lib-)enchant using hunspell dictionaries
 #+begin_src emacs-lisp
+  ;; use on normal systems
   (use-package jinx
     :if (not (file-directory-p "~/.guix-profile/share/emacs/site-lisp")) ;only install on non guix system
     :hook (emacs-startup . global-jinx-mode)
@@ -815,7 +798,7 @@ match brackets and other delimiters by color to see the current scope more easil
     (require 'smartparens-config))
 #+end_src
 *** electric behavior
-auto indent,  via electric-mode
+auto indent, via electric-mode
 #+begin_src emacs-lisp
   ;; (electric-pair-mode t)
   (electric-indent-mode t)
@@ -832,10 +815,17 @@ TODO: add checkout shortcut
     :bind (("C-x g" . magit)
            ("C-x c" . magit-clone-shallow)))
 #+end_src
+**** keychain-evnvironment
 to prevent being asked to type the ssh/gpg-key password on every action, make sure magit knows the ssh-key-agents location via =keychain-evnvironment=:
-#+begin_src emacs-lisp
+#+begin_src emacs-lisp :tangle no
   (use-package keychain-environment
     :hook ((magit . keychain-environment)))
+#+end_src
+*** forge
+Forge allows you to work with Git forges, currently Github and Gitlab, from the comfort of Magit and Emacs.
+#+begin_src emacs-lisp
+  (use-package forge
+    :after magit)
 #+end_src
 *** diff-hl
 highlight uncommitted, changed lines on the side of a buffer
@@ -920,7 +910,7 @@ auto enable makefile-mode for Makefiles
   (add-to-list 'auto-mode-alist '("\\Makefile\\'" . makefile-mode))
 #+end_src
 ** flymake
-finding syntax errors on the fly, also works with eglot and spellcheck (it also might be worth checking out [[[https://www.flycheck.org] Flycheck]])
+finding syntax errors on the fly, also works with eglot and spellcheck (it also might be worth checking out [[https://www.flycheck.org] [Flycheck]])
 #+begin_src emacs-lisp
   ;; (define-key flymake-mode-map (kbd "M-n") 'flymake-goto-next-error)
   ;; (define-key flymake-mode-map (kbd "M-p") 'flymake-goto-prev-error)

@@ -123,6 +123,8 @@
 
 (save-place-mode t)
 
+(setq dired-recursive-deletes 'always)
+
 (delete-selection-mode)
 
 (global-auto-revert-mode t)
@@ -351,7 +353,6 @@
       org-image-actual-width '(300))
 
 (use-package org-appear
-  ;; :after org-mode
   :hook (org-mode . org-appear-mode))
 
 (custom-set-faces
@@ -364,7 +365,6 @@
 (require 'org-tempo)
 (add-to-list 'org-structure-template-alist '("sh" . "src sh"))
 (add-to-list 'org-structure-template-alist '("ba" . "src bash"))
-(add-to-list 'org-structure-template-alist '("zs" . "src zsh"))
 (add-to-list 'org-structure-template-alist '("el" . "src emacs-lisp"))
 (add-to-list 'org-structure-template-alist '("li" . "src lisp"))
 (add-to-list 'org-structure-template-alist '("sc" . "src scheme"))
@@ -434,6 +434,7 @@
   :init
   (setq  mc/match-cursor-style nil))
 
+;; use on normal systems
 (use-package jinx
   :if (not (file-directory-p "~/.guix-profile/share/emacs/site-lisp")) ;only install on non guix system
   :hook (emacs-startup . global-jinx-mode)
@@ -489,8 +490,8 @@
   :bind (("C-x g" . magit)
          ("C-x c" . magit-clone-shallow)))
 
-(use-package keychain-environment
-  :hook ((magit . keychain-environment)))
+(use-package forge
+  :after magit)
 
 (use-package diff-hl
   :hook ((text-mode . diff-hl-mode)
