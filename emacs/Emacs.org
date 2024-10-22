@@ -62,7 +62,15 @@ prevent Emacs from adding custom settings to init.el and choose =custom.el= inst
 #+end_src
 *** trash directory
 #+begin_src emacs-lisp
-  (setq trash-directory (expand-file-name "~/Trash/" user-emacs-directory))
+  ;; (setq trash-directory (expand-file-name "~/.local/share/Trash" user-emacs-directory))
+  (setq trash-directory (expand-file-name "~/.local/share/Trash/files/"))
+
+  (defun create-directory-if-not-exists (dir)
+    "Create directory DIR if it does not exist."
+    (unless (file-exists-p dir)
+      (make-directory dir t)))
+
+  (create-directory-if-not-exists trash-directory)
 #+end_src
 *** keep  auto-save files in a temporary directory
 #+begin_src emacs-lisp

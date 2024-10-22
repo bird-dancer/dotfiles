@@ -14,7 +14,15 @@
 (setq backup-directory-alist `(("." . , backup-dir)))
 (setq delete-old-versions t)
 
-(setq trash-directory (expand-file-name "~/Trash/" user-emacs-directory))
+;; (setq trash-directory (expand-file-name "~/.local/share/Trash" user-emacs-directory))
+(setq trash-directory (expand-file-name "~/.local/share/Trash/files/"))
+
+(defun create-directory-if-not-exists (dir)
+  "Create directory DIR if it does not exist."
+  (unless (file-exists-p dir)
+    (make-directory dir t)))
+
+(create-directory-if-not-exists trash-directory)
 
 (make-directory (expand-file-name "tmp/auto-saves/" user-emacs-directory) t)
 (setq auto-save-list-file-prefix (expand-file-name "tmp/auto-saves/sessions/" user-emacs-directory)
