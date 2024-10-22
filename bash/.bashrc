@@ -110,6 +110,9 @@ fi
 if [ -d "$HOME/go/bin" ] ; then
     export PATH="$PATH:$HOME/go/bin"
 fi
+if [ -d "$HOME/arm/bin" ] ; then
+    export PATH=$HOME/arm/bin:$PATH
+fi
 
 # if [ -z "$(which emacs)" ] ; then
 export EDITOR=$(which emacs)
