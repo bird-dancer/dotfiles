@@ -8,25 +8,12 @@
 simple "performant" GNU Emacs 29.1+ [[https://leanpub.com/lit-config/read][literate config]] that uses as much built in stuff as possible and builds upon that where necessary
 Works for me
 * startup
-** splash screen
-#+begin_src emacs-lisp :tangle no
-  ___           ___           ___           ___           ___
-  /\  \         /\  \         /\  \         /\  \         /\  \
-  /::\  \       /||\  \       /::\  \       /::\  \       /||\  \
-  /:/\:\  \     /|/\|\  \     /:/\:\  \     /:/\:\  \     /|/\|\  \
-  /::\~\:\  \   /|/ /||\  \   /::\~\:\  \   /:/  \:\  \   _\|\~\|\  \
-  /:/\:\ \:\__\ /|/ /|/\|\__\ /:/\:\ \:\__\ /:/__/ \:\__\ /\ \|\ \|\__\
-  \:\~\:\ \/__/ \/_/|/ /|/  / \/__\:\/:/  / \:\  \  \/__/ \|\ \|\ \/__/
-  \:\ \:\__\     /|/ /|/  /       \::/  /   \:\  \        \|\ \|\__\
-  \:\ \/__/     \/_/|/  /        /:/  /     \:\  \        \|\/|/  /
-  \:\__\         /|/  /        /:/  /       \:\__\        \||/  /
-  \/__/         \/__/         \/__/         \/__/         \/__/
-#+end_src
 ** increase startup performance
 *** increase garbage collection threshold
 make garbage-collection less active by increasing its threshold during startup so Emacs starts up faster
 #+begin_src emacs-lisp
-  (setq gc-cons-threshold (* 50 1000 1000))
+  (setq gc-cons-threshold (* 50 1000 1000))      ;500mb
+  (setq read-process-output-max (* 2 1024 1024)) ; 2mb
 #+end_src
 *** measure startup performance
 in order to measure the time it takes for Emacs to startup use ~emacs-init-time~
@@ -184,10 +171,15 @@ picks a light color-theme when the sun is risen and a dark theme when the sun is
     (setq circadian-themes '(
                              ;; (:sunrise . modus-operandi-tinted) ;emacs 30
                              ;; (:sunrise . modus-operandi)
-                             ;; (:sunrise  . ef-day)
-                             (:sunset  . ef-autumn)
+                             (:sunrise  . ef-day)
+                             (:sunset  . ef-night)
+                             ;; (:sunset  . ef-autumn)
+                             ;; (:sunset . tango-dark)
                              ;; (:sunset . modus-vivendi)
-                             (:sunrise . tsdh-light)
+                             ;; (:sunset . ef-owl)
+                             ;; (:sunrise . tsdh-light)
+                             ;; (:sunset . gruber-darker)
+                             ;; (:sunrise . tango)
                              ;; (:sunset . deeper-blue)
                              ;; (:sunset . wheatgrass)
                              ;; (:sunset . manoj-dark)

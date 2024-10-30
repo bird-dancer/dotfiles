@@ -1,4 +1,5 @@
-(setq gc-cons-threshold (* 50 1000 1000))
+(setq gc-cons-threshold (* 50 1000 1000))      ;500mb
+(setq read-process-output-max (* 2 1024 1024)) ; 2mb
 
 (require 'package)
 (add-to-list 'package-archives '("melpa" . "https://melpa.org/packages/") t)
@@ -75,10 +76,15 @@
   (setq circadian-themes '(
                            ;; (:sunrise . modus-operandi-tinted) ;emacs 30
                            ;; (:sunrise . modus-operandi)
-                           ;; (:sunrise  . ef-day)
-                           (:sunset  . ef-autumn)
+                           (:sunrise  . ef-day)
+                           (:sunset  . ef-night)
+                           ;; (:sunset  . ef-autumn)
+                           ;; (:sunset . tango-dark)
                            ;; (:sunset . modus-vivendi)
-                           (:sunrise . tsdh-light)
+                           ;; (:sunset . ef-owl)
+                           ;; (:sunrise . tsdh-light)
+                           ;; (:sunset . gruber-darker)
+                           ;; (:sunrise . tango)
                            ;; (:sunset . deeper-blue)
                            ;; (:sunset . wheatgrass)
                            ;; (:sunset . manoj-dark)
