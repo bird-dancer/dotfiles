@@ -490,17 +490,17 @@ add nerd-font icons to corfu completion candidates
     ;; used by `completion-at-point'.  The order of the functions matters, the
     ;; first function returning a result wins.  Note that the list of buffer-local
     ;; completion functions takes precedence over the global list.
-    (add-to-list 'completion-at-point-functions #'cape-dabbrev)
-    (add-to-list 'completion-at-point-functions #'cape-file)
-    (add-to-list 'completion-at-point-functions #'cape-elisp-block)
-    (add-to-list 'completion-at-point-functions #'cape-history)
-    (add-to-list 'completion-at-point-functions #'cape-keyword)
+    (add-to-list 'completion-at-point-functions #'cape-abbrev) ;Complete abbreviation (add-global-abbrev, add-mode-abbrev).
+    (add-to-list 'completion-at-point-functions #'cape-dabbrev) ;Complete word from current buffers. See also dabbrev-capf on Emacs 29
+    (add-to-list 'completion-at-point-functions #'cape-file)    ;Complete file name.
+    (add-to-list 'completion-at-point-functions #'cape-elisp-block) ;Complete Elisp in Org or Markdown code block.
+    (add-to-list 'completion-at-point-functions #'cape-history)	  ;Complete from Eshell, Comint or minibuffer history.
+    (add-to-list 'completion-at-point-functions #'cape-keyword)	  ;Complete programming language keyword.
     ;;(add-to-list 'completion-at-point-functions #'cape-tex)
     ;;(add-to-list 'completion-at-point-functions #'cape-sgml)
     ;;(add-to-list 'completion-at-point-functions #'cape-rfc1345)
-    (add-to-list 'completion-at-point-functions #'cape-abbrev)
-    (add-to-list 'completion-at-point-functions #'cape-dict)
-    (add-to-list 'completion-at-point-functions #'cape-emoji)
+    (add-to-list 'completion-at-point-functions #'cape-dict) ;Complete word from dictionary file.
+    ;; (add-to-list 'completion-at-point-functions #'cape-emoji)
     ;; (add-to-list 'completion-at-point-functions #'cape-elisp-symbol)
     ;;(add-to-list 'completion-at-point-functions #'cape-line)
     )
@@ -1029,8 +1029,8 @@ use ~emacsclient --eval "(emacs-everywhere)"~ from another window when writing t
 #+end_src
 * runtime performance
 make garbage-collection pauses faster by decreasing the threshold, increasing the runtime performance
-#+begin_src emacs-lisp
-  (setq gc-cons-threshold (* 10 1000 1000))
+#+begin_src emacs-lisp :tangle no
+  (setq gc-cons-threshold (* 10 1000 1000)) ;10mb
 #+end_src
 * TODO
 + native compile
@@ -1044,7 +1044,8 @@ make garbage-collection pauses faster by decreasing the threshold, increasing th
 + inline git blame
 * look into
 + [[https://www.youtube.com/watch?v=PMWwM8QJAtU][Emacs From Scratch #10 - Effortless File Management with Dired - YouTube]]
-+ =nov.el= for reading books
++ https://git.sr.ht/~technomancy/better-defaults/
++ look into new .el files in this directory
 + irc: [[https://www.youtube.com/watch?v=qWHTZIYTA4s&list=PLEoMzSkcN8oMMcPnYlNbQkUInjUxB75wE&pp=iAQB][Chat Like the 90's in Emacs with ERC - YouTube]]
 + [[https://github.com/Wilfred/deadgrep?tab=readme-ov-file][GitHub - Wilfred/deadgrep: fast, friendly searching with ripgrep and Emacs]]
 + wdired [[https://xenodium.com/emacs-git-rename-courtesy-of-dired/][Emacs: git rename, courtesy of dired]]
