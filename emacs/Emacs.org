@@ -570,10 +570,10 @@ export org-mode files to HTML pages using hugo
 #+end_src
 *** drag-and-drop
 enable drag-and-drop support for images and files; inserts inline previews for images and an icon+link for other media types.
-#+begin_src emacs-lisp :tangle no
+#+begin_src emacs-lisp
   (use-package org-download
-    :defer t
-    :hook (org-mode #'org-download-mode))
+    :hook ((org-mode . org-download-mode)
+           (dired-mode . org-download-enable)))
 #+end_src
 ** navigation
 *** replace S-M-arrow-key with S-M-{n,p,b,f}
@@ -784,15 +784,19 @@ match brackets and other delimiters by color to see the current scope more easil
 *** smartparens
 #+begin_src emacs-lisp
   (use-package smartparens-mode
-    :ensure smartparens  ;; install the package
-    :hook (prog-mode text-mode markdown-mode) ;; add `smartparens-mode` to these hooks
+    :ensure smartparens
+    :hook (prog-mode text-mode markdown-mode)
     :config
     (require 'smartparens-config))
 #+end_src
-*** electric behavior
-auto indent, via electric-mode
+*** auto close brackets
+automatically add closing brackets, via electric-mode
+#+begin_src emacs-lisp :tangle no
+  (electric-pair-mode t)
+#+end_src
+*** auto indent
+auto indent
 #+begin_src emacs-lisp
-  ;; (electric-pair-mode t)
   (electric-indent-mode t)
   ;; (electric-quote-mode t)
   (setq minibuffer-default-prompt-format " [%s]") ; Emacs 29

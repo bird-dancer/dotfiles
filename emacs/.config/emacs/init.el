@@ -339,6 +339,10 @@
   :after org-mode
   :commands org-hugo-auto-export-mode)
 
+(use-package org-download
+  :hook ((org-mode . org-download-mode)
+         (dired-mode . org-download-enable)))
+
 (add-hook 'org-mode-hook
           (lambda ()
             (local-set-key (kbd "M-F") 'org-shiftmetaright)))
@@ -481,12 +485,11 @@
   :hook (prog-mode . rainbow-delimiters-mode))
 
 (use-package smartparens-mode
-  :ensure smartparens  ;; install the package
-  :hook (prog-mode text-mode markdown-mode) ;; add `smartparens-mode` to these hooks
+  :ensure smartparens
+  :hook (prog-mode text-mode markdown-mode)
   :config
   (require 'smartparens-config))
 
-;; (electric-pair-mode t)
 (electric-indent-mode t)
 ;; (electric-quote-mode t)
 (setq minibuffer-default-prompt-format " [%s]") ; Emacs 29
