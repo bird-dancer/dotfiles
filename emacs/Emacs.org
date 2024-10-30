@@ -905,6 +905,14 @@ auto enable makefile-mode for Makefiles
 #+begin_src emacs-lisp
   (add-to-list 'auto-mode-alist '("\\Makefile\\'" . makefile-mode))
 #+end_src
+*** c-ts-mode: use linux coding style
+#+begin_src emacs-lisp
+  (require 'c-ts-mode)
+  (add-hook 'c-ts-mode-hook (c-ts-mode-set-global-style 'linux))
+  (when (eq c-ts-mode-indent-style 'linux)
+    (setq c-ts-mode-indent-offset 8)
+    (setq comment-style 'extra-line))
+#+end_src
 ** flymake
 finding syntax errors on the fly, also works with eglot and spellcheck (it also might be worth checking out [[https://www.flycheck.org] [Flycheck]])
 #+begin_src emacs-lisp

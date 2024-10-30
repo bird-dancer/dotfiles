@@ -534,6 +534,12 @@
 
 (add-to-list 'auto-mode-alist '("\\Makefile\\'" . makefile-mode))
 
+(require 'c-ts-mode)
+(add-hook 'c-ts-mode-hook (c-ts-mode-set-global-style 'linux))
+(when (eq c-ts-mode-indent-style 'linux)
+  (setq c-ts-mode-indent-offset 8)
+  (setq comment-style 'extra-line))
+
 ;; (define-key flymake-mode-map (kbd "M-n") 'flymake-goto-next-error)
 ;; (define-key flymake-mode-map (kbd "M-p") 'flymake-goto-prev-error)
 (global-set-key (kbd "M-n") 'flymake-goto-next-error)
