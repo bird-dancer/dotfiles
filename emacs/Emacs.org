@@ -817,6 +817,13 @@ to prevent being asked to type the ssh/gpg-key password on every action, make su
   (use-package keychain-environment
     :hook ((magit . keychain-environment)))
 #+end_src
+**** magit-todo
+Show source files' TODOs (and FIXMEs, etc) in Magit status buffer
+#+begin_src emacs-lisp
+  (use-package magit-todos
+    :after magit
+    :config (magit-todos-mode 1))
+#+end_src
 *** forge
 Forge allows you to work with Git forges, currently Github and Gitlab, from the comfort of Magit and Emacs.
 #+begin_src emacs-lisp
@@ -877,7 +884,7 @@ enable shellcheck using flymake for checking correctness and scanning common mis
   (use-package erblint
     :hook (ruby-ts-mode . erblint-mode))
 #+end_src
-*** elm-mode
+*** elm
 #+begin_src emacs-lisp :tangle no
   (use-package elm-mode
     :defer t
@@ -885,6 +892,10 @@ enable shellcheck using flymake for checking correctness and scanning common mis
     :config
     (setq elm-mode-hook '(elm-indent-simple-mode))
     (add-hook 'elm-mode-hook 'elm-format-on-save-mode))
+#+end_src
+*** php
+#+begin_src emacs-lisp
+  (use-package php-mode)
 #+end_src
 *** webmode
 #+begin_src emacs-lisp
@@ -908,10 +919,10 @@ auto enable makefile-mode for Makefiles
 *** c-ts-mode: use linux coding style
 #+begin_src emacs-lisp
   (require 'c-ts-mode)
-  (add-hook 'c-ts-mode-hook (c-ts-mode-set-global-style 'linux))
-  (when (eq c-ts-mode-indent-style 'linux)
-    (setq c-ts-mode-indent-offset 8)
-    (setq comment-style 'extra-line))
+  (add-hook 'c-ts-mode-hook (lambda () (c-ts-mode-set-global-style 'linux)
+                              (when (eq c-ts-mode-indent-style 'linux)
+                                (setq c-ts-mode-indent-offset 8)
+                                (setq comment-style 'extra-line))))
 #+end_src
 ** flymake
 finding syntax errors on the fly, also works with eglot and spellcheck (it also might be worth checking out [[https://www.flycheck.org] [Flycheck]])
