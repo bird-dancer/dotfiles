@@ -66,13 +66,14 @@ shorten my most used =pacman= commands
   alias cleanup='sudo guix system delete-generations; guix package -d; guix gc'
 #+end_src
 **** zypper
-#+begin_src bash :tangle no
+#+begin_src bash
   alias zinf='zypper info --provides --recommends --requires --suggests'
   alias zse='zypper search'
   alias zin='sudo zypper install'
   alias zrm='sudo zypper remove -u'
   alias zup='sudo zypper update'
   alias zre='sudo zypper refresh'
+  alias zun='zypper packages --unneeded'
 #+end_src
 *** ssh
 remember my ssh-keys during a session
