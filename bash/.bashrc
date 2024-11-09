@@ -96,6 +96,10 @@ fi
 
 export LC_CTYPE=en_US.UTF-8
 
+# if [ -z "$(which emacs)" ] ; then
+export EDITOR=$(which emacs)
+# fi
+
 if [ -d "$HOME/.cargo" ] ; then
     export PATH="$HOME/.cargo/bin:$PATH"
 fi
@@ -114,7 +118,4 @@ fi
 if [ -d "$HOME/arm/bin" ] ; then
     export PATH=$HOME/arm/bin:$PATH
 fi
-
-# if [ -z "$(which emacs)" ] ; then
-export EDITOR=$(which emacs)
-# fi
+export PATH=/usr/share/zap/:$PATH

@@ -228,7 +228,13 @@ set locale format to =en_us utf-8=
   GUIX_PROFILE="$HOME/.config/guix/current"
   . "$GUIX_PROFILE/etc/profile"
 #+end_src
-*** path
+** editor
+#+begin_src bash
+  # if [ -z "$(which emacs)" ] ; then
+  export EDITOR=$(which emacs)
+  # fi
+#+end_src
+** path
 #+begin_src bash
   if [ -d "$HOME/.cargo" ] ; then
       export PATH="$HOME/.cargo/bin:$PATH"
@@ -248,13 +254,7 @@ set locale format to =en_us utf-8=
   if [ -d "$HOME/arm/bin" ] ; then
       export PATH=$HOME/arm/bin:$PATH
   fi
-
-#+end_src
-** editor
-#+begin_src bash
-  # if [ -z "$(which emacs)" ] ; then
-  export EDITOR=$(which emacs)
-  # fi
+  export PATH=/usr/share/zap/:$PATH
 #+end_src
 * look into
 + blesh
