@@ -1,4 +1,5 @@
-(setq gc-cons-threshold (* 50 1000 1000))
+(setq gc-cons-threshold (* 50 1000 1000))      ;500mb
+(setq read-process-output-max (* 2 1024 1024)) ; 2mb
 
 (require 'package)
 (add-to-list 'package-archives '("melpa" . "https://melpa.org/packages/") t)
@@ -75,10 +76,15 @@
   (setq circadian-themes '(
                            ;; (:sunrise . modus-operandi-tinted) ;emacs 30
                            ;; (:sunrise . modus-operandi)
-                           ;; (:sunrise  . ef-day)
-                           (:sunset  . ef-autumn)
+                           (:sunrise  . ef-day)
+                           (:sunset  . ef-night)
+                           ;; (:sunset  . ef-autumn)
+                           ;; (:sunset . tango-dark)
                            ;; (:sunset . modus-vivendi)
-                           (:sunrise . tsdh-light)
+                           ;; (:sunset . ef-owl)
+                           ;; (:sunrise . tsdh-light)
+                           ;; (:sunset . gruber-darker)
+                           ;; (:sunrise . tango)
                            ;; (:sunset . deeper-blue)
                            ;; (:sunset . wheatgrass)
                            ;; (:sunset . manoj-dark)
@@ -282,17 +288,17 @@
   ;; used by `completion-at-point'.  The order of the functions matters, the
   ;; first function returning a result wins.  Note that the list of buffer-local
   ;; completion functions takes precedence over the global list.
-  (add-to-list 'completion-at-point-functions #'cape-dabbrev)
-  (add-to-list 'completion-at-point-functions #'cape-file)
-  (add-to-list 'completion-at-point-functions #'cape-elisp-block)
-  (add-to-list 'completion-at-point-functions #'cape-history)
-  (add-to-list 'completion-at-point-functions #'cape-keyword)
+  (add-to-list 'completion-at-point-functions #'cape-abbrev) ;Complete abbreviation (add-global-abbrev, add-mode-abbrev).
+  (add-to-list 'completion-at-point-functions #'cape-dabbrev) ;Complete word from current buffers. See also dabbrev-capf on Emacs 29
+  (add-to-list 'completion-at-point-functions #'cape-file)    ;Complete file name.
+  (add-to-list 'completion-at-point-functions #'cape-elisp-block) ;Complete Elisp in Org or Markdown code block.
+  (add-to-list 'completion-at-point-functions #'cape-history)	  ;Complete from Eshell, Comint or minibuffer history.
+  (add-to-list 'completion-at-point-functions #'cape-keyword)	  ;Complete programming language keyword.
   ;;(add-to-list 'completion-at-point-functions #'cape-tex)
   ;;(add-to-list 'completion-at-point-functions #'cape-sgml)
   ;;(add-to-list 'completion-at-point-functions #'cape-rfc1345)
-  (add-to-list 'completion-at-point-functions #'cape-abbrev)
-  (add-to-list 'completion-at-point-functions #'cape-dict)
-  (add-to-list 'completion-at-point-functions #'cape-emoji)
+  (add-to-list 'completion-at-point-functions #'cape-dict) ;Complete word from dictionary file.
+  ;; (add-to-list 'completion-at-point-functions #'cape-emoji)
   ;; (add-to-list 'completion-at-point-functions #'cape-elisp-symbol)
   ;;(add-to-list 'completion-at-point-functions #'cape-line)
   )
@@ -332,6 +338,10 @@
 (use-package ox-hugo
   :after org-mode
   :commands org-hugo-auto-export-mode)
+
+(use-package org-download
+  :hook ((org-mode . org-download-mode)
+         (dired-mode . org-download-enable)))
 
 (add-hook 'org-mode-hook
           (lambda ()
@@ -475,12 +485,11 @@
   :hook (prog-mode . rainbow-delimiters-mode))
 
 (use-package smartparens-mode
-  :ensure smartparens  ;; install the package
-  :hook (prog-mode text-mode markdown-mode) ;; add `smartparens-mode` to these hooks
+  :ensure smartparens
+  :hook (prog-mode text-mode markdown-mode)
   :config
   (require 'smartparens-config))
 
-;; (electric-pair-mode t)
 (electric-indent-mode t)
 ;; (electric-quote-mode t)
 (setq minibuffer-default-prompt-format " [%s]") ; Emacs 29
@@ -489,6 +498,10 @@
 (use-package magit
   :bind (("C-x g" . magit)
          ("C-x c" . magit-clone-shallow)))
+
+(use-package magit-todos
+  :after magit
+  :config (magit-todos-mode 1))
 
 (use-package forge
   :after magit)
@@ -511,6 +524,8 @@
   :mode ("\\.md\\'" . markdown-mode)
   :config (setq markdown-command "multimarkdown"))
 
+(use-package php-mode)
+
 (use-package web-mode
   :defer t
   :config
@@ -524,6 +539,12 @@
   (add-to-list 'auto-mode-alist '("\\.djhtml\\'" . web-mode)))
 
 (add-to-list 'auto-mode-alist '("\\Makefile\\'" . makefile-mode))
+
+(require 'c-ts-mode)
+(add-hook 'c-ts-mode-hook (lambda () (c-ts-mode-set-global-style 'linux)
+                            (when (eq c-ts-mode-indent-style 'linux)
+                              (setq c-ts-mode-indent-offset 8)
+                              (setq comment-style 'extra-line))))
 
 ;; (define-key flymake-mode-map (kbd "M-n") 'flymake-goto-next-error)
 ;; (define-key flymake-mode-map (kbd "M-p") 'flymake-goto-prev-error)
@@ -593,5 +614,3 @@
   :commands mbsync
   :config
   (add-hook 'mbsync-exit-hook 'notmuch-poll-and-refresh-this-buffer))
-
-(setq gc-cons-threshold (* 10 1000 1000))

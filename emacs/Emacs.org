@@ -8,25 +8,12 @@
 simple "performant" GNU Emacs 29.1+ [[https://leanpub.com/lit-config/read][literate config]] that uses as much built in stuff as possible and builds upon that where necessary
 Works for me
 * startup
-** splash screen
-#+begin_src emacs-lisp :tangle no
-  ___           ___           ___           ___           ___
-  /\  \         /\  \         /\  \         /\  \         /\  \
-  /::\  \       /||\  \       /::\  \       /::\  \       /||\  \
-  /:/\:\  \     /|/\|\  \     /:/\:\  \     /:/\:\  \     /|/\|\  \
-  /::\~\:\  \   /|/ /||\  \   /::\~\:\  \   /:/  \:\  \   _\|\~\|\  \
-  /:/\:\ \:\__\ /|/ /|/\|\__\ /:/\:\ \:\__\ /:/__/ \:\__\ /\ \|\ \|\__\
-  \:\~\:\ \/__/ \/_/|/ /|/  / \/__\:\/:/  / \:\  \  \/__/ \|\ \|\ \/__/
-  \:\ \:\__\     /|/ /|/  /       \::/  /   \:\  \        \|\ \|\__\
-  \:\ \/__/     \/_/|/  /        /:/  /     \:\  \        \|\/|/  /
-  \:\__\         /|/  /        /:/  /       \:\__\        \||/  /
-  \/__/         \/__/         \/__/         \/__/         \/__/
-#+end_src
 ** increase startup performance
 *** increase garbage collection threshold
 make garbage-collection less active by increasing its threshold during startup so Emacs starts up faster
 #+begin_src emacs-lisp
-  (setq gc-cons-threshold (* 50 1000 1000))
+  (setq gc-cons-threshold (* 50 1000 1000))      ;500mb
+  (setq read-process-output-max (* 2 1024 1024)) ; 2mb
 #+end_src
 *** measure startup performance
 in order to measure the time it takes for Emacs to startup use ~emacs-init-time~
@@ -184,10 +171,15 @@ picks a light color-theme when the sun is risen and a dark theme when the sun is
     (setq circadian-themes '(
                              ;; (:sunrise . modus-operandi-tinted) ;emacs 30
                              ;; (:sunrise . modus-operandi)
-                             ;; (:sunrise  . ef-day)
-                             (:sunset  . ef-autumn)
+                             (:sunrise  . ef-day)
+                             (:sunset  . ef-night)
+                             ;; (:sunset  . ef-autumn)
+                             ;; (:sunset . tango-dark)
                              ;; (:sunset . modus-vivendi)
-                             (:sunrise . tsdh-light)
+                             ;; (:sunset . ef-owl)
+                             ;; (:sunrise . tsdh-light)
+                             ;; (:sunset . gruber-darker)
+                             ;; (:sunrise . tango)
                              ;; (:sunset . deeper-blue)
                              ;; (:sunset . wheatgrass)
                              ;; (:sunset . manoj-dark)
@@ -498,17 +490,17 @@ add nerd-font icons to corfu completion candidates
     ;; used by `completion-at-point'.  The order of the functions matters, the
     ;; first function returning a result wins.  Note that the list of buffer-local
     ;; completion functions takes precedence over the global list.
-    (add-to-list 'completion-at-point-functions #'cape-dabbrev)
-    (add-to-list 'completion-at-point-functions #'cape-file)
-    (add-to-list 'completion-at-point-functions #'cape-elisp-block)
-    (add-to-list 'completion-at-point-functions #'cape-history)
-    (add-to-list 'completion-at-point-functions #'cape-keyword)
+    (add-to-list 'completion-at-point-functions #'cape-abbrev) ;Complete abbreviation (add-global-abbrev, add-mode-abbrev).
+    (add-to-list 'completion-at-point-functions #'cape-dabbrev) ;Complete word from current buffers. See also dabbrev-capf on Emacs 29
+    (add-to-list 'completion-at-point-functions #'cape-file)    ;Complete file name.
+    (add-to-list 'completion-at-point-functions #'cape-elisp-block) ;Complete Elisp in Org or Markdown code block.
+    (add-to-list 'completion-at-point-functions #'cape-history)	  ;Complete from Eshell, Comint or minibuffer history.
+    (add-to-list 'completion-at-point-functions #'cape-keyword)	  ;Complete programming language keyword.
     ;;(add-to-list 'completion-at-point-functions #'cape-tex)
     ;;(add-to-list 'completion-at-point-functions #'cape-sgml)
     ;;(add-to-list 'completion-at-point-functions #'cape-rfc1345)
-    (add-to-list 'completion-at-point-functions #'cape-abbrev)
-    (add-to-list 'completion-at-point-functions #'cape-dict)
-    (add-to-list 'completion-at-point-functions #'cape-emoji)
+    (add-to-list 'completion-at-point-functions #'cape-dict) ;Complete word from dictionary file.
+    ;; (add-to-list 'completion-at-point-functions #'cape-emoji)
     ;; (add-to-list 'completion-at-point-functions #'cape-elisp-symbol)
     ;;(add-to-list 'completion-at-point-functions #'cape-line)
     )
@@ -578,10 +570,10 @@ export org-mode files to HTML pages using hugo
 #+end_src
 *** drag-and-drop
 enable drag-and-drop support for images and files; inserts inline previews for images and an icon+link for other media types.
-#+begin_src emacs-lisp :tangle no
+#+begin_src emacs-lisp
   (use-package org-download
-    :defer t
-    :hook (org-mode #'org-download-mode))
+    :hook ((org-mode . org-download-mode)
+           (dired-mode . org-download-enable)))
 #+end_src
 ** navigation
 *** replace S-M-arrow-key with S-M-{n,p,b,f}
@@ -792,15 +784,19 @@ match brackets and other delimiters by color to see the current scope more easil
 *** smartparens
 #+begin_src emacs-lisp
   (use-package smartparens-mode
-    :ensure smartparens  ;; install the package
-    :hook (prog-mode text-mode markdown-mode) ;; add `smartparens-mode` to these hooks
+    :ensure smartparens
+    :hook (prog-mode text-mode markdown-mode)
     :config
     (require 'smartparens-config))
 #+end_src
-*** electric behavior
-auto indent, via electric-mode
+*** auto close brackets
+automatically add closing brackets, via electric-mode
+#+begin_src emacs-lisp :tangle no
+  (electric-pair-mode t)
+#+end_src
+*** auto indent
+auto indent
 #+begin_src emacs-lisp
-  ;; (electric-pair-mode t)
   (electric-indent-mode t)
   ;; (electric-quote-mode t)
   (setq minibuffer-default-prompt-format " [%s]") ; Emacs 29
@@ -820,6 +816,13 @@ to prevent being asked to type the ssh/gpg-key password on every action, make su
 #+begin_src emacs-lisp :tangle no
   (use-package keychain-environment
     :hook ((magit . keychain-environment)))
+#+end_src
+**** magit-todo
+Show source files' TODOs (and FIXMEs, etc) in Magit status buffer
+#+begin_src emacs-lisp
+  (use-package magit-todos
+    :after magit
+    :config (magit-todos-mode 1))
 #+end_src
 *** forge
 Forge allows you to work with Git forges, currently Github and Gitlab, from the comfort of Magit and Emacs.
@@ -881,7 +884,7 @@ enable shellcheck using flymake for checking correctness and scanning common mis
   (use-package erblint
     :hook (ruby-ts-mode . erblint-mode))
 #+end_src
-*** elm-mode
+*** elm
 #+begin_src emacs-lisp :tangle no
   (use-package elm-mode
     :defer t
@@ -889,6 +892,10 @@ enable shellcheck using flymake for checking correctness and scanning common mis
     :config
     (setq elm-mode-hook '(elm-indent-simple-mode))
     (add-hook 'elm-mode-hook 'elm-format-on-save-mode))
+#+end_src
+*** php
+#+begin_src emacs-lisp
+  (use-package php-mode)
 #+end_src
 *** webmode
 #+begin_src emacs-lisp
@@ -908,6 +915,14 @@ enable shellcheck using flymake for checking correctness and scanning common mis
 auto enable makefile-mode for Makefiles
 #+begin_src emacs-lisp
   (add-to-list 'auto-mode-alist '("\\Makefile\\'" . makefile-mode))
+#+end_src
+*** c-ts-mode: use linux coding style
+#+begin_src emacs-lisp
+  (require 'c-ts-mode)
+  (add-hook 'c-ts-mode-hook (lambda () (c-ts-mode-set-global-style 'linux)
+                              (when (eq c-ts-mode-indent-style 'linux)
+                                (setq c-ts-mode-indent-offset 8)
+                                (setq comment-style 'extra-line))))
 #+end_src
 ** flymake
 finding syntax errors on the fly, also works with eglot and spellcheck (it also might be worth checking out [[https://www.flycheck.org] [Flycheck]])
@@ -1037,8 +1052,8 @@ use ~emacsclient --eval "(emacs-everywhere)"~ from another window when writing t
 #+end_src
 * runtime performance
 make garbage-collection pauses faster by decreasing the threshold, increasing the runtime performance
-#+begin_src emacs-lisp
-  (setq gc-cons-threshold (* 10 1000 1000))
+#+begin_src emacs-lisp :tangle no
+  (setq gc-cons-threshold (* 10 1000 1000)) ;10mb
 #+end_src
 * TODO
 + native compile
@@ -1052,7 +1067,8 @@ make garbage-collection pauses faster by decreasing the threshold, increasing th
 + inline git blame
 * look into
 + [[https://www.youtube.com/watch?v=PMWwM8QJAtU][Emacs From Scratch #10 - Effortless File Management with Dired - YouTube]]
-+ =nov.el= for reading books
++ https://git.sr.ht/~technomancy/better-defaults/
++ look into new .el files in this directory
 + irc: [[https://www.youtube.com/watch?v=qWHTZIYTA4s&list=PLEoMzSkcN8oMMcPnYlNbQkUInjUxB75wE&pp=iAQB][Chat Like the 90's in Emacs with ERC - YouTube]]
 + [[https://github.com/Wilfred/deadgrep?tab=readme-ov-file][GitHub - Wilfred/deadgrep: fast, friendly searching with ripgrep and Emacs]]
 + wdired [[https://xenodium.com/emacs-git-rename-courtesy-of-dired/][Emacs: git rename, courtesy of dired]]
