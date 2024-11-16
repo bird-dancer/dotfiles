@@ -540,7 +540,6 @@
 
 (add-to-list 'auto-mode-alist '("\\Makefile\\'" . makefile-mode))
 
-(require 'c-ts-mode)
 (add-hook 'c-ts-mode-hook (lambda () (c-ts-mode-set-global-style 'linux)
                             (when (eq c-ts-mode-indent-style 'linux)
                               (setq c-ts-mode-indent-offset 8)
