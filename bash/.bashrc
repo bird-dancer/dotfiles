@@ -62,7 +62,8 @@ ex ()
 
 export XDG_RUNTIME_DIR=/run/user/$(id -u)
 
-export TERM="xterm-256color"
+#export TERM="xterm-256color"
+export TERM=konsole
 
 export HISTSIZE=1000
 export HISTFILESIZE=2000  

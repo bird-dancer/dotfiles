@@ -144,7 +144,8 @@ usage: ex <file>
 #+end_src
 *** set color
 #+begin_src bash
-  export TERM="xterm-256color"
+  #export TERM="xterm-256color"
+  export TERM=konsole
 #+end_src
 *** command not found
 requires pkgfile
