@@ -125,6 +125,8 @@
   (move-file-to-trash buffer-file-name))
 (global-set-key (kbd "C-x x x") 'move-current-file-to-trash)
 
+(global-set-key (kbd "C-x C-b") 'switch-to-buffer)
+
 (recentf-mode t)
 
 (save-place-mode t)

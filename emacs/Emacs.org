@@ -245,6 +245,11 @@ it shows a table of all possible ways you can finish a shortcut after having sta
     (move-file-to-trash buffer-file-name))
   (global-set-key (kbd "C-x x x") 'move-current-file-to-trash)
 #+end_src
+*** open switch-to-buffer with =C-x C-b=
+=C-x C-b= same as =C-x b= because thats what i always want
+#+begin_src emacs-lisp
+  (global-set-key (kbd "C-x C-b") 'switch-to-buffer)
+#+end_src
 *** show recently opened files first in minibuffers
 #+begin_src emacs-lisp
   (recentf-mode t)
