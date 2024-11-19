@@ -2,7 +2,7 @@
 [user]
 	name = Felix Dumbeck
 	email = felix@dumbeck.net
-	signingkey = /home/felix/.ssh/id_rsa.pub
+	signingkey = ~/.ssh/id_rsa.pub
 [color]
 	diff = auto
 	status = auto
