@@ -16,6 +16,7 @@ alias zse='zypper search'
 alias zin='sudo zypper install'
 alias zrm='sudo zypper remove -u'
 alias zup='sudo zypper update'
+alias zd='sudo zypper dup'
 alias zre='sudo zypper refresh'
 alias zun='zypper packages --unneeded'
 
