@@ -23,11 +23,11 @@ see what packages are loaded at startup (*only have it enabled when debugging!*)
   (setq use-package-verbose t)
 #+end_src
 * package management
+** enable melpa
 Setup package repositories
 #+begin_src emacs-lisp
   (require 'package)
   (add-to-list 'package-archives '("melpa" . "https://melpa.org/packages/") t)
-  ;; (add-to-list 'package-archives '("melpa-stable" . "https://stable.melpa.org/packages/") t)
   (package-initialize)
   (require 'use-package-ensure) ;; make all use-package :ensure t
   (setq use-package-always-ensure t)
@@ -575,7 +575,7 @@ export org-mode files to HTML pages using hugo
 #+end_src
 *** drag-and-drop
 enable drag-and-drop support for images and files; inserts inline previews for images and an icon+link for other media types.
-#+begin_src emacs-lisp
+#+begin_src emacs-lisp :tangle no
   (use-package org-download
     :hook ((org-mode . org-download-mode)
            (dired-mode . org-download-enable)))

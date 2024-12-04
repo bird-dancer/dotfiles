@@ -3,7 +3,6 @@
 
 (require 'package)
 (add-to-list 'package-archives '("melpa" . "https://melpa.org/packages/") t)
-;; (add-to-list 'package-archives '("melpa-stable" . "https://stable.melpa.org/packages/") t)
 (package-initialize)
 (require 'use-package-ensure) ;; make all use-package :ensure t
 (setq use-package-always-ensure t)
@@ -340,10 +339,6 @@
 (use-package ox-hugo
   :after org-mode
   :commands org-hugo-auto-export-mode)
-
-(use-package org-download
-  :hook ((org-mode . org-download-mode)
-         (dired-mode . org-download-enable)))
 
 (add-hook 'org-mode-hook
           (lambda ()
