@@ -145,8 +145,8 @@ usage: ex <file>
 #+end_src
 *** set color
 #+begin_src bash
-  #export TERM="xterm-256color"
-  export TERM=konsole
+  export TERM="xterm-256color"
+  #export TERM=konsole
 #+end_src
 *** command not found
 requires pkgfile
@@ -209,10 +209,10 @@ tangle to =.inputrc= for other read-line programs
   fi
   #+end_src
 *** java
-  #+begin_src bash
-  if [ -d "/usr/lib/jvm/default" ] ; then
-      export JAVA_HOME=/usr/lib/jvm/default
-  fi
+  #+begin_src bash :tangle no
+    if [ -d "/usr/lib/jvm/default" ] ; then
+        export JAVA_HOME=/usr/lib/jvm/default
+    fi
   #+end_src
 *** ruby
   #+begin_src bash :tangle no

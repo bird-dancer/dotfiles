@@ -63,8 +63,8 @@ ex ()
 
 export XDG_RUNTIME_DIR=/run/user/$(id -u)
 
-#export TERM="xterm-256color"
-export TERM=konsole
+export TERM="xterm-256color"
+#export TERM=konsole
 
 export HISTSIZE=1000
 export HISTFILESIZE=2000  
@@ -91,10 +91,6 @@ shopt -s checkwinsize # checks term size when bash regains control
 eval "$(starship init bash)"
 
 export CC=gcc CXX=g++
-
-if [ -d "/usr/lib/jvm/default" ] ; then
-    export JAVA_HOME=/usr/lib/jvm/default
-fi
 
 export LC_CTYPE=en_US.UTF-8
 
