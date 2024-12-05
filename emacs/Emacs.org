@@ -32,6 +32,10 @@ Setup package repositories
   (require 'use-package-ensure) ;; make all use-package :ensure t
   (setq use-package-always-ensure t)
 #+end_src
+** upgrade built in packages
+#+begin_src emacs-lisp
+  (setq package-install-upgrade-built-in t)
+#+end_src
 * keep .config/emacs clean
 stop transient files from being created in the Emacs config folder
 ** change location of the custom file

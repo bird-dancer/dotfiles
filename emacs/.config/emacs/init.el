@@ -7,6 +7,8 @@
 (require 'use-package-ensure) ;; make all use-package :ensure t
 (setq use-package-always-ensure t)
 
+(setq package-install-upgrade-built-in t)
+
 (setq custom-file (locate-user-emacs-file "custom.el"))
 (load custom-file 'noerror 'nomessage)
 
