@@ -14,16 +14,6 @@
 (setq backup-directory-alist `(("." . , backup-dir)))
 (setq delete-old-versions t)
 
-;; (setq trash-directory (expand-file-name "~/.local/share/Trash" user-emacs-directory))
-(setq trash-directory (expand-file-name "~/.local/share/Trash/files/"))
-
-(defun create-directory-if-not-exists (dir)
-  "Create directory DIR if it does not exist."
-  (unless (file-exists-p dir)
-    (make-directory dir t)))
-
-(create-directory-if-not-exists trash-directory)
-
 (make-directory (expand-file-name "tmp/auto-saves/" user-emacs-directory) t)
 (setq auto-save-list-file-prefix (expand-file-name "tmp/auto-saves/sessions/" user-emacs-directory)
       auto-save-file-name-transforms `((".*", (expand-file-name "tmp/auto-saves/" user-emacs-directory) t)))
@@ -74,12 +64,12 @@
   (setq calendar-longitude 13.4)
   (setq circadian-themes '(
                            ;; (:sunrise . modus-operandi-tinted) ;emacs 30
-                           ;; (:sunrise . modus-operandi)
-                           (:sunrise  . ef-day)
-                           (:sunset  . ef-night)
+                           (:sunrise . modus-operandi)
+                           ;; (:sunrise  . ef-day)
+                           ;; (:sunset  . ef-night)
                            ;; (:sunset  . ef-autumn)
                            ;; (:sunset . tango-dark)
-                           ;; (:sunset . modus-vivendi)
+                           (:sunset . modus-vivendi)
                            ;; (:sunset . ef-owl)
                            ;; (:sunrise . tsdh-light)
                            ;; (:sunset . gruber-darker)
@@ -90,11 +80,10 @@
                            ))
   (circadian-setup))
 
-;; (when (display-graphic-p))
-(set-frame-font "Comic Shanns 13" nil t)
+;; (set-frame-font "Comic Shanns Mono 13" nil t)
+(set-frame-font "Serious Shanns NerdFont 14" nil t)
 ;; (set-frame-font "Fantasque Sans Mono 12" nil t)
-;; (set-frame-font "Comic Mono 12" nil t)
-;; (add-to-list 'default-frame-alist '(font . "Comic Mono 11"))
+(add-to-list 'default-frame-alist '(font . "Serious Shanns NerdFont 14"))
 
 (use-package all-the-icons
   :if (display-graphic-p))
@@ -116,6 +105,8 @@
   (setq which-key-idle-delay 1))
 
 (global-set-key (kbd "C-x C-j") 'join-line)
+
+(setq delete-by-moving-to-trash t)
 
 (defun move-current-file-to-trash ()
   (interactive)
@@ -499,9 +490,6 @@
 (use-package magit-todos
   :after magit
   :config (magit-todos-mode 1))
-
-(use-package forge
-  :after magit)
 
 (use-package diff-hl
   :hook ((text-mode . diff-hl-mode)
