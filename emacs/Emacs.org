@@ -99,7 +99,7 @@ remove the menu-bar tool-bar and scroll-bar as a measure to remove visual clutte
   (add-hook 'prog-mode-hook #'display-line-numbers-mode)
   (add-hook 'text-mode-hook #'display-line-numbers-mode)
   (add-hook 'org-mode-hook #'display-line-numbers-mode)
-  (setq display-line-numbers-type 'relative) ;; make line numbers relative
+  ;;(setq display-line-numbers-type 'relative) ;; make line numbers relative
 #+end_src
 *** prettify symbols
 #+begin_src emacs-lisp
@@ -653,6 +653,13 @@ when ~#+auto_tangle: t~ is set in the beginning of an org-file, tangle all code 
     :hook (org-mode . org-auto-tangle-mode))
 #+end_src
 *** languages
+**** built-in
+#+begin_src emacs-lisp
+  (setq org-babel-python-command "python3")
+  (org-babel-do-load-languages
+   'org-babel-load-languages
+   '((python . t)))
+#+end_src
 **** rust
 #+begin_src emacs-lisp :tangle no
   (use-package ob-rust
@@ -1087,7 +1094,10 @@ make garbage-collection pauses faster by decreasing the threshold, increasing th
 + embark [[https://protesilaos.com/codelog/2024-02-17-emacs-modern-minibuffer-packages/][Emacs: modern minibuffer packages (Vertico, Consult, etc.) | Protesilaos Stavrou]]
 + wgrep [[https://protesilaos.com/codelog/2024-02-17-emacs-modern-minibuffer-packages/][Emacs: modern minibuffer packages (Vertico, Consult, etc.) | Protesilaos Stavrou]]
 + org-present
++ interact with system trash [[https://github.com/shingo256/trashed][GitHub - shingo256/trashed: Viewing/editing system trash can in Emacs]]
++ xref navigation integration with consult [[https://github.com/brett-lempereur/consult-xref-stack][GitHub - brett-lempereur/consult-xref-stack: Navigate the Xref stack with Con...]]
 + treemacs
++ [[https://github.com/jdtsmith/speedrect][GitHub - jdtsmith/speedrect: Quick key bindings and other tools for rectangle...]]
 + denote instead of org-roam
 + ibuffer
 + deft

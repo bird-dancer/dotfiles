@@ -41,7 +41,7 @@
 (add-hook 'prog-mode-hook #'display-line-numbers-mode)
 (add-hook 'text-mode-hook #'display-line-numbers-mode)
 (add-hook 'org-mode-hook #'display-line-numbers-mode)
-(setq display-line-numbers-type 'relative) ;; make line numbers relative
+;;(setq display-line-numbers-type 'relative) ;; make line numbers relative
 
 (global-prettify-symbols-mode t)
 
@@ -381,6 +381,11 @@
 (use-package org-auto-tangle
   :defer t
   :hook (org-mode . org-auto-tangle-mode))
+
+(setq org-babel-python-command "python3")
+(org-babel-do-load-languages
+ 'org-babel-load-languages
+ '((python . t)))
 
 (org-babel-do-load-languages
  'org-babel-load-languages
