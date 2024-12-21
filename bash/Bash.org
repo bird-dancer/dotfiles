@@ -207,15 +207,15 @@ tangle to =.inputrc= for other read-line programs
   if [ -z "$(which sccache)" ] ; then
       export RUSTC_WRAPPER=sccache
   fi
-  #+end_src
+#+end_src
 *** java
-  #+begin_src bash :tangle no
-    if [ -d "/usr/lib/jvm/default" ] ; then
-        export JAVA_HOME=/usr/lib/jvm/default
-    fi
-  #+end_src
+#+begin_src bash :tangle no
+  if [ -d "/usr/lib/jvm/default" ] ; then
+      export JAVA_HOME=/usr/lib/jvm/default
+  fi
+#+end_src
 *** ruby
-  #+begin_src bash :tangle no
+#+begin_src bash :tangle no
   if [ -z "$(which gem)" ] ; then
       export GEM_HOME="$(gem env user_gemhome)"
   fi
@@ -225,16 +225,18 @@ set locale format to =en_us utf-8=
 #+begin_src bash
   export LC_CTYPE=en_US.UTF-8
 #+end_src
-*** guix
-#+begin_src bash :tangle no
-  GUIX_PROFILE="$HOME/.config/guix/current"
-  . "$GUIX_PROFILE/etc/profile"
-#+end_src
 ** editor
 #+begin_src bash
-  # if [ -z "$(which emacs)" ] ; then
-  export EDITOR=$(which emacs)
-  # fi
+  if [ -z "$(which emacs)" ] ; then
+      export EDITOR=$(which emacs)
+  fi
+#+end_src
+** guix
+#+begin_src bash
+  if [ -z "~/.guix-profile" ] ; then
+      export GUIX_PROFILE="~/.guix-profile"
+      . "$GUIX_PROFILE/etc/profile"
+  fi
 #+end_src
 ** path
 #+begin_src bash
