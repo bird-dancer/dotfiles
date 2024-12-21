@@ -66,12 +66,12 @@
   (setq calendar-longitude 13.4)
   (setq circadian-themes '(
                            ;; (:sunrise . modus-operandi-tinted) ;emacs 30
-                           (:sunrise . modus-operandi)
+  			 (:sunrise . modus-operandi)
                            ;; (:sunrise  . ef-day)
                            ;; (:sunset  . ef-night)
-                           ;; (:sunset  . ef-autumn)
+  			 (:sunset  . ef-autumn)
                            ;; (:sunset . tango-dark)
-                           (:sunset . modus-vivendi)
+                           ;; (:sunset . modus-vivendi)
                            ;; (:sunset . ef-owl)
                            ;; (:sunrise . tsdh-light)
                            ;; (:sunset . gruber-darker)
@@ -413,8 +413,8 @@
 (setq org-agenda-start-on-weekday nil)
 
 (setq org-agenda-files
-      '("~/uni/uni.org"
-        "~/uni/personal.org"))
+      '("~/uni/notes/uni.org"
+        "~/uni/notes/personal.org"))
 
 (add-hook 'prog-mode-hook #'hs-minor-mode)
 (global-set-key (kbd "C-c C-h") 'hs-hide-block)

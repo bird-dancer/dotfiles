@@ -162,12 +162,12 @@ picks a light color-theme when the sun is risen and a dark theme when the sun is
     (setq calendar-longitude 13.4)
     (setq circadian-themes '(
                              ;; (:sunrise . modus-operandi-tinted) ;emacs 30
-                             (:sunrise . modus-operandi)
+  			   (:sunrise . modus-operandi)
                              ;; (:sunrise  . ef-day)
                              ;; (:sunset  . ef-night)
-                             ;; (:sunset  . ef-autumn)
+  			   (:sunset  . ef-autumn)
                              ;; (:sunset . tango-dark)
-                             (:sunset . modus-vivendi)
+                             ;; (:sunset . modus-vivendi)
                              ;; (:sunset . ef-owl)
                              ;; (:sunrise . tsdh-light)
                              ;; (:sunset . gruber-darker)
@@ -704,8 +704,8 @@ make it so the agenda always starts today and we can see two weeks from today in
 the files that org-agenda will visit to search for timestamps to use when creating the agenda
 #+begin_src emacs-lisp
   (setq org-agenda-files
-        '("~/uni/uni.org"
-          "~/uni/personal.org"))
+        '("~/uni/notes/uni.org"
+          "~/uni/notes/personal.org"))
 #+end_src
 * editing configuration
 ** folding
