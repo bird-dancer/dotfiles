@@ -1064,7 +1064,7 @@ make garbage-collection pauses faster by decreasing the threshold, increasing th
   (setq gc-cons-threshold (* 10 1000 1000)) ;10mb
 #+end_src
 * TODO
-+ native compile
++ look into [[https://protesilaos.com/codelog/2024-11-28-basic-emacs-configuration/][Emacs: a basic and capable configuration | Protesilaos Stavrou]]
 + use tabs for indentation and make them "sticky"???
 + email
   + gnus

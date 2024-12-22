@@ -22,6 +22,7 @@
 	verify = off
 [gpg]
 	format = ssh
+	helper = store
 [commit]
 	gpgsign = true
 [credential]
