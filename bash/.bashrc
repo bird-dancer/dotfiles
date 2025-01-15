@@ -72,8 +72,6 @@ export HISTCONTROL=ignoreboth:erasedups
 
 bind '"\e[A": history-search-backward'
 bind '"\e[B": history-search-forward'
-#bind '"^[^M-f": history-search-backward'
-#bind '"\e\C-m": history-search-forward'
 
 source ~/.dotfiles/complete-alias/complete_alias
 complete -F _complete_alias "${!BASH_ALIASES[@]}"
@@ -98,10 +96,11 @@ if [ -z "$(which emacs)" ] ; then
     export EDITOR=$(which emacs)
 fi
 
-if [ -z "~/.guix-profile" ] ; then
-    export GUIX_PROFILE="~/.guix-profile"
-    . "$GUIX_PROFILE/etc/profile"
-fi
+#if [ -z "~/.guix-profile" ] ; then
+#export GUIX_PROFILE="~/.guix-profile"
+#. $GUIX_PROFILE/etc/profile
+. ~/.guix-profile/etc/profile
+#fi
 
 if [ -d "$HOME/.cargo" ] ; then
     export PATH="$HOME/.cargo/bin:$PATH"

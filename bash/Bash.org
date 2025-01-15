@@ -165,8 +165,6 @@ tangle to =.inputrc= for other read-line programs
 #+begin_src bash 
   bind '"\e[A": history-search-backward'
   bind '"\e[B": history-search-forward'
-  #bind '"^[^M-f": history-search-backward'
-  #bind '"\e\C-m": history-search-forward'
 #+end_src
 *** auto-completion
 #+begin_src bash :tangle no
@@ -233,10 +231,11 @@ set locale format to =en_us utf-8=
 #+end_src
 ** guix
 #+begin_src bash
-  if [ -z "~/.guix-profile" ] ; then
-      export GUIX_PROFILE="~/.guix-profile"
-      . "$GUIX_PROFILE/etc/profile"
-  fi
+  #if [ -z "~/.guix-profile" ] ; then
+  #export GUIX_PROFILE="~/.guix-profile"
+  #. $GUIX_PROFILE/etc/profile
+  . ~/.guix-profile/etc/profile
+  #fi
 #+end_src
 ** path
 #+begin_src bash
