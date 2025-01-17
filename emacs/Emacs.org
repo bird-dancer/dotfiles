@@ -1112,6 +1112,10 @@ make garbage-collection pauses faster by decreasing the threshold, increasing th
 + Combobulate: https://github.com/mickeynp/combobulate uses Tree-Sitter to provide a structured movement within your code [[https://www.masteringemacs.org/article/combobulate-structured-movement-editing-treesitter][Combobulate: Structured Movement and Editing with Tree-Sitter]]
 + crafted org config: [[file:~/crafted-emacs/docs/crafted-org.org]]
 + [[https://github.com/mclear-tools/tabspaces][GitHub - mclear-tools/tabspaces]]
++ [[https://cachestocaches.com/2017/3/complete-guide-email-emacs-using-mu-and/][A Complete Guide to Email in Emacs using Mu and Mu4e]]
+[[https://arialdomartini.github.io/emacs-zoom][+ Emacs: let's zoom]]
++ https://www.reddit.com/r/emacs/comments/1h1d5k4/how_to_potentially_make_your_eglot_completions/
++ https://www.reddit.com/r/emacs/comments/1h2o8hr/share_your_mx_compile_compilationmode_config/
 ** from doom
 + format+ onsave
 + grammar
