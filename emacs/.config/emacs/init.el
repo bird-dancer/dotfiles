@@ -590,7 +590,14 @@
           "https://mccd.space/feed.xml"
           "https://dthompson.us/feed.xml"
           "https://planet.emacslife.com/atom.xml"
-          "https://archlinux.org/feeds/news/")))
+          "https://news.opensuse.org/feed.xml"
+          "https://irreal.org/blog/?feed=rss2"
+          "https://protesilaos.com/keeb.xml"
+          "https://protesilaos.com/codelog.xml"
+          "https://protesilaos.com/news.xml"
+          "https://drewdevault.com/blog/index.xml"
+          ;; "https://archlinux.org/feeds/news/"
+          "https://blogs.kde.org/index.xml")))
 
 (use-package nov
   :mode ("\\.epub\\'" . nov-mode))
