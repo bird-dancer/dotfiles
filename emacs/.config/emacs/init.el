@@ -568,6 +568,18 @@
 
 (setq dired-auto-revert-buffer t)
 
+(setq dired-guess-shell-alist-user
+      '(("\\.tar\\.gz\\'"
+         "b=$(basename ? .tar.gz); mkdir -p $b; tar xzf ? -C $b")
+        ("\\.tar\\.bz2\\'"
+         "b=$(basename ? .tar.gz); mkdir -p $b; tar xjf ? -C $b")
+        ("\\.tar\\.xz\\'"
+         "b=$(basename ? .tar.gz); mkdir -p $b; tar xJf ? -C $b")
+        ("\\.tar\\'"
+         "b=$(basename ? .tar); mkdir -p $b; tar xf ? -C $b")
+        ("\\.zip\\'"
+         "b=$(basename ? .zip); mkdir -p $b; unzip ? -d $b")))
+
 (setq dired-dwim-target t)
 
 (use-package elfeed

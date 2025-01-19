@@ -987,6 +987,20 @@ manually explore and test HTTP REST webservices
 #+begin_src emacs-lisp
   (setq dired-auto-revert-buffer t)
 #+end_src
+*** extract tar.gz contents in subfolder instead of the current dir
+#+begin_src emacs-lisp
+  (setq dired-guess-shell-alist-user
+        '(("\\.tar\\.gz\\'"
+           "b=$(basename ? .tar.gz); mkdir -p $b; tar xzf ? -C $b")
+          ("\\.tar\\.bz2\\'"
+           "b=$(basename ? .tar.gz); mkdir -p $b; tar xjf ? -C $b")
+          ("\\.tar\\.xz\\'"
+           "b=$(basename ? .tar.gz); mkdir -p $b; tar xJf ? -C $b")
+          ("\\.tar\\'"
+           "b=$(basename ? .tar); mkdir -p $b; tar xf ? -C $b")
+          ("\\.zip\\'"
+           "b=$(basename ? .zip); mkdir -p $b; unzip ? -d $b")))
+#+end_src
 *** make dired guess the target directory when copying
 #+begin_src emacs-lisp
   (setq dired-dwim-target t)
