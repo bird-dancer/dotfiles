@@ -596,6 +596,7 @@
           "https://protesilaos.com/codelog.xml"
           "https://protesilaos.com/news.xml"
           "https://drewdevault.com/blog/index.xml"
+  	  "https://0pointer.net/blog/index.rss20"
           ;; "https://archlinux.org/feeds/news/"
           "https://blogs.kde.org/index.xml")))
 
