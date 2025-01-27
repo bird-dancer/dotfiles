@@ -225,7 +225,7 @@ set locale format to =en_us utf-8=
 #+end_src
 ** editor
 #+begin_src bash
-  if [ -z "$(which emacs)" ] ; then
+  if [ "$(which emacs)" ] ; then
       export EDITOR=$(which emacs)
   fi
 #+end_src

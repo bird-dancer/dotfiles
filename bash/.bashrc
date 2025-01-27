@@ -92,7 +92,7 @@ export CC=gcc CXX=g++
 
 export LC_CTYPE=en_US.UTF-8
 
-if [ -z "$(which emacs)" ] ; then
+if [ "$(which emacs)" ] ; then
     export EDITOR=$(which emacs)
 fi
 
