@@ -181,10 +181,10 @@ picks a light color-theme when the sun is risen and a dark theme when the sun is
 *** fonts
 **** general font
 #+begin_src emacs-lisp
-  ;; (set-frame-font "Comic Shanns Mono 13" nil t)
-  (set-frame-font "Serious Shanns NerdFont 14" nil t)
+  (set-frame-font "Comic Shanns Mono 14" nil t)
+  ;; (set-frame-font "Serious Shanns NerdFont 14" nil t)
   ;; (set-frame-font "Fantasque Sans Mono 12" nil t)
-  (add-to-list 'default-frame-alist '(font . "Serious Shanns NerdFont 14"))
+  (add-to-list 'default-frame-alist '(font . "Comic Shanns Mono 14"))
 #+end_src
 **** icon font
 #+begin_src emacs-lisp
@@ -991,15 +991,17 @@ manually explore and test HTTP REST webservices
 #+begin_src emacs-lisp
   (setq dired-guess-shell-alist-user
         '(("\\.tar\\.gz\\'"
-           "b=$(basename ? .tar.gz); mkdir -p $b; tar xzf ? -C $b")
+           "b=$(basename ? .tar.gz); mkdir -p \"$b\"; tar xzf ? -C \"$b\"")
           ("\\.tar\\.bz2\\'"
-           "b=$(basename ? .tar.gz); mkdir -p $b; tar xjf ? -C $b")
+           "b=$(basename ? .tar.bz2); mkdir -p \"$b\"; tar xjf ? -C \"$b\"")
           ("\\.tar\\.xz\\'"
-           "b=$(basename ? .tar.gz); mkdir -p $b; tar xJf ? -C $b")
+           "b=$(basename ? .tar.xz); mkdir -p \"$b\"; tar xJf ? -C \"$b\"")
           ("\\.tar\\'"
-           "b=$(basename ? .tar); mkdir -p $b; tar xf ? -C $b")
+           "b=$(basename ? .tar); mkdir -p \"$b\"; tar xf ? -C \"$b\"")
           ("\\.zip\\'"
-           "b=$(basename ? .zip); mkdir -p $b; unzip ? -d $b")))
+           "b=$(basename ? .zip); mkdir -p \"$b\"; unzip ? -d \"$b\"")
+  	("\\.rar\\'"
+  	 "b=$(basename ? .rar); mkdir -p \"$b\"; unrar ? \"$b\"")))
 #+end_src
 *** make dired guess the target directory when copying
 #+begin_src emacs-lisp

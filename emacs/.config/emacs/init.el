@@ -82,10 +82,10 @@
                            ))
   (circadian-setup))
 
-;; (set-frame-font "Comic Shanns Mono 13" nil t)
-(set-frame-font "Serious Shanns NerdFont 14" nil t)
+(set-frame-font "Comic Shanns Mono 14" nil t)
+;; (set-frame-font "Serious Shanns NerdFont 14" nil t)
 ;; (set-frame-font "Fantasque Sans Mono 12" nil t)
-(add-to-list 'default-frame-alist '(font . "Serious Shanns NerdFont 14"))
+(add-to-list 'default-frame-alist '(font . "Comic Shanns Mono 14"))
 
 (use-package all-the-icons
   :if (display-graphic-p))
@@ -570,15 +570,17 @@
 
 (setq dired-guess-shell-alist-user
       '(("\\.tar\\.gz\\'"
-         "b=$(basename ? .tar.gz); mkdir -p $b; tar xzf ? -C $b")
+         "b=$(basename ? .tar.gz); mkdir -p \"$b\"; tar xzf ? -C \"$b\"")
         ("\\.tar\\.bz2\\'"
-         "b=$(basename ? .tar.gz); mkdir -p $b; tar xjf ? -C $b")
+         "b=$(basename ? .tar.bz2); mkdir -p \"$b\"; tar xjf ? -C \"$b\"")
         ("\\.tar\\.xz\\'"
-         "b=$(basename ? .tar.gz); mkdir -p $b; tar xJf ? -C $b")
+         "b=$(basename ? .tar.xz); mkdir -p \"$b\"; tar xJf ? -C \"$b\"")
         ("\\.tar\\'"
-         "b=$(basename ? .tar); mkdir -p $b; tar xf ? -C $b")
+         "b=$(basename ? .tar); mkdir -p \"$b\"; tar xf ? -C \"$b\"")
         ("\\.zip\\'"
-         "b=$(basename ? .zip); mkdir -p $b; unzip ? -d $b")))
+         "b=$(basename ? .zip); mkdir -p \"$b\"; unzip ? -d \"$b\"")
+      ("\\.rar\\'"
+       "b=$(basename ? .rar); mkdir -p \"$b\"; unrar ? \"$b\"")))
 
 (setq dired-dwim-target t)
 
