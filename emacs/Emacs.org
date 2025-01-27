@@ -1066,6 +1066,17 @@ use ~emacsclient --eval "(emacs-everywhere)"~ from another window when writing t
 #+begin_src emacs-lisp :tangle no
   (use-package emacs-everywhere)
 #+end_src
+** ollama
+#+begin_src emacs-lisp
+  (use-package ellama
+    :bind ("C-c e" . ellama-transient-main-menu)
+    :init
+    (setopt ellama-chat-display-action-function #'display-buffer-full-frame)
+    (setopt ellama-instant-display-action-function #'display-buffer-at-bottom)
+    :config
+    ;; send last message in chat buffer with C-c C-c
+    (add-hook 'org-ctrl-c-ctrl-c-hook #'ellama-chat-send-last-message))
+#+end_src
 ** email
 *** filtering with notmuch
 #+begin_src emacs-lisp

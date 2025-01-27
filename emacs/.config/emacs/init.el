@@ -618,6 +618,15 @@
   :load-path "~/.guix-profile/share/emacs/site-lisp/pdf-tools-1.1.0"
   :mode ("\\.pdf\\'" . pdf-view-mode))
 
+(use-package ellama
+  :bind ("C-c e" . ellama-transient-main-menu)
+  :init
+  (setopt ellama-chat-display-action-function #'display-buffer-full-frame)
+  (setopt ellama-instant-display-action-function #'display-buffer-at-bottom)
+  :config
+  ;; send last message in chat buffer with C-c C-c
+  (add-hook 'org-ctrl-c-ctrl-c-hook #'ellama-chat-send-last-message))
+
 (use-package notmuch
   :commands notmuch
   :bind (:map global-map ("C-c m" . notmuch)
