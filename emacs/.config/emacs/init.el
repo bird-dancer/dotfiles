@@ -142,6 +142,15 @@
   (delete-window))
 (global-set-key (kbd "C-x C-k") 'kill-buffer-and-close-window)
 
+(global-set-key (kbd "C-x r a") 'append-to-register)
+
+(defun empty-register (register)
+  "Clears out value from Emacs register."
+  (interactive "cRegister: ")
+  (set-register register nil))
+
+(global-set-key (kbd "C-x r e") 'empty-register)
+
 (defun convert-region-decimal-to-hexadecimal (start end)
   "Convert a region from decimal to hexadecimal."
   (interactive "r")
