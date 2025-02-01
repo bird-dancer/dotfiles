@@ -1039,6 +1039,7 @@ subscribe to rss-feeds
             "https://protesilaos.com/codelog.xml"
             "https://protesilaos.com/news.xml"
             "https://drewdevault.com/blog/index.xml"
+  	  "https://lorendb.dev/index.xml"
   	  "https://0pointer.net/blog/index.rss20"
             ;; "https://archlinux.org/feeds/news/"
             "https://blogs.kde.org/index.xml")))
@@ -1091,6 +1092,21 @@ use ~emacsclient --eval "(emacs-everywhere)"~ from another window when writing t
     :config
     ;; send last message in chat buffer with C-c C-c
     (add-hook 'org-ctrl-c-ctrl-c-hook #'ellama-chat-send-last-message))
+#+end_src
+** casual
+#+begin_src emacs-lisp
+  (use-package casual)
+#+end_src
+*** casual-calc
+#+begin_src emacs-lisp
+  (require 'casual-calc)
+  (keymap-set calc-mode-map "C-o" #'casual-calc-tmenu)
+  (keymap-set calc-alg-map "C-o" #'casual-calc-tmenu)
+#+end_src
+*** casual-image
+#+begin_src emacs-lisp
+  (require 'casual-image)
+  (keymap-set image-mode-map "C-o" #'casual-image-tmenu)
 #+end_src
 ** email
 *** filtering with notmuch

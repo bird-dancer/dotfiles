@@ -607,7 +607,8 @@
           "https://protesilaos.com/codelog.xml"
           "https://protesilaos.com/news.xml"
           "https://drewdevault.com/blog/index.xml"
-  	  "https://0pointer.net/blog/index.rss20"
+  	"https://lorendb.dev/index.xml"
+  	"https://0pointer.net/blog/index.rss20"
           ;; "https://archlinux.org/feeds/news/"
           "https://blogs.kde.org/index.xml")))
 
@@ -635,6 +636,15 @@
   :config
   ;; send last message in chat buffer with C-c C-c
   (add-hook 'org-ctrl-c-ctrl-c-hook #'ellama-chat-send-last-message))
+
+(use-package casual)
+
+(require 'casual-calc)
+(keymap-set calc-mode-map "C-o" #'casual-calc-tmenu)
+(keymap-set calc-alg-map "C-o" #'casual-calc-tmenu)
+
+(require 'casual-image)
+(keymap-set image-mode-map "C-o" #'casual-image-tmenu)
 
 (use-package notmuch
   :commands notmuch
