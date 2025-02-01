@@ -18,6 +18,7 @@ alias zrm='sudo zypper remove -u'
 alias zup='sudo zypper update'
 alias zd='sudo zypper dup'
 alias zre='sudo zypper refresh'
+alias zps='sudo zypper ps -s'
 alias zun='zypper packages --unneeded'
 
 eval $(ssh-agent) > /dev/null
