@@ -66,10 +66,11 @@
   (setq calendar-longitude 13.4)
   (setq circadian-themes '(
                            ;; (:sunrise . modus-operandi-tinted) ;emacs 30
-  			 (:sunrise . modus-operandi)
+                           (:sunrise . modus-operandi)
                            ;; (:sunrise  . ef-day)
                            ;; (:sunset  . ef-night)
-  			 (:sunset  . ef-autumn)
+                           ;; (:sunset . ef-autumn)
+  			 (:sunset . modus-vivendi)
                            ;; (:sunset . tango-dark)
                            ;; (:sunset . modus-vivendi)
                            ;; (:sunset . ef-owl)
@@ -363,6 +364,9 @@
 
 (use-package org-appear
   :hook (org-mode . org-appear-mode))
+
+(use-package org-superstar
+  :hook (org-mode . org-superstar-mode))
 
 (custom-set-faces
  '(org-level-1 ((t (:height 1.75))))

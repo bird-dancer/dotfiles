@@ -121,6 +121,7 @@ remove the menu-bar tool-bar and scroll-bar as a measure to remove visual clutte
   (use-package ef-themes)
 #+end_src
 #+begin_src emacs-lisp :tangle no
+  ;; (load-theme 'modus-operandi)
   ;; (load-theme 'ef-cherie t)
   ;; (load-theme 'ef-autumn t)
   ;; (load-theme 'ef-dark t)
@@ -162,10 +163,11 @@ picks a light color-theme when the sun is risen and a dark theme when the sun is
     (setq calendar-longitude 13.4)
     (setq circadian-themes '(
                              ;; (:sunrise . modus-operandi-tinted) ;emacs 30
-  			   (:sunrise . modus-operandi)
+                             (:sunrise . modus-operandi)
                              ;; (:sunrise  . ef-day)
                              ;; (:sunset  . ef-night)
-  			   (:sunset  . ef-autumn)
+                             ;; (:sunset . ef-autumn)
+  			   (:sunset . modus-vivendi)
                              ;; (:sunset . tango-dark)
                              ;; (:sunset . modus-vivendi)
                              ;; (:sunset . ef-owl)
@@ -625,7 +627,7 @@ show style emphasis markers such as the * in =*bold*= when hovering over the wor
 *** fonts and bullets
 **** org-superstar (disabled)
 make bullet points and headings look nicer
-#+begin_src emacs-lisp :tangle no
+#+begin_src emacs-lisp
   (use-package org-superstar
     :hook (org-mode . org-superstar-mode))
 #+end_src
