@@ -59,11 +59,11 @@ shorten my most used =pacman= commands
   alias pacr='sudo pacman -Rs'
   alias paci='pacman -Si'
   alias pacq='pacman -Qs'
-  alias cleanup='sudo pacman -Rns $(pacman -Qtdq)'
+  alias pacleanup='sudo pacman -Rns $(pacman -Qtdq)'
 #+end_src
 **** guix
-#+begin_src bash :tangle no
-  alias cleanup='sudo guix system delete-generations; guix package -d; guix gc'
+#+begin_src bash
+  alias gcleanup='sudo guix system delete-generations; guix package -d; guix gc'
 #+end_src
 **** zypper
 #+begin_src bash
@@ -141,7 +141,7 @@ usage: ex <file>
 
 ** general
 *** set
-#+begin_src bash
+#+begin_src bash :tangle no
   export XDG_RUNTIME_DIR=/run/user/$(id -u)
 #+end_src
 *** set color

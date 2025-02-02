@@ -11,6 +11,8 @@ alias lcear='clear'
 alias clea='clear'
 alias cleat='clear'
 
+alias gcleanup='sudo guix system delete-generations; guix package -d; guix gc'
+
 alias zinf='zypper info --provides --recommends --requires --suggests'
 alias zse='zypper search'
 alias zin='sudo zypper install'
@@ -61,8 +63,6 @@ ex ()
         echo "'$1' is not a valid file"
     fi
 }
-
-export XDG_RUNTIME_DIR=/run/user/$(id -u)
 
 export TERM="xterm-256color"
 #export TERM=konsole

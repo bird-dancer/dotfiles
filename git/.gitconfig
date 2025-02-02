@@ -25,6 +25,7 @@
 	helper = store
 [commit]
 	gpgsign = true
+	helper = store
 [credential]
 	helper = store
 	#credentialStore = gpg
