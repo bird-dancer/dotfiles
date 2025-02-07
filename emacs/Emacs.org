@@ -523,7 +523,7 @@ add nerd-font icons to corfu completion candidates
     ;;(add-to-list 'completion-at-point-functions #'cape-line)
     )
 #+end_src
-** Improve Candidate Filtering with Orderless
+** improve candidate filtering with orderless
 improve vertico and corfu completions by allowing matches to search terms differently ordered
 #+begin_src emacs-lisp
   (use-package orderless
@@ -531,6 +531,11 @@ improve vertico and corfu completions by allowing matches to search terms differ
     (setq completion-styles '(orderless basic)
           completion-category-defaults nil
           completion-category-overrides '((file (styles partial-completion)))))
+#+end_src
+** other completion stuff
+*** bash-completion
+#+begin_src emacs-lisp
+  (use-package bash-completion)
 #+end_src
 * org-mode
 ** defer startup
@@ -888,7 +893,47 @@ enable shellcheck using flymake for checking correctness and scanning common mis
   (use-package flymake-shellcheck
     :hook (bash-ts-mode . flymake-shellcheck-mode))
 #+end_src
-*** rust (not used)
+*** rust-ts-mode get info regarding indentation from rustfmt.toml
+#+begin_src emacs-lisp
+  (use-package toml)
+  (require 'toml)
+
+  (defun my-rust-ts--apply-rustfmt-config (rustfmt-data)
+    "Apply settings from RUSTFMT-DATA to the current buffer.
+  RUSTFMT-DATA is an alist parsed from rustfmt.toml."
+    (let ((hard-tabs (alist-get "hard_tabs" rustfmt-data nil nil #'equal))
+          (tab-spaces (alist-get "tab_spaces" rustfmt-data nil nil #'equal)))
+      (message "rustfmt config: hard_tabs: %s; tab_spaces: %s" hard-tabs tab-spaces)
+      (when (eq hard-tabs t)
+        (setq-local indent-tabs-mode t))
+      (if tab-spaces
+  	(setq-local tab-width tab-spaces)
+        (setq-local tab-width 4))))
+
+  (defun my-rust-ts--find-and-apply-rustfmt-config ()
+    "Look for a rustfmt.toml file in the current project tree and apply its settings."
+    (let ((root (locate-dominating-file default-directory "rustfmt.toml")))
+      (when root
+        (let ((rustfmt-file (expand-file-name "rustfmt.toml" root)))
+          (when (file-exists-p rustfmt-file)
+  	  (message "using rustfmt.toml file: %s" (rustfmt-file))
+            (condition-case err
+                (let ((data (toml:read-from-file rustfmt-file)))
+  		(message "data: %s" data)
+                  (my-rust-ts--apply-rustfmt-config data))
+              (error (message "Error parsing rustfmt.toml: %s" err))))))))
+
+  (add-hook 'rust-ts-mode-hook #'my-rust-ts--find-and-apply-rustfmt-config)
+#+end_src
+#+begin_src emacs-lisp :tangle no
+  (defun my-rust-ts-mode-tab-setup ()
+    "Configure `rust-ts-mode' to use tabs for indentation."
+    (setq indent-tabs-mode t)
+    (setq tab-width 4))
+
+  (add-hook 'rust-ts-mode-hook #'my-rust-ts-mode-tab-setup)
+#+end_src
+*** rust-mode (not used)
 #+begin_src emacs-lisp :tangle no
   (defvar rust-mode-map
     (let ((map (make-sparse-keymap)))
@@ -977,6 +1022,10 @@ scroll to bottom in compile mode output buffer
 #+begin_src emacs-lisp
   (setq compilation-scroll-output 'first-error)
 #+end_src
+** which-function-mode
+#+begin_src emacs-lisp
+  (add-hook 'prog-mode-hook #'which-function-mode)
+#+end_src
 ** debugging
 #+begin_src emacs-lisp :tangle no
   (use-package dape)
@@ -999,6 +1048,12 @@ manually explore and test HTTP REST webservices
 *** show sizes of all files in human readable format
 #+begin_src emacs-lisp
   (setq dired-listing-switches "-alh")
+#+end_src
+*** show sizes of folders
+#+begin_src emacs-lisp
+  (use-package dired-du
+    :after dired
+    :config (setq dired-du-size-format t))
 #+end_src
 *** automatically update dired buffers on revisiting their directory
 #+begin_src emacs-lisp

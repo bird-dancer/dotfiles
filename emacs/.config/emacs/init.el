@@ -313,6 +313,8 @@
         completion-category-defaults nil
         completion-category-overrides '((file (styles partial-completion)))))
 
+(use-package bash-completion)
+
 (use-package org
   :ensure nil				;load built in org-mode
   :commands (org-mode))
@@ -529,6 +531,36 @@
   :mode ("\\.md\\'" . markdown-mode)
   :config (setq markdown-command "multimarkdown"))
 
+(use-package toml)
+(require 'toml)
+
+(defun my-rust-ts--apply-rustfmt-config (rustfmt-data)
+  "Apply settings from RUSTFMT-DATA to the current buffer.
+RUSTFMT-DATA is an alist parsed from rustfmt.toml."
+  (let ((hard-tabs (alist-get "hard_tabs" rustfmt-data nil nil #'equal))
+        (tab-spaces (alist-get "tab_spaces" rustfmt-data nil nil #'equal)))
+    (message "rustfmt config: hard_tabs: %s; tab_spaces: %s" hard-tabs tab-spaces)
+    (when (eq hard-tabs t)
+      (setq-local indent-tabs-mode t))
+    (if tab-spaces
+      (setq-local tab-width tab-spaces)
+      (setq-local tab-width 4))))
+
+(defun my-rust-ts--find-and-apply-rustfmt-config ()
+  "Look for a rustfmt.toml file in the current project tree and apply its settings."
+  (let ((root (locate-dominating-file default-directory "rustfmt.toml")))
+    (when root
+      (let ((rustfmt-file (expand-file-name "rustfmt.toml" root)))
+        (when (file-exists-p rustfmt-file)
+  	(message "using rustfmt.toml file: %s" (rustfmt-file))
+          (condition-case err
+              (let ((data (toml:read-from-file rustfmt-file)))
+  	      (message "data: %s" data)
+                (my-rust-ts--apply-rustfmt-config data))
+            (error (message "Error parsing rustfmt.toml: %s" err))))))))
+
+(add-hook 'rust-ts-mode-hook #'my-rust-ts--find-and-apply-rustfmt-config)
+
 (use-package php-mode)
 
 (use-package web-mode
@@ -570,6 +602,8 @@
 
 (setq compilation-scroll-output 'first-error)
 
+(add-hook 'prog-mode-hook #'which-function-mode)
+
 (use-package restclient
   :defer t)
 
@@ -578,6 +612,10 @@
   :hook (dired-mode . all-the-icons-dired-mode))
 
 (setq dired-listing-switches "-alh")
+
+(use-package dired-du
+  :after dired
+  :config (setq dired-du-size-format t))
 
 (setq dired-auto-revert-buffer t)
 
