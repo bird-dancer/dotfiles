@@ -552,7 +552,7 @@ RUSTFMT-DATA is an alist parsed from rustfmt.toml."
     (when root
       (let ((rustfmt-file (expand-file-name "rustfmt.toml" root)))
         (when (file-exists-p rustfmt-file)
-  	(message "using rustfmt.toml file: %s" (rustfmt-file))
+  	(message "using rustfmt.toml file: %s" rustfmt-file)
           (condition-case err
               (let ((data (toml:read-from-file rustfmt-file)))
   	      (message "data: %s" data)
