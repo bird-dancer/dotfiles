@@ -65,14 +65,13 @@
   (setq calendar-latitude 52.5)
   (setq calendar-longitude 13.4)
   (setq circadian-themes '(
-                           ;; (:sunrise . modus-operandi-tinted) ;emacs 30
-                           (:sunrise . modus-operandi)
+                           (:sunrise . modus-operandi-tinted)
                            ;; (:sunrise  . ef-day)
                            ;; (:sunset  . ef-night)
                            ;; (:sunset . ef-autumn)
-  			 (:sunset . modus-vivendi)
+                           (:sunset . modus-vivendi)
                            ;; (:sunset . tango-dark)
-                           ;; (:sunset . modus-vivendi)
+			   ;; (:sunset . modus-vivendi)
                            ;; (:sunset . ef-owl)
                            ;; (:sunrise . tsdh-light)
                            ;; (:sunset . gruber-darker)
@@ -100,12 +99,8 @@
   (setq display-time-24hr-format t)
   (display-time))
 
-(use-package which-key
-  ;; :ensure nil				;included in emacs 30+
-  :diminish which-key-mode
-  :config
-  (which-key-mode)
-  (setq which-key-idle-delay 1))
+(setq which-key-idle-delay 1)
+(which-key-mode)
 
 (global-set-key (kbd "C-x C-j") 'join-line)
 
@@ -524,6 +519,7 @@
   :custom
   (treesit-auto-install 'prompt)
   :config
+  (delete 'rust treesit-auto-langs)
   (treesit-auto-add-to-auto-mode-alist 'all)
   (global-treesit-auto-mode))
 
@@ -543,7 +539,7 @@ RUSTFMT-DATA is an alist parsed from rustfmt.toml."
     (when (eq hard-tabs t)
       (setq-local indent-tabs-mode t))
     (if tab-spaces
-      (setq-local tab-width tab-spaces)
+        (setq-local tab-width tab-spaces)
       (setq-local tab-width 4))))
 
 (defun my-rust-ts--find-and-apply-rustfmt-config ()
@@ -552,14 +548,20 @@ RUSTFMT-DATA is an alist parsed from rustfmt.toml."
     (when root
       (let ((rustfmt-file (expand-file-name "rustfmt.toml" root)))
         (when (file-exists-p rustfmt-file)
-  	(message "using rustfmt.toml file: %s" rustfmt-file)
+          (message "using rustfmt.toml file: %s" rustfmt-file)
           (condition-case err
               (let ((data (toml:read-from-file rustfmt-file)))
-  	      (message "data: %s" data)
+                (message "data: %s" data)
                 (my-rust-ts--apply-rustfmt-config data))
             (error (message "Error parsing rustfmt.toml: %s" err))))))))
 
 (add-hook 'rust-ts-mode-hook #'my-rust-ts--find-and-apply-rustfmt-config)
+
+(use-package rust-mode
+  :init (setq rust-mode-treesitter-derive t)
+  :mode ("\\.rs\\'" . rust-mode)
+  :config
+  (add-hook 'rust-mode-hook 'eglot-ensure))
 
 (use-package php-mode)
 
@@ -607,6 +609,8 @@ RUSTFMT-DATA is an alist parsed from rustfmt.toml."
 (use-package restclient
   :defer t)
 
+(use-package anki-editor)
+
 (use-package all-the-icons-dired
   :after all-the-icons
   :hook (dired-mode . all-the-icons-dired-mode))
@@ -630,10 +634,16 @@ RUSTFMT-DATA is an alist parsed from rustfmt.toml."
          "b=$(basename ? .tar); mkdir -p \"$b\"; tar xf ? -C \"$b\"")
         ("\\.zip\\'"
          "b=$(basename ? .zip); mkdir -p \"$b\"; unzip ? -d \"$b\"")
-      ("\\.rar\\'"
-       "b=$(basename ? .rar); mkdir -p \"$b\"; unrar ? \"$b\"")))
+        ("\\.rar\\'"
+         "b=$(basename ? .rar); mkdir -p \"$b\"; unrar ? \"$b\"")))
+
+(add-to-list 'dired-guess-shell-alist-user
+             '("\\.jpg\\'"
+               "xdg-open ?"))
 
 (setq dired-dwim-target t)
+
+(setq dired-recursive-copies 'always)
 
 (use-package elfeed
   :bind ("C-x w" . elfeed)
