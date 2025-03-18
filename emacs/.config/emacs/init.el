@@ -649,8 +649,11 @@ RUSTFMT-DATA is an alist parsed from rustfmt.toml."
           "https://protesilaos.com/codelog.xml"
           "https://protesilaos.com/news.xml"
           "https://drewdevault.com/blog/index.xml"
-  	"https://lorendb.dev/index.xml"
-  	"https://0pointer.net/blog/index.rss20"
+          "http://dominique.leuenberger.net/blog/feed"
+          "https://lorendb.dev/index.xml"
+          "https://0pointer.net/blog/index.rss20"
+          "https://robert.kra.hn/feed.xml"
+          "https://lambdaland.org/index.xml"
           ;; "https://archlinux.org/feeds/news/"
           "https://blogs.kde.org/index.xml")))
 
