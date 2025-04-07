@@ -9,7 +9,7 @@
 # The bell style used e.g. on error or tab completion, possible values
 # are `none', `visible', and `audible' the ringing the bell.
 #
-#set bell-style none
+set bell-style visible
 
 #
 # If set to on, words which have more than one possible completion without
@@ -24,8 +24,21 @@ set show-all-if-unmodified on
 #
 #set show-all-if-ambiguous on
 
+# go up in history with arrow keys
 "\e[A": history-search-backward
 "\e[B": history-search-forward
+
+# go up in history with meta P
+"\eP": history-search-backward
+"\eN": history-search-forward
+
+
+set expand-tilde on
+
+set keyseq-timeout 1200
+
+set colored-stats on
+set colored-completion-prefix on
 
 #
 # end
