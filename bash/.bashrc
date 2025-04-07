@@ -20,12 +20,15 @@ alias zrm='sudo zypper remove -u'
 alias zup='sudo zypper update'
 alias zd='sudo zypper dup'
 alias zre='sudo zypper refresh'
+alias zref='sudo zypper refresh -f'
 alias zps='sudo zypper ps -s'
 alias zun='zypper packages --unneeded'
 
 eval $(ssh-agent) > /dev/null
 
 alias build='rm -rf build && cmake -B build -DCMAKE_BUILD_TYPE=Debug -DCMAKE_EXPORT_COMPILE_COMMANDS=1 && make -C'
+
+alias make='make -j $(nproc)'
 
 export CC=gcc CXX=g++
 alias comp='gcc -std=c17 -Wall -Wextra -fstack-protector -g3 -lm'
@@ -97,11 +100,11 @@ if [ "$(which emacs)" ] ; then
     export EDITOR=$(which emacs)
 fi
 
-#if [ -z "~/.guix-profile" ] ; then
-#export GUIX_PROFILE="~/.guix-profile"
-#. $GUIX_PROFILE/etc/profile
-. ~/.guix-profile/etc/profile
-#fi
+if [ -d "$HOME/.config/guix/current/bin" ]; then
+    GUIX_PROFILE="$HOME/.guix-profile"
+    . "$GUIX_PROFILE/etc/profile"
+    export PATH="$HOME/.config/guix/current/bin:$PATH"
+fi
 
 if [ -d "$HOME/.cargo" ] ; then
     export PATH="$HOME/.cargo/bin:$PATH"
