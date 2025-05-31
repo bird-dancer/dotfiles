@@ -1,3 +1,5 @@
+test -z "$PROFILEREAD" && . /etc/profile || true
+
 [[ -r /etc/bash.bashrc ]] && . /etc/bash.bashrc
 
 alias docker_stop='[ -n "$(sudo docker ps -a -q)" ] && sudo docker stop $(sudo docker ps -a -q) || echo "No containers to stop"'
@@ -100,11 +102,15 @@ if [ "$(which emacs)" ] ; then
     export EDITOR=$(which emacs)
 fi
 
+GUIX_PROFILE="$HOME/.guix-profile"
 if [ -d "$HOME/.config/guix/current/bin" ]; then
-    GUIX_PROFILE="$HOME/.guix-profile"
-    . "$GUIX_PROFILE/etc/profile"
     export PATH="$HOME/.config/guix/current/bin:$PATH"
 fi
+if [ -d "$GUIX_PROFILE/etc/profile" ]; then
+     . "$GUIX_PROFILE/etc/profile"
+fi
+
+export NIX_PATH=nixpkgs=channel:nixos-unstable
 
 if [ -d "$HOME/.cargo" ] ; then
     export PATH="$HOME/.cargo/bin:$PATH"

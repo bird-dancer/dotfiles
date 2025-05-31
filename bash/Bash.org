@@ -9,6 +9,10 @@
 this bash config uses =bash-complete= and has no further requirements. The contents of the code blocks will be tangled to =~/.bashrc= and =~/.bash_profile=.
 * profile
 to load env variables to the login shell rather then just the active shell
+** read system wide
+#+begin_src bash
+  test -z "$PROFILEREAD" && . /etc/profile || true
+#+end_src
 ** load bashrc to bash_profile
 #+begin_src bash :tangle no
   [[ -r ~/.bashrc ]] && . ~/.bashrc
@@ -239,11 +243,17 @@ set locale format to =en_us utf-8=
 #+end_src
 ** guix
 #+begin_src bash
+  GUIX_PROFILE="$HOME/.guix-profile"
   if [ -d "$HOME/.config/guix/current/bin" ]; then
-      GUIX_PROFILE="$HOME/.guix-profile"
-      . "$GUIX_PROFILE/etc/profile"
       export PATH="$HOME/.config/guix/current/bin:$PATH"
   fi
+  if [ -d "$GUIX_PROFILE/etc/profile" ]; then
+       . "$GUIX_PROFILE/etc/profile"
+  fi
+#+end_src
+** nix
+#+begin_src bash
+  export NIX_PATH=nixpkgs=channel:nixos-unstable
 #+end_src
 ** path
 #+begin_src bash
@@ -275,5 +285,5 @@ set locale format to =en_us utf-8=
 + boxes?
 + fzy
 + hstr
-+ 
++ test -s ~/.alias && . ~/.alias || true
 + [[https://github.com/ajeetdsouza/zoxide][GitHub - ajeetdsouza/zoxide: A smarter cd command. Supports all major shells.]]
