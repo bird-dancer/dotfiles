@@ -1,0 +1,4 @@
+set history save on
+set debuginfod enabled on
+set print pretty on
+#set history remove-duplicates <count>
