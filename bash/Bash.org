@@ -21,6 +21,10 @@ to load env variables to the login shell rather then just the active shell
 #+begin_src bash :tangle .profile
   export LANGUAGE=en_US
 #+end_src
+** ghidra
+#+begin_src bash :tangle .profile
+  export GHIDRA_INSTALL_DIR=/lib64/ghidra/
+#+end_src
 * bashrc
 ** include system wide bashrc
 #+begin_src bash
@@ -149,7 +153,10 @@ usage: ex <file>
       fi
   }
 #+end_src
-
+*** wget
+#+begin_src bash
+alias wget='wget2'
+#+end_src
 ** general
 *** set
 #+begin_src bash :tangle no
@@ -254,6 +261,10 @@ set locale format to =en_us utf-8=
 ** nix
 #+begin_src bash
   export NIX_PATH=nixpkgs=channel:nixos-unstable
+#+end_src
+** ghidra
+#+begin_src bash
+  export GHIDRA_INSTALL_DIR=/lib64/ghidra/
 #+end_src
 ** path
 #+begin_src bash

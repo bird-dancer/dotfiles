@@ -69,6 +69,8 @@ ex ()
     fi
 }
 
+alias wget='wget2'
+
 export TERM="xterm-256color"
 #export TERM=konsole
 
@@ -111,6 +113,8 @@ if [ -d "$GUIX_PROFILE/etc/profile" ]; then
 fi
 
 export NIX_PATH=nixpkgs=channel:nixos-unstable
+
+export GHIDRA_INSTALL_DIR=/lib64/ghidra/
 
 if [ -d "$HOME/.cargo" ] ; then
     export PATH="$HOME/.cargo/bin:$PATH"
