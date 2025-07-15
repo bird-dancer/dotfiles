@@ -94,6 +94,7 @@ shorten my most used =pacman= commands
   alias zref='sudo zypper refresh -f'
   alias zps='sudo zypper ps -s'
   alias zun='zypper packages --unneeded'
+  alias zlo='sudo zypper addlock'
 #+end_src
 *** ssh
 remember my ssh-keys during a session

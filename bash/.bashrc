@@ -29,6 +29,7 @@ alias zre='sudo zypper refresh'
 alias zref='sudo zypper refresh -f'
 alias zps='sudo zypper ps -s'
 alias zun='zypper packages --unneeded'
+alias zlo='sudo zypper addlock'
 
 eval $(ssh-agent) > /dev/null
 
