@@ -75,6 +75,13 @@ shorten my most used =pacman= commands
 #+begin_src bash
   alias gcleanup='sudo guix system delete-generations; guix package -d; guix gc'
 #+end_src
+**** nix
+#+begin_src bash
+  alias nup='nix-channel --update; nix-env -u'
+#+end_src
+#+begin_src bash
+  alias nclean='nix-env --delete-generations +1; nix-collect-garbage'
+#+end_src
 **** zypper
 #+begin_src bash
   alias zinf='zypper info --provides --recommends --requires --suggests'
@@ -244,18 +251,24 @@ set locale format to =en_us utf-8=
 #+end_src
 ** editor
 #+begin_src bash
-  if [ "$(which emacs)" ] ; then
-      export EDITOR=$(which emacs)
+  if command -v emacs > /dev/null ; then
+      export EDITOR=$(command -v emacs)
   fi
 #+end_src
 ** guix
 #+begin_src bash
-  GUIX_PROFILE="$HOME/.guix-profile"
+  export GUIX_PROFILE="$HOME/.guix-profile"
   if [ -d "$HOME/.config/guix/current/bin" ]; then
       export PATH="$HOME/.config/guix/current/bin:$PATH"
   fi
+  if [ -d "$HOME/.guix-profile" ]; then
+      export PATH="$HOME/.guix-profile/bin:$PATH"
+  fi
   if [ -d "$GUIX_PROFILE/etc/profile" ]; then
-       . "$GUIX_PROFILE/etc/profile"
+      . "$GUIX_PROFILE/etc/profile"
+  fi
+  if [ -d "$GUIX_PROFILE/lib" ]; then
+      export "LD_LIBRARY_PATH=$GUIX_PROFILE/lib:$LD_LIBRARY_PATH"
   fi
 #+end_src
 ** nix

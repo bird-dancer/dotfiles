@@ -15,6 +15,10 @@ alias cleat='clear'
 
 alias gcleanup='sudo guix system delete-generations; guix package -d; guix gc'
 
+alias nup='nix-channel --update; nix-env -u'
+
+alias nclean='nix-env --delete-generations +1; nix-collect-garbage'
+
 alias zinf='zypper info --provides --recommends --requires --suggests'
 alias zse='zypper search'
 alias zin='sudo zypper install'
@@ -100,16 +104,22 @@ export CC=gcc CXX=g++
 
 export LC_CTYPE=en_US.UTF-8
 
-if [ "$(which emacs)" ] ; then
-    export EDITOR=$(which emacs)
+if command -v emacs > /dev/null ; then
+    export EDITOR=$(command -v emacs)
 fi
 
-GUIX_PROFILE="$HOME/.guix-profile"
+export GUIX_PROFILE="$HOME/.guix-profile"
 if [ -d "$HOME/.config/guix/current/bin" ]; then
     export PATH="$HOME/.config/guix/current/bin:$PATH"
 fi
+if [ -d "$HOME/.guix-profile" ]; then
+    export PATH="$HOME/.guix-profile/bin:$PATH"
+fi
 if [ -d "$GUIX_PROFILE/etc/profile" ]; then
-     . "$GUIX_PROFILE/etc/profile"
+    . "$GUIX_PROFILE/etc/profile"
+fi
+if [ -d "$GUIX_PROFILE/lib" ]; then
+    export "LD_LIBRARY_PATH=$GUIX_PROFILE/lib:$LD_LIBRARY_PATH"
 fi
 
 export NIX_PATH=nixpkgs=channel:nixos-unstable
