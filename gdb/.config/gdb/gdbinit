@@ -1,4 +1,5 @@
 set history save on
 set debuginfod enabled on
+set history filename ~/.gdb_history
 set print pretty on
 #set history remove-duplicates <count>
