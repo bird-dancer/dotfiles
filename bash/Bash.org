@@ -78,9 +78,10 @@ shorten my most used =pacman= commands
 **** nix
 #+begin_src bash
   alias nup='nix-channel --update; nix-env -u'
-#+end_src
-#+begin_src bash
   alias nclean='nix-env --delete-generations +1; nix-collect-garbage'
+  alias nse='nix search nixpkgs'
+  alias nls='nix-env -q --installed'
+  alias nrm='nix-env --uninstall'
 #+end_src
 **** zypper
 #+begin_src bash
@@ -161,9 +162,13 @@ usage: ex <file>
       fi
   }
 #+end_src
+*** python
+#+begin_src bash
+  alias python='python3'
+#+end_src
 *** wget
 #+begin_src bash
-alias wget='wget2'
+  alias wget='wget2'
 #+end_src
 ** general
 *** set
@@ -275,6 +280,7 @@ set locale format to =en_us utf-8=
 ** nix
 #+begin_src bash
   export NIX_PATH=nixpkgs=channel:nixos-unstable
+  export NIX_CONFIG="experimental-features = nix-command flakes"
 #+end_src
 ** ghidra
 #+begin_src bash

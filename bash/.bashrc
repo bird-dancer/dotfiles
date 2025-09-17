@@ -16,8 +16,10 @@ alias cleat='clear'
 alias gcleanup='sudo guix system delete-generations; guix package -d; guix gc'
 
 alias nup='nix-channel --update; nix-env -u'
-
 alias nclean='nix-env --delete-generations +1; nix-collect-garbage'
+alias nse='nix search nixpkgs'
+alias nls='nix-env -q --installed'
+alias nrm='nix-env --uninstall'
 
 alias zinf='zypper info --provides --recommends --requires --suggests'
 alias zse='zypper search'
@@ -74,6 +76,8 @@ ex ()
     fi
 }
 
+alias python='python3'
+
 alias wget='wget2'
 
 export TERM="xterm-256color"
@@ -124,6 +128,7 @@ if [ -d "$GUIX_PROFILE/lib" ]; then
 fi
 
 export NIX_PATH=nixpkgs=channel:nixos-unstable
+export NIX_CONFIG="experimental-features = nix-command flakes"
 
 export GHIDRA_INSTALL_DIR=/lib64/ghidra/
 
