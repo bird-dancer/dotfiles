@@ -1,0 +1,272 @@
+#+TITLE:  config
+#+AUTHOR: Felix Dumbeck
+#+STARTUP: fold
+#+PROPERTY: header-args :emacs-lisp :tangle ./init.el :results silent :mkdirp yes
+#+auto_tangle: t
+
+* measure startup performance (disabled)
+in order to measure the time it takes for Emacs to startup use ~emacs-init-time~
+see what packages are loaded at startup (*only have it enabled when debugging!*):
+#+begin_src emacs-lisp :tangle no
+  (setq use-package-compute-statistics t)
+  (setq debug-on-error t)
+  (setq use-package-verbose t)
+#+end_src
+
+* load scame
+#+begin_src emacs-lisp
+  (load "~/scame/base.el" nil t)
+  ;; (load "~/Documents/scame/extended/org-mode.el" nil t)
+  ;; (load "~/Documents/scame/extended/editing-config.el" nil t)
+  ;; (load "~/Documents/scame/extended/multiple-cursors.el" nil t)
+  ;; (load "~/Documents/scame/extended/spell-check.el" nil t)
+  ;; (load "~/Documents/scame/extended/dired-setting.el" nil t)
+  ;; (load "~/Documents/scame/extended/mode-line.el" nil t)
+  ;; (load "~/Documents/scame/extended/git.el" nil t)
+  ;; (load "~/Documents/scame/extended/buffer-completion-system.el" nil t)
+  ;; (load "~/Documents/scame/extended/minibuffer-completion-system.el" nil t)
+  ;; (load "~/Documents/scame/extended/more-packages.el" nil t)
+  (load "~/scame/extended.el" nil t)
+#+end_src
+
+* looks
+#+begin_src emacs-lisp
+  (use-package ef-themes)
+  (use-package doric-themes)
+  (when (display-graphic-p)
+    (set-frame-font "Comic Shanns Mono 14" nil t)
+    ;; (load-theme 'modus-operandi-tinted)
+    ;; (load-theme 'modus-operandi-tinted)
+    ;; (load-theme 'doric-wind)
+    ;; (load-theme 'doric-earth)
+    ;; (load-theme 'doric-light)
+    (load-theme 'doric-cherry)
+    ;; (load-theme 'doric-marble)
+    ;; (load-theme 'ef-autumn)
+    )
+  ;; ;; (set-face-attribute hl-line-face nil :underline t)
+#+end_src
+#+begin_src emacs-lisp :tangle no
+  (use-package standard-themes
+    :ensure t
+    :init
+    ;; This makes the Modus commands listed below consider only the
+    ;; Standard themes.  For an alternative that includes Modus and all
+    ;; derivative themes (like Standard), enable the
+    ;; `modus-themes-include-derivatives-mode' instead.
+    (standard-themes-take-over-modus-themes-mode 1)
+    :bind
+    (("<f5>" . modus-themes-rotate)
+     ("C-<f5>" . modus-themes-select)
+     ("M-<f5>" . modus-themes-load-random))
+    :config
+    ;; All customisations here.
+    (setq modus-themes-mixed-fonts t)
+    (setq modus-themes-italic-constructs t)
+
+    ;; Finally, load your theme of choice (or a random one with
+    ;; `modus-themes-load-random', `modus-themes-load-random-dark',
+    ;; `modus-themes-load-random-light').
+    (modus-themes-load-theme 'standard-light-tinted))
+#+end_src
+** modus theme modifications
+for emacs 30:
+#+begin_src emacs-lisp :tangle no
+  (setq modus-themes-common-palette-overrides
+        '((border-mode-line-active unspecified)
+          (border-mode-line-inactive unspecified)))
+#+end_src
+
+#+begin_src emacs-lisp
+  (setq modus-themes-fringes nil)
+  (add-hook 'enable-theme-functions
+            (lambda (&rest _) (set-face-foreground
+                               'vertical-border (face-background 'default))))
+#+end_src
+* user specific
+#+begin_src emacs-lisp
+  ;; user info
+  (setq user-full-name "Felix Dumbeck"
+        user-mail-address "felix@dumbeck.net")
+
+  (setq org-agenda-files
+        '("~/uni/notes/uni.org"
+          "~/uni/notes/personal.org"))
+#+end_src
+
+* packages
+** org-roam
+#+begin_src emacs-lisp
+  (setq completion-in-region-function #'completion--in-region)
+  (use-package org-roam
+    :custom
+    (org-roam-directory (file-truename "~/Documents/Notes"))
+    :bind (("C-c n l" . org-roam-buffer-toggle)
+           ("C-c n f" . org-roam-node-find)
+           ("C-c n g" . org-roam-graph)
+           ("C-c n i" . org-roam-node-insert)
+           ("C-c n c" . org-roam-capture)
+           ;; Dailies
+           ("C-c n j" . org-roam-dailies-capture-today))
+    :config
+    ;; If you're using a vertical completion framework, you might want a more informative completion interface
+    (setq org-roam-node-display-template (concat "${title:*} " (propertize "${tags:10}" 'face 'org-tag)))
+    (org-roam-db-autosync-mode))
+#+end_src
+** emacs-everywhere
+#+begin_src emacs-lisp :tangle no
+  (use-package emacs-everywhere
+    :ensure t)
+#+end_src
+** lsp-mode
+#+begin_src emacs-lisp :tangle no
+  (use-package lsp-mode
+    :init
+    ;; set prefix for lsp-command-keymap (few alternatives - "C-l", "C-c l")
+    (setq lsp-keymap-prefix "C-=")
+    :hook (;; replace XXX-mode with concrete major-mode(e. g. python-mode)
+           ;; (java-ts-mode . lsp)
+           ;; if you want which-key integration
+           (lsp-mode . lsp-enable-which-key-integration))
+    :commands lsp)
+
+  ;; optionally
+  (use-package lsp-ui :commands lsp-ui-mode)
+
+  ;; optionally if you want to use debugger
+  ;; (use-package dap-mode)
+  ;; (use-package dap-LANGUAGE) to load the dap adapter for your language
+
+  ;; (use-package lsp-java)
+
+#+end_src
+** show weather in modeline
+#+begin_src emacs-lisp :tangle no
+  (use-package display-wttr
+    ;; :custom
+    ;; (display-wttr-format "4")
+    ;; (display-wttr-locations '(""))
+    ;; (display-wttr-interval (* 60 60))
+    :config
+    (display-wttr-mode))
+#+end_src
+** elf-feed
+subscribe to rss-feeds
+#+begin_src emacs-lisp
+  (use-package elfeed
+    :bind ("C-x w" . elfeed)
+    :config
+    (setq elfeed-feeds
+          '("http://nullprogram.com/feed/"
+  	  "https://nixos.org/blog/announcements-rss.xml"
+  	  "https://www.schneier.com/feed/atom/"
+            "https://mccd.space/feed.xml"
+            "https://dthompson.us/feed.xml"
+            ;; "https://planet.emacslife.com/atom.xml"
+  	  "https://guix.gnu.org/feeds/blog.atom"
+  	  "https://chrismaiorana.com/feed/"
+  	  "https://blog.hansenpartnership.com/feed/"
+            "https://news.opensuse.org/feed.xml"
+            "https://irreal.org/blog/?feed=rss2"
+            "https://protesilaos.com/keeb.xml"
+            "https://protesilaos.com/codelog.xml"
+            "https://protesilaos.com/news.xml"
+            "https://drewdevault.com/blog/index.xml"
+            "http://dominique.leuenberger.net/blog/feed"
+            "https://lorendb.dev/index.xml"
+            "https://0pointer.net/blog/index.rss20"
+            "https://robert.kra.hn/feed.xml"
+            "https://lambdaland.org/index.xml"
+  	  "https://cjohansen.no/atom.xml"
+            ;; "https://archlinux.org/feeds/news/"
+            "https://blogs.kde.org/index.xml")))
+#+end_src
+* bindings
+** open switch-to-buffer with =C-x C-b=
+=C-x C-b= same as =C-x b= because that's what i always want
+#+begin_src emacs-lisp :tangle no
+  (bind-key "C-x C-b" #'switch-to-buffer)
+#+end_src
+** compile-mode
+#+begin_src emacs-lisp
+  (bind-key "C-c c c" #'compile)
+  (bind-key "C-c c r" #'recompile)
+#+end_src
+** yank (paste) when pressing C-z
+because it is very confusing when switching between qwerty and qwertz and the window gets minimized
+#+begin_src emacs-lisp
+  (bind-key "C-z" #'yank)
+#+end_src
+* langauge specific
+** nix-ts-mode
+#+begin_src emacs-lisp
+  (use-package nix-ts-mode
+    :mode ("\\.toml\\'" . nix-ts-mode))
+#+end_src
+** java
+#+begin_src emacs-lisp
+  (use-package eglot-java)
+#+end_src
+** rust
+*** rust-mode
+#+begin_src emacs-lisp :tangle no
+  (use-package rust-mode
+    :init (setq rust-mode-treesitter-derive t)
+    :mode ("\\.rs\\'" . rust-mode)
+    :config
+    (add-hook 'rust-mode-hook 'eglot-ensure))
+#+end_src
+*** rust-ts-mode get info regarding indentation from rustfmt.toml
+#+begin_src emacs-lisp :tangle no
+  (use-package toml
+    :defer t)
+
+  (defun my-rust-ts--apply-rustfmt-config (rustfmt-data)
+    "Apply settings from RUSTFMT-DATA to the current buffer.
+  RUSTFMT-DATA is an alist parsed from rustfmt.toml."
+    (let ((hard-tabs (alist-get "hard_tabs" rustfmt-data nil nil #'equal))
+          (tab-spaces (alist-get "tab_spaces" rustfmt-data nil nil #'equal)))
+      (message "rustfmt config: hard_tabs: %s; tab_spaces: %s" hard-tabs tab-spaces)
+      (when (eq hard-tabs t)
+        (setq-local indent-tabs-mode t))
+      (if tab-spaces
+          (setq-local tab-width tab-spaces)
+        (setq-local tab-width 4))))
+
+  (defun my-rust-ts--find-and-apply-rustfmt-config ()
+    "Look for a rustfmt.toml file in the current project tree and apply its settings."
+    (let ((root (locate-dominating-file default-directory "rustfmt.toml")))
+      (when root
+        (let ((rustfmt-file (expand-file-name "rustfmt.toml" root)))
+          (when (file-exists-p rustfmt-file)
+            (message "using rustfmt.toml file: %s" rustfmt-file)
+            (condition-case err
+  	      (progn
+  		(require 'toml)
+  		(let ((data (toml:read-from-file rustfmt-file)))
+                    (message "data: %s" data)
+                    (my-rust-ts--apply-rustfmt-config data))
+  		(error (message "Error parsing rustfmt.toml: %s" err)))))))))
+
+  (add-hook 'rust-ts-mode-hook #'my-rust-ts--find-and-apply-rustfmt-config)
+#+end_src
+
+* tramp remote path for nixos
+#+begin_src emacs-lisp
+  (require 'tramp)
+  (setq tramp-remote-process-environment
+        (append
+         (list (concat "PATH="
+                       "/run/wrappers/bin" ":"
+                       "/home/admin/.nix-profile/bin" ":"
+                       "/nix/profile/bin" ":"
+                       "/home/admin/.local/state/nix/profile/bin" ":"
+                       "/etc/profiles/per-user/admin/bin" ":"
+                       "/nix/var/nix/profiles/default/bin" ":"
+                       "/run/current-system/sw/bin" ":"
+                       "/bin" ":" "/usr/bin")) ; Match terminal PATH
+         tramp-remote-process-environment))
+#+end_src
+* look into:
++ [[https://github.com/konrad1977/flyover][GitHub - konrad1977/flyover: A beautiful inline overlay for Emacs (Flycheck |...]]
+
