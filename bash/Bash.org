@@ -10,16 +10,21 @@ this bash config uses =bash-complete= and has no further requirements. The conte
 * profile
 to load env variables to the login shell rather then just the active shell
 ** read system wide
-#+begin_src bash
+#+begin_src bash :tangle .profile
   test -z "$PROFILEREAD" && . /etc/profile || true
-#+end_src
-** load bashrc to bash_profile
-#+begin_src bash :tangle no
-  [[ -r ~/.bashrc ]] && . ~/.bashrc
 #+end_src
 ** language
 #+begin_src bash :tangle .profile
   export LANGUAGE=en_US
+#+end_src
+** ssh-agent
+remember my ssh-keys during a session
+#+begin_src bash :tangle .profile
+  eval $(ssh-agent) > /dev/null
+#+end_src
+** editor=emacs
+#+begin_src bash :tangle .profile
+  export EDITOR=/usr/bin/emacs
 #+end_src
 ** ghidra
 #+begin_src bash :tangle .profile
@@ -32,7 +37,11 @@ to load env variables to the login shell rather then just the active shell
 #+end_src
 ** aliases
 because the aliases are used in the rest of the config they are first
-*** load aliases from =~./bash_aliases=
+*** load aliases from .aliases (disabled)
+#+begin_src bash :tangle no
+  test -s ~/.alias && . ~/.alias || true
+#+end_src
+*** load aliases from =~./bash_aliases= (disabled)
 #+begin_src bash :tangle no
   if [ -f ~/.bash_aliases ]; then
       . ~/.bash_aliases
@@ -97,11 +106,6 @@ shorten my most used =pacman= commands
   alias zun='zypper packages --unneeded'
   alias zlo='sudo zypper addlock'
 #+end_src
-*** ssh
-remember my ssh-keys during a session
-#+begin_src bash
-  eval $(ssh-agent) > /dev/null
-#+end_src
 *** build stuff
 **** cmake
 clear build directory and build with debug flags enabled
@@ -115,9 +119,7 @@ clear build directory and build with debug flags enabled
 **** gcc
 =comp= compiles gcc code for optimal debugging, bug reduction and security
 #+begin_src bash
-  export CC=gcc CXX=g++
   alias comp='gcc -std=c17 -Wall -Wextra -fstack-protector -g3 -lm'
-  export GCC_COLORS='error=01;31:warning=01;35:note=01;36:caret=01;32:locus=01:quote=01'
 #+end_src
 *** =b= for =cd ..=
 =b= to go back one directory
@@ -181,6 +183,7 @@ usage: ex <file>
   #export TERM=konsole
 #+end_src
 *** command not found
+enabled by default in opensuse, debian etc.
 requires pkgfile
 run ~pkgfile -u~ to update package index
 #+begin_src bash :tangle no
@@ -199,6 +202,7 @@ tangle to =.inputrc= for other read-line programs
   bind '"\e[B": history-search-forward'
 #+end_src
 *** auto-completion
+enabled by default
 #+begin_src bash :tangle no
   [[ $PS1 && -f /usr/share/bash-completion/bash_completion ]] && \
       . /usr/share/bash-completion/bash_completion
@@ -231,8 +235,9 @@ tangle to =.inputrc= for other read-line programs
 *** c
 #+begin_src bash
   export CC=gcc CXX=g++
+  export GCC_COLORS='error=01;31:warning=01;35:note=01;36:caret=01;32:locus=01:quote=01'
 #+end_src
-*** rust
+*** rust (sccache)
 #+begin_src bash :tangle no
   if [ -z "$(which sccache)" ] ; then
       export RUSTC_WRAPPER=sccache
@@ -256,7 +261,7 @@ set locale format to =en_us utf-8=
   export LC_CTYPE=en_US.UTF-8
 #+end_src
 ** editor
-#+begin_src bash
+#+begin_src bash :tangle no
   if command -v emacs > /dev/null ; then
       export EDITOR=$(command -v emacs)
   fi
@@ -303,10 +308,9 @@ set locale format to =en_us utf-8=
   if [ -d "$HOME/go/bin" ] ; then
       export PATH="$PATH:$HOME/go/bin"
   fi
-  if [ -d "$HOME/arm/bin" ] ; then
-      export PATH=$HOME/arm/bin:$PATH
+  if [ -d "/usr/share/zap/" ] ; then
+      export PATH="$PATH:/usr/share/zap/"
   fi
-  export PATH=/usr/share/zap/:$PATH
 #+end_src
 * look into
 + blesh

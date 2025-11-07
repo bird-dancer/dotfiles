@@ -1,5 +1,3 @@
-test -z "$PROFILEREAD" && . /etc/profile || true
-
 [[ -r /etc/bash.bashrc ]] && . /etc/bash.bashrc
 
 alias docker_stop='[ -n "$(sudo docker ps -a -q)" ] && sudo docker stop $(sudo docker ps -a -q) || echo "No containers to stop"'
@@ -33,15 +31,11 @@ alias zps='sudo zypper ps -s'
 alias zun='zypper packages --unneeded'
 alias zlo='sudo zypper addlock'
 
-eval $(ssh-agent) > /dev/null
-
 alias build='rm -rf build && cmake -B build -DCMAKE_BUILD_TYPE=Debug -DCMAKE_EXPORT_COMPILE_COMMANDS=1 && make -C'
 
 alias make='make -j $(nproc)'
 
-export CC=gcc CXX=g++
 alias comp='gcc -std=c17 -Wall -Wextra -fstack-protector -g3 -lm'
-export GCC_COLORS='error=01;31:warning=01;35:note=01;36:caret=01;32:locus=01:quote=01'
 
 alias b='cd ..'
 
@@ -106,12 +100,9 @@ shopt -s checkwinsize # checks term size when bash regains control
 eval "$(starship init bash)"
 
 export CC=gcc CXX=g++
+export GCC_COLORS='error=01;31:warning=01;35:note=01;36:caret=01;32:locus=01:quote=01'
 
 export LC_CTYPE=en_US.UTF-8
-
-if command -v emacs > /dev/null ; then
-    export EDITOR=$(command -v emacs)
-fi
 
 export GUIX_PROFILE="$HOME/.guix-profile"
 if [ -d "$HOME/.config/guix/current/bin" ]; then
@@ -147,7 +138,6 @@ fi
 if [ -d "$HOME/go/bin" ] ; then
     export PATH="$PATH:$HOME/go/bin"
 fi
-if [ -d "$HOME/arm/bin" ] ; then
-    export PATH=$HOME/arm/bin:$PATH
+if [ -d "/usr/share/zap/" ] ; then
+    export PATH="$PATH:/usr/share/zap/"
 fi
-export PATH=/usr/share/zap/:$PATH
