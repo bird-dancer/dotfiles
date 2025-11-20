@@ -22,13 +22,13 @@
 	verify = off
 [gpg]
 	format = ssh
-	helper = store
+	# helper = store
 [commit]
 	gpgsign = true
-	helper = store
-[credential]
-	helper = store
-	#credentialStore = gpg
+	# helper = store
+# [credential]
+	# helper = store
+	# credentialStore = gpg
 [init]
 	defaultBranch = main
 [filter "lfs"]
