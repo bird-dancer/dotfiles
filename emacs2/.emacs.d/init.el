@@ -15,8 +15,8 @@
 (use-package doric-themes)
 (when (display-graphic-p)
   ;; (set-frame-font "Comic Shanns Mono 14" nil t)
-  (set-frame-font "Comic Code Ligatures 14" nil t)
-  (setq-default line-spacing 0.1)
+  (set-frame-font "Comic Code Ligatures 13" nil t)
+  (setq-default line-spacing 0.08)
   ;; (load-theme 'modus-operandi-tinted)
   ;; (load-theme 'modus-operandi-tinted)
   ;; (load-theme 'doric-wind)
@@ -30,6 +30,8 @@
   ;; (load-theme 'ef-fire)
   )
 ;; ;; (set-face-attribute hl-line-face nil :underline t)
+(use-package pulsar)
+(pulsar-global-mode)
 
 (setq modus-themes-fringes nil)
 (add-hook 'enable-theme-functions
@@ -101,6 +103,35 @@
 
 (use-package eglot-java)
 
+(defun felix/rust-ts--apply-rustfmt-config (rustfmt-data)
+  "Apply settings from RUSTFMT-DATA to the current buffer.
+RUSTFMT-DATA is an alist parsed from rustfmt.toml."
+  (let ((hard-tabs (alist-get "hard_tabs" rustfmt-data nil nil #'equal))
+        (tab-spaces (alist-get "tab_spaces" rustfmt-data nil nil #'equal)))
+    (message "rustfmt config: hard_tabs: %s; tab_spaces: %s" hard-tabs tab-spaces)
+    (when (eq hard-tabs t)
+      (setq-local indent-tabs-mode t))
+    (if tab-spaces
+        (setq-local tab-width tab-spaces)
+      (setq-local tab-width 4))))
+
+(defun felix/rust-ts--find-and-apply-rustfmt-config ()
+  (interactive)
+  "Look for a rustfmt.toml file in the current project tree and apply its settings."
+  (let ((root (locate-dominating-file default-directory "rustfmt.toml")))
+    (if (not(eql root nil))
+	(let ((rustfmt-file (expand-file-name "rustfmt.toml" root)))
+	  (message "using rustfmt.toml file: %s" rustfmt-file)
+	  (use-package toml)
+	  (condition-case err
+	      (let ((data (toml:read-from-file rustfmt-file)))
+		(message "data: %s" data)
+		(felix/rust-ts--apply-rustfmt-config data))
+	    (error (message "error: %s" err))))
+      (message "no rustfmt-file found"))))
+
+(add-hook 'rust-ts-mode-hook #'felix/rust-ts--find-and-apply-rustfmt-config)
+
 (require 'tramp)
 (setq tramp-remote-process-environment
       (append
@@ -130,7 +161,7 @@
 
 (require 'calc)
 
-(defun felix/my-hexl-goto-hex-address (expr)
+(defun felix/hexl-goto-hex-address (expr)
   "Goto address in hexl-mode.
  - Accepts hex literals (0x...).
  - Accepts arithmetic (e.g. 0x20 + 10).
