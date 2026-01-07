@@ -23,8 +23,10 @@
   ;; (load-theme 'doric-earth)
   ;; (load-theme 'doric-oak)
   ;; (load-theme 'doric-light)
-  ;; (load-theme 'doric-beach)
-  (load-theme 'doric-cherry)
+  (load-theme 'doric-beach)
+  ;; (load-theme 'doric-cherry)
+  ;; (load-theme 'alect-light-alt)
+  ;; (load-theme 'alect-black)
   ;; (load-theme 'doric-marble) ;obsidian
   ;; (load-theme 'ef-autumn)
   ;; (load-theme 'ef-fire)
@@ -46,6 +48,22 @@
       '("~/uni/notes/uni.org"
         "~/uni/notes/personal.org"))
 
+(setq org-highlight-latex-and-related '(latex script entities))
+(require 'ox-latex)
+;; (setq org-latex-src-block-backend 'minted)
+;; (add-to-list 'org-latex-packages-alist '("" "minted"))
+(use-package engrave-faces
+  :config
+  (setq org-latex-src-block-backend 'engraved))
+;; (setq org-latex-listings 't)
+(setq org-cite-global-bibliography '("~/Zotero/better-bibtex/My Library.bib"))
+(add-to-list 'org-cite-export-processors '(html csl))
+(add-to-list 'org-cite-export-processors '(latex biblatex))
+;; (setq org-cite-export-processors
+;;       '((latex biblatex)))
+;; (setq org-latex-pdf-process
+;;     '("latexmk -pdf -interaction=nonstopmode -output-directory=%o %f"))
+
 (setq completion-in-region-function #'completion--in-region)
 (use-package org-roam
   :custom
@@ -55,19 +73,32 @@
          ("C-c n g" . org-roam-graph)
          ("C-c n i" . org-roam-node-insert)
          ("C-c n c" . org-roam-capture)
+	 ("C-c n a" . org-roam-alias-add)
+	 ("C-c n b" . orb-insert-link)
          ;; Dailies
          ("C-c n j" . org-roam-dailies-capture-today))
   :config
   ;; If you're using a vertical completion framework, you might want a more informative completion interface
   (setq org-roam-node-display-template (concat "${title:*} " (propertize "${tags:10}" 'face 'org-tag)))
   (org-roam-db-autosync-mode))
+(use-package org-roam-ui)
+
+(use-package org-roam-bibtex
+  :after org-roam
+  :config
+  (setq bibtex-completion-bibliography org-cite-global-bibliography)
+  (setq orb-roam-ref-format 'org-cite)
+  (org-roam-bibtex-mode))
 
 (use-package elfeed
   :bind ("C-x w" . elfeed)
   :config
   (setq elfeed-feeds
         '("http://nullprogram.com/feed/"
+	  "https://grapheneos.org/releases.atom"
+	  "https://mjg59.dreamwidth.org/data/rss"
 	  "https://nixos.org/blog/announcements-rss.xml"
+	  "https://rosenzweig.io/feed.xml"
 	  ;; "https://www.schneier.com/feed/atom/"
 	  "https://systemcrafters.net/rss/"
 	  "http://www.polyomica.com/feed/"
@@ -187,53 +218,6 @@ RUSTFMT-DATA is an alist parsed from rustfmt.toml."
          (addr (if relative (+ cur val) val)))
     (hexl-goto-address addr)))
 
-(defun thanos/wtype-text (text)
-  "Process TEXT for wtype, handling newlines properly."
-  (let* ((has-final-newline (string-match-p "\n$" text))
-         (lines (split-string text "\n"))
-         (last-idx (1- (length lines))))
-    (string-join
-     (cl-loop for line in lines
-              for i from 0
-              collect (cond
-                       ;; Last line without final newline
-                       ((and (= i last-idx) (not has-final-newline))
-                        (format "wtype -s 350 \"%s\"" 
-                                (replace-regexp-in-string "\"" "\\\\\"" line)))
-                       ;; Any other line
-                       (t
-                        (format "wtype -s 350 \"%s\" && wtype -k Return" 
-                                (replace-regexp-in-string "\"" "\\\\\"" line)))))
-     " && ")))
-
-(defun thanos/type ()
-  "Launch a temporary frame with a clean buffer for typing."
-  (interactive)
-  (let ((frame (make-frame '((name . "emacs-float")
-                             (fullscreen . 0)
-                             (undecorated . t)
-                             (width . 70)
-                             (height . 20))))
-        (buf (get-buffer-create "emacs-float")))
-    (select-frame frame)
-    (switch-to-buffer buf)
-    (erase-buffer)
-    (org-mode)
-    (setq-local header-line-format
-                (format " %s to insert text or %s to cancel."
-                        (propertize "C-c C-c" 'face 'help-key-binding)
-			(propertize "C-c C-k" 'face 'help-key-binding)))
-    (local-set-key (kbd "C-c C-k")
-		   (lambda () (interactive)
-		     (kill-new (buffer-string))
-		     (delete-frame)))
-    (local-set-key (kbd "C-c C-c")
-		   (lambda () (interactive)
-		     (start-process-shell-command
-		      "wtype" nil
-		      (thanos/wtype-text (buffer-string)))
-		     (delete-frame)))))
-
 (setq auth-sources '("secrets:default" default))
 
 (require 'smtpmail)
@@ -246,3 +230,4 @@ RUSTFMT-DATA is an alist parsed from rustfmt.toml."
 ;; (setq auth-nsource-debug t)
 ;; (setq smtpmail-debug-info t
 ;;       smtpmail-debug-verb t)
+(put 'dired-find-alternate-file 'disabled nil)

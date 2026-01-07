@@ -43,8 +43,10 @@ see what packages are loaded at startup (*only have it enabled when debugging!*)
     ;; (load-theme 'doric-earth)
     ;; (load-theme 'doric-oak)
     ;; (load-theme 'doric-light)
-    ;; (load-theme 'doric-beach)
-    (load-theme 'doric-cherry)
+    (load-theme 'doric-beach)
+    ;; (load-theme 'doric-cherry)
+    ;; (load-theme 'alect-light-alt)
+    ;; (load-theme 'alect-black)
     ;; (load-theme 'doric-marble) ;obsidian
     ;; (load-theme 'ef-autumn)
     ;; (load-theme 'ef-fire)
@@ -100,8 +102,41 @@ for emacs 30:
         '("~/uni/notes/uni.org"
           "~/uni/notes/personal.org"))
 #+end_src
+* org
+** latex
+#+begin_src emacs-lisp
+  (setq org-highlight-latex-and-related '(latex script entities))
+  (require 'ox-latex)
+  ;; (setq org-latex-src-block-backend 'minted)
+  ;; (add-to-list 'org-latex-packages-alist '("" "minted"))
+  (use-package engrave-faces
+    :config
+    (setq org-latex-src-block-backend 'engraved))
+  ;; (setq org-latex-listings 't)
+  (setq org-cite-global-bibliography '("~/Zotero/better-bibtex/My Library.bib"))
+  (add-to-list 'org-cite-export-processors '(html csl))
+  (add-to-list 'org-cite-export-processors '(latex biblatex))
+  ;; (setq org-cite-export-processors
+  ;;       '((latex biblatex)))
+  ;; (setq org-latex-pdf-process
+  ;;     '("latexmk -pdf -interaction=nonstopmode -output-directory=%o %f"))
+#+end_src
 
-* packages
+#+begin_src emacs-lisp :tangle no
+  (with-eval-after-load 'ox-latex
+    (add-to-list 'org-latex-classes
+                 '("org-plain-latex"
+  		 "\\documentclass{article}
+             [NO-DEFAULT-PACKAGES]
+             [PACKAGES]
+             [EXTRA]"
+  		 ("\\section{%s}" . "\\section*{%s}")
+  		 ("\\subsection{%s}" . "\\subsection*{%s}")
+  		 ("\\subsubsection{%s}" . "\\subsubsection*{%s}")
+  		 ("\\paragraph{%s}" . "\\paragraph*{%s}")
+  		 ("\\subparagraph{%s}" . "\\subparagraph*{%s}"))))
+#+end_src
+checkout: [[https://jakebox.github.io/posts/2021-03-20-org_latex][Jacob Boxerman - Org LaTeX Export]]
 ** org-roam
 #+begin_src emacs-lisp
   (setq completion-in-region-function #'completion--in-region)
@@ -113,19 +148,32 @@ for emacs 30:
            ("C-c n g" . org-roam-graph)
            ("C-c n i" . org-roam-node-insert)
            ("C-c n c" . org-roam-capture)
+  	 ("C-c n a" . org-roam-alias-add)
+  	 ("C-c n b" . orb-insert-link)
            ;; Dailies
            ("C-c n j" . org-roam-dailies-capture-today))
     :config
     ;; If you're using a vertical completion framework, you might want a more informative completion interface
     (setq org-roam-node-display-template (concat "${title:*} " (propertize "${tags:10}" 'face 'org-tag)))
     (org-roam-db-autosync-mode))
+  (use-package org-roam-ui)
 #+end_src
-** emacs-everywhere
+** org-roam-bibtex
+#+begin_src emacs-lisp
+  (use-package org-roam-bibtex
+    :after org-roam
+    :config
+    (setq bibtex-completion-bibliography org-cite-global-bibliography)
+    (setq orb-roam-ref-format 'org-cite)
+    (org-roam-bibtex-mode))
+#+end_src
+* emacs-everywhere
 #+begin_src emacs-lisp :tangle no
   (use-package emacs-everywhere
     :ensure t)
 #+end_src
-** lsp-mode
+
+* lsp-mode
 #+begin_src emacs-lisp :tangle no
   (use-package lsp-mode
     :init
@@ -147,7 +195,7 @@ for emacs 30:
   ;; (use-package lsp-java)
 
 #+end_src
-** show weather in modeline
+* show weather in modeline
 #+begin_src emacs-lisp :tangle no
   (use-package display-wttr
     ;; :custom
@@ -157,7 +205,7 @@ for emacs 30:
     :config
     (display-wttr-mode))
 #+end_src
-** elf-feed
+* elf-feed
 subscribe to rss-feeds
 #+begin_src emacs-lisp
   (use-package elfeed
@@ -165,7 +213,10 @@ subscribe to rss-feeds
     :config
     (setq elfeed-feeds
           '("http://nullprogram.com/feed/"
+  	  "https://grapheneos.org/releases.atom"
+  	  "https://mjg59.dreamwidth.org/data/rss"
   	  "https://nixos.org/blog/announcements-rss.xml"
+  	  "https://rosenzweig.io/feed.xml"
   	  ;; "https://www.schneier.com/feed/atom/"
   	  "https://systemcrafters.net/rss/"
   	  "http://www.polyomica.com/feed/"
@@ -317,56 +368,6 @@ because it is very confusing when switching between qwerty and qwertz and the wi
            (addr (if relative (+ cur val) val)))
       (hexl-goto-address addr)))
 #+end_src
-* thanos
-#+begin_src emacs-lisp
-  (defun thanos/wtype-text (text)
-    "Process TEXT for wtype, handling newlines properly."
-    (let* ((has-final-newline (string-match-p "\n$" text))
-           (lines (split-string text "\n"))
-           (last-idx (1- (length lines))))
-      (string-join
-       (cl-loop for line in lines
-                for i from 0
-                collect (cond
-                         ;; Last line without final newline
-                         ((and (= i last-idx) (not has-final-newline))
-                          (format "wtype -s 350 \"%s\"" 
-                                  (replace-regexp-in-string "\"" "\\\\\"" line)))
-                         ;; Any other line
-                         (t
-                          (format "wtype -s 350 \"%s\" && wtype -k Return" 
-                                  (replace-regexp-in-string "\"" "\\\\\"" line)))))
-       " && ")))
-
-  (defun thanos/type ()
-    "Launch a temporary frame with a clean buffer for typing."
-    (interactive)
-    (let ((frame (make-frame '((name . "emacs-float")
-                               (fullscreen . 0)
-                               (undecorated . t)
-                               (width . 70)
-                               (height . 20))))
-          (buf (get-buffer-create "emacs-float")))
-      (select-frame frame)
-      (switch-to-buffer buf)
-      (erase-buffer)
-      (org-mode)
-      (setq-local header-line-format
-                  (format " %s to insert text or %s to cancel."
-                          (propertize "C-c C-c" 'face 'help-key-binding)
-  			(propertize "C-c C-k" 'face 'help-key-binding)))
-      (local-set-key (kbd "C-c C-k")
-  		   (lambda () (interactive)
-  		     (kill-new (buffer-string))
-  		     (delete-frame)))
-      (local-set-key (kbd "C-c C-c")
-  		   (lambda () (interactive)
-  		     (start-process-shell-command
-  		      "wtype" nil
-  		      (thanos/wtype-text (buffer-string)))
-  		     (delete-frame)))))
-
-#+end_src
 * email
 #+begin_src emacs-lisp
   (setq auth-sources '("secrets:default" default))
@@ -385,4 +386,7 @@ because it is very confusing when switching between qwerty and qwertz and the wi
 
 * look into:
 + [[https://github.com/konrad1977/flyover][GitHub - konrad1977/flyover: A beautiful inline overlay for Emacs (Flycheck |...]]
++ [[https://thanosapollo.org/posts/use-emacs-everywhere/][Emacs Everywhere, even in Wayland | Thanos Apollo]]
++ [[https://thanosapollo.org/posts/emacs-notmuch-video-guide/][(Video) Emacs Notmuch with Multiple Addresses & Auto Encryption | Thanos Apollo]]
++ [[https://gitlab.com/jabranham/system-packages][Alex Branham / system-packages · GitLab]]
 
