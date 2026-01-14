@@ -24,7 +24,7 @@ remember my ssh-keys during a session
 #+end_src
 ** editor=emacs
 #+begin_src bash :tangle .profile
-  export EDITOR=/usr/bin/emacs
+  export EDITOR=/usr/bin/emacs -nw
 #+end_src
 ** ghidra
 #+begin_src bash :tangle .profile

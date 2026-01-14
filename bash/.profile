@@ -4,6 +4,6 @@ export LANGUAGE=en_US
 
 eval $(ssh-agent) > /dev/null
 
-export EDITOR=/usr/bin/emacs
+export EDITOR=/usr/bin/emacs -nw
 
 export GHIDRA_INSTALL_DIR=/lib64/ghidra/
