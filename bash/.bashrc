@@ -77,8 +77,8 @@ alias wget='wget2'
 export TERM="xterm-256color"
 #export TERM=konsole
 
-export HISTSIZE=1000
-export HISTFILESIZE=2000  
+export HISTSIZE=20000
+export HISTFILESIZE=4000
 export HISTCONTROL=ignoreboth:erasedups
 
 bind '"\e[A": history-search-backward'

@@ -191,8 +191,8 @@ run ~pkgfile -u~ to update package index
 #+end_src
 *** history
 #+begin_src bash
-  export HISTSIZE=1000
-  export HISTFILESIZE=2000  
+  export HISTSIZE=20000
+  export HISTFILESIZE=4000
   export HISTCONTROL=ignoreboth:erasedups
 #+end_src
 *** history-completion
