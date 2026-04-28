@@ -7,10 +7,80 @@
 * measure startup performance (disabled)
 in order to measure the time it takes for Emacs to startup use ~emacs-init-time~
 see what packages are loaded at startup (*only have it enabled when debugging!*):
+
+** show which packages were loaded
 #+begin_src emacs-lisp :tangle no
   (setq use-package-compute-statistics t)
   (setq debug-on-error t)
   (setq use-package-verbose t)
+  ;;(with-eval-after-load 'org
+  ;;(debug))
+  ;; Measure startup time
+#+end_src
+
+** display startup time
+#+begin_src emacs-lisp :tangle no
+  (defun my/display-startup-time ()
+    "Display the startup time after Emacs initialization."
+    (message "Emacs loaded in %s with %d garbage collections."
+             (format "%.2f seconds"
+                     (float-time
+                      (time-subtract after-init-time before-init-time)))
+             gcs-done))
+  (add-hook 'emacs-startup-hook #'my/display-startup-time)
+#+end_src
+
+** profiling
+#+begin_src emacs-lisp :tangle no
+  ;; Add to beginning of init.el for profiling
+  (require 'profiler)
+  (profiler-start 'cpu)
+
+  ;; Add to end of init.el
+  (profiler-stop)
+  (profiler-report)
+#+end_src
+
+** Benchmark Individual Packages
+#+begin_src emacs-lisp
+  (defmacro my/time-it (name &rest body)
+    "Measure execution time of BODY and display with NAME."
+    `(let ((time (current-time)))
+       ,@body
+       (message "%s: %.06f seconds" ,name
+                (float-time (time-since time)))))
+#+end_src
+
+#+begin_src emacs-lisp :tangle no
+  ;; Usage example
+  (my/time-it "Loading Magit"
+  	    (use-package magit
+  	      :defer t
+  	      :bind ("C-x g" . magit-status)))
+#+end_src
+
+** Enable Configuration Warnings
+#+begin_src emacs-lisp :tangle no
+  ;; Enable debug mode for configuration errors
+  (setq debug-on-error t)
+  (setq warning-minimum-level :error)
+
+  ;; Log package loading issues
+  (setq use-package-verbose t)
+  (setq use-package-debug t)
+#+end_src
+
+** Idle time loading
+#+begin_src emacs-lisp :tangle no
+  ;; Load packages after Emacs has been idle
+  (use-package dashboard
+    :defer 2  ; Load after 2 seconds of idle time
+    :config
+    (dashboard-setup-startup-hook))
+
+  (use-package all-the-icons
+    :defer 5  ; Load after 5 seconds of idle time
+    :if (display-graphic-p))
 #+end_src
 
 * load scame
@@ -31,19 +101,20 @@ see what packages are loaded at startup (*only have it enabled when debugging!*)
 
 * looks
 #+begin_src emacs-lisp
-  (use-package ef-themes)
-  (use-package doric-themes)
   (when (display-graphic-p)
     ;; (set-frame-font "Comic Shanns Mono 14" nil t)
     (set-frame-font "Comic Code Ligatures 13" nil t)
-    (setq-default line-spacing 0.08)
+    ;;(setq-default line-spacing 0.08)
+    (load-theme 'modus-operandi-tinted)
+    ;; (use-package ef-themes)
+    ;; (use-package doric-themes)
     ;; (load-theme 'modus-operandi-tinted)
     ;; (load-theme 'modus-operandi-tinted)
     ;; (load-theme 'doric-wind)
     ;; (load-theme 'doric-earth)
     ;; (load-theme 'doric-oak)
     ;; (load-theme 'doric-light)
-    (load-theme 'doric-beach)
+    ;; (load-theme 'doric-beach)
     ;; (load-theme 'doric-cherry)
     ;; (load-theme 'alect-light-alt)
     ;; (load-theme 'alect-black)
@@ -51,9 +122,20 @@ see what packages are loaded at startup (*only have it enabled when debugging!*)
     ;; (load-theme 'ef-autumn)
     ;; (load-theme 'ef-fire)
     )
-  ;; ;; (set-face-attribute hl-line-face nil :underline t)
-  (use-package pulsar)
-  (pulsar-global-mode)
+  ;; (set-face-attribute hl-line-face nil :underline t)
+#+end_src
+** more color stuff
+#+begin_src emacs-lisp :tangle no
+  (set-face-attribute hl-line-face nil :underline nil)
+  (use-package gnome-accent-theme-switcher
+    :demand t
+    :vc (:url "https://github.com/protesilaos/gnome-accent-theme-switcher.git"
+  	    :rev :newest)
+    :bind
+    (("<f5>" . gnome-accent-theme-switcher-toggle-mode)
+     ("C-<f5>" . gnome-accent-theme-switcher-change-accent))
+    :config
+    (gnome-accent-theme-switcher-mode 1))
 #+end_src
 #+begin_src emacs-lisp :tangle no
   (use-package standard-themes
@@ -103,40 +185,20 @@ for emacs 30:
           "~/uni/notes/personal.org"))
 #+end_src
 * org
-** latex
 #+begin_src emacs-lisp
-  (setq org-highlight-latex-and-related '(latex script entities))
-  (require 'ox-latex)
-  ;; (setq org-latex-src-block-backend 'minted)
-  ;; (add-to-list 'org-latex-packages-alist '("" "minted"))
-  (use-package engrave-faces
-    :config
-    (setq org-latex-src-block-backend 'engraved))
-  ;; (setq org-latex-listings 't)
-  (setq org-cite-global-bibliography '("~/Zotero/better-bibtex/My Library.bib"))
-  (add-to-list 'org-cite-export-processors '(html csl))
-  (add-to-list 'org-cite-export-processors '(latex biblatex))
-  ;; (setq org-cite-export-processors
-  ;;       '((latex biblatex)))
+  (setq org-export-in-background t)
+#+end_src
+** latex
+*** bibliography
+#+begin_src emacs-lisp
+  ;; (setq org-highlight-latex-and-related '(latex script entities))
+  (with-eval-after-load 'org
+    (setq org-cite-global-bibliography '("~/Zotero/better-bibtex/My Library.bib")))
+
+  ;; (setq org-cite-export-processors '((latex biblatex)))
   ;; (setq org-latex-pdf-process
   ;;     '("latexmk -pdf -interaction=nonstopmode -output-directory=%o %f"))
 #+end_src
-
-#+begin_src emacs-lisp :tangle no
-  (with-eval-after-load 'ox-latex
-    (add-to-list 'org-latex-classes
-                 '("org-plain-latex"
-  		 "\\documentclass{article}
-             [NO-DEFAULT-PACKAGES]
-             [PACKAGES]
-             [EXTRA]"
-  		 ("\\section{%s}" . "\\section*{%s}")
-  		 ("\\subsection{%s}" . "\\subsection*{%s}")
-  		 ("\\subsubsection{%s}" . "\\subsubsection*{%s}")
-  		 ("\\paragraph{%s}" . "\\paragraph*{%s}")
-  		 ("\\subparagraph{%s}" . "\\subparagraph*{%s}"))))
-#+end_src
-checkout: [[https://jakebox.github.io/posts/2021-03-20-org_latex][Jacob Boxerman - Org LaTeX Export]]
 ** org-roam
 #+begin_src emacs-lisp
   (setq completion-in-region-function #'completion--in-region)
@@ -161,11 +223,11 @@ checkout: [[https://jakebox.github.io/posts/2021-03-20-org_latex][Jacob Boxerman
 ** org-roam-bibtex
 #+begin_src emacs-lisp
   (use-package org-roam-bibtex
-    :after org-roam
-    :config
-    (setq bibtex-completion-bibliography org-cite-global-bibliography)
-    (setq orb-roam-ref-format 'org-cite)
-    (org-roam-bibtex-mode))
+  :after org-roam
+  :config
+  (setq bibtex-completion-bibliography org-cite-global-bibliography)
+  (setq orb-roam-ref-format 'org-cite)
+  (org-roam-bibtex-mode))
 #+end_src
 * emacs-everywhere
 #+begin_src emacs-lisp :tangle no
@@ -259,6 +321,15 @@ because it is very confusing when switching between qwerty and qwertz and the wi
   (bind-key "C-z" #'yank)
 #+end_src
 * langauge specific
+** gleam
+#+begin_src emacs-lisp
+  (use-package gleam-ts-mode
+    :mode ("\\.gleam\\'" . gleam-ts-mode)
+    :config
+    (with-eval-after-load 'eglot
+      (add-to-list 'eglot-server-programs
+    		 '(gleam-ts-mode . ("gleam" "lsp")))))
+#+end_src
 ** nix-ts-mode
 #+begin_src emacs-lisp
   (use-package nix-ts-mode
@@ -266,7 +337,13 @@ because it is very confusing when switching between qwerty and qwertz and the wi
 #+end_src
 ** java
 #+begin_src emacs-lisp
-  (use-package eglot-java)
+  (use-package eglot-java
+    :defer t)
+#+end_src
+** python
+#+begin_src emacs-lisp
+  (use-package indent-bars
+    :hook (python-ts-mode . indent-bars-mode))
 #+end_src
 ** rust
 *** rust-mode
@@ -279,9 +356,10 @@ because it is very confusing when switching between qwerty and qwertz and the wi
 #+end_src
 *** rust-ts-mode get info regarding indentation from rustfmt.toml
 #+begin_src emacs-lisp
+  ;;;###autoload
   (defun felix/rust-ts--apply-rustfmt-config (rustfmt-data)
     "Apply settings from RUSTFMT-DATA to the current buffer.
-  RUSTFMT-DATA is an alist parsed from rustfmt.toml."
+    RUSTFMT-DATA is an alist parsed from rustfmt.toml."
     (let ((hard-tabs (alist-get "hard_tabs" rustfmt-data nil nil #'equal))
           (tab-spaces (alist-get "tab_spaces" rustfmt-data nil nil #'equal)))
       (message "rustfmt config: hard_tabs: %s; tab_spaces: %s" hard-tabs tab-spaces)
@@ -290,89 +368,60 @@ because it is very confusing when switching between qwerty and qwertz and the wi
       (if tab-spaces
           (setq-local tab-width tab-spaces)
         (setq-local tab-width 4))))
-
+  ;;;###autoload
   (defun felix/rust-ts--find-and-apply-rustfmt-config ()
     (interactive)
     "Look for a rustfmt.toml file in the current project tree and apply its settings."
     (let ((root (locate-dominating-file default-directory "rustfmt.toml")))
       (if (not(eql root nil))
-  	(let ((rustfmt-file (expand-file-name "rustfmt.toml" root)))
-  	  (message "using rustfmt.toml file: %s" rustfmt-file)
-  	  (use-package toml)
-  	  (condition-case err
-  	      (let ((data (toml:read-from-file rustfmt-file)))
-  		(message "data: %s" data)
-  		(felix/rust-ts--apply-rustfmt-config data))
-  	    (error (message "error: %s" err))))
+    	(let ((rustfmt-file (expand-file-name "rustfmt.toml" root)))
+    	  (message "using rustfmt.toml file: %s" rustfmt-file)
+    	  (use-package toml)
+    	  (condition-case err
+    	      (let ((data (toml:read-from-file rustfmt-file)))
+    		(message "data: %s" data)
+    		(felix/rust-ts--apply-rustfmt-config data))
+    	    (error (message "error: %s" err))))
         (message "no rustfmt-file found"))))
 
   (add-hook 'rust-ts-mode-hook #'felix/rust-ts--find-and-apply-rustfmt-config)
 #+end_src
 
 * tramp remote path for nixos
-#+begin_src emacs-lisp
-  (require 'tramp)
-  (setq tramp-remote-process-environment
-        (append
-         (list (concat "PATH="
-                       "/run/wrappers/bin" ":"
-                       "/home/admin/.nix-profile/bin" ":"
-                       "/nix/profile/bin" ":"
-                       "/home/admin/.local/state/nix/profile/bin" ":"
-                       "/etc/profiles/per-user/admin/bin" ":"
-                       "/nix/var/nix/profiles/default/bin" ":"
-                       "/run/current-system/sw/bin" ":"
-                       "/bin" ":" "/usr/bin")) ; Match terminal PATH
-         tramp-remote-process-environment))
+#+begin_src emacs-lisp :tangle no
+  (use-package tramp
+    :config
+    (setq tramp-remote-process-environment
+  	(append
+  	 (list (concat "PATH="
+                         "/run/wrappers/bin" ":"
+                         "/home/admin/.nix-profile/bin" ":"
+                         "/nix/profile/bin" ":"
+                         "/home/admin/.local/state/nix/profile/bin" ":"
+                         "/etc/profiles/per-user/admin/bin" ":"
+                         "/nix/var/nix/profiles/default/bin" ":"
+                         "/run/current-system/sw/bin" ":"
+                         "/bin" ":" "/usr/bin")) ; Match terminal PATH
+  	 tramp-remote-process-environment)))
 #+end_src
-* hexl
+* llm
 #+begin_src emacs-lisp
-  (defun felix/hexl-hex-string-to-integer (hex-string)
-    "Return decimal integer for HEX-STRING.
-   Accepts optional 0x or 0X prefix."
-    (interactive "sHex number: ")
-    (when (string-match "\\`0[xX]\\(.+\\)" hex-string)
-      (setq hex-string (match-string 1 hex-string)))
-    (let ((hex-num 0))
-      (while (not (equal hex-string ""))
-        (setq hex-num (+ (* hex-num 16)
-                         (hexl-hex-char-to-integer (string-to-char hex-string))))
-        (setq hex-string (substring hex-string 1)))
-      hex-num))
-
-  (require 'calc)
-
-  (defun felix/hexl-goto-hex-address (expr)
-    "Goto address in hexl-mode.
-   - Accepts hex literals (0x...).
-   - Accepts arithmetic (e.g. 0x20 + 10).
-   - Supports relative jumps with +N / -N.
-
-   Examples:
-     0x20       → absolute 0x20
-     0x100 + 7  → absolute 0x107
-     +0x10      → move forward 0x10 bytes
-     -32        → move back 32 bytes"
-    (interactive "sHex Address (expression): ")
-    (let* ((cur (hexl-current-address))
-           (relative (string-match-p "\\`[+-]" expr))
-           ;; turn 0x... into decimal literals for calc
-           (expr (replace-regexp-in-string
-  		"0x[0-9A-Fa-f]+"
-  		(lambda (s) (format "(%d)" (string-to-number (substring s 2) 16)))
-  		;; "0x[0-9A-Fa-f]+\\>"
-  		;; (lambda (s)
-  		;;   (format "(%d)"(string-to-number (replace-regexp-in-string "\\`0[xX]" "" s) 16)))
-  		expr))
-           (val (string-to-number (calc-eval expr)))
-           (addr (if relative (+ cur val) val)))
-      (hexl-goto-address addr)))
+  (use-package gptel)
+#+end_src
+#+begin_src emacs-lisp :tangle no
+  ;; OPTIONAL configuration
+  (setq
+   gptel-model 'mistral:latest
+   gptel-backend (gptel-make-ollama "Ollama"
+                   :host "localhost:11434"
+                   :stream t
+                   :models '(mistral:latest)))
 #+end_src
 * email
 #+begin_src emacs-lisp
   (setq auth-sources '("secrets:default" default))
 
-  (require 'smtpmail)
+  ;; (use-package smtpmail)
   (setq message-send-mail-function 'smtpmail-send-it
         smtpmail-smtp-server "smtp.mailbox.org"
         smtpmail-smtp-service 465

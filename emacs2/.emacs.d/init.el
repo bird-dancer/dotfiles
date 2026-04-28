@@ -1,3 +1,10 @@
+(defmacro my/time-it (name &rest body)
+  "Measure execution time of BODY and display with NAME."
+  `(let ((time (current-time)))
+     ,@body
+     (message "%s: %.06f seconds" ,name
+              (float-time (time-since time)))))
+
 (load "~/scame/base.el" nil t)
 ;; (load "~/Documents/scame/extended/org-mode.el" nil t)
 ;; (load "~/Documents/scame/extended/editing-config.el" nil t)
@@ -11,19 +18,20 @@
 ;; (load "~/Documents/scame/extended/more-packages.el" nil t)
 (load "~/scame/extended.el" nil t)
 
-(use-package ef-themes)
-(use-package doric-themes)
 (when (display-graphic-p)
   ;; (set-frame-font "Comic Shanns Mono 14" nil t)
   (set-frame-font "Comic Code Ligatures 13" nil t)
-  (setq-default line-spacing 0.08)
+  ;;(setq-default line-spacing 0.08)
+  (load-theme 'modus-operandi-tinted)
+  ;; (use-package ef-themes)
+  ;; (use-package doric-themes)
   ;; (load-theme 'modus-operandi-tinted)
   ;; (load-theme 'modus-operandi-tinted)
   ;; (load-theme 'doric-wind)
   ;; (load-theme 'doric-earth)
   ;; (load-theme 'doric-oak)
   ;; (load-theme 'doric-light)
-  (load-theme 'doric-beach)
+  ;; (load-theme 'doric-beach)
   ;; (load-theme 'doric-cherry)
   ;; (load-theme 'alect-light-alt)
   ;; (load-theme 'alect-black)
@@ -31,9 +39,7 @@
   ;; (load-theme 'ef-autumn)
   ;; (load-theme 'ef-fire)
   )
-;; ;; (set-face-attribute hl-line-face nil :underline t)
-(use-package pulsar)
-(pulsar-global-mode)
+;; (set-face-attribute hl-line-face nil :underline t)
 
 (setq modus-themes-fringes nil)
 (add-hook 'enable-theme-functions
@@ -48,19 +54,13 @@
       '("~/uni/notes/uni.org"
         "~/uni/notes/personal.org"))
 
-(setq org-highlight-latex-and-related '(latex script entities))
-(require 'ox-latex)
-;; (setq org-latex-src-block-backend 'minted)
-;; (add-to-list 'org-latex-packages-alist '("" "minted"))
-(use-package engrave-faces
-  :config
-  (setq org-latex-src-block-backend 'engraved))
-;; (setq org-latex-listings 't)
-(setq org-cite-global-bibliography '("~/Zotero/better-bibtex/My Library.bib"))
-(add-to-list 'org-cite-export-processors '(html csl))
-(add-to-list 'org-cite-export-processors '(latex biblatex))
-;; (setq org-cite-export-processors
-;;       '((latex biblatex)))
+(setq org-export-in-background t)
+
+;; (setq org-highlight-latex-and-related '(latex script entities))
+(with-eval-after-load 'org
+  (setq org-cite-global-bibliography '("~/Zotero/better-bibtex/My Library.bib")))
+
+;; (setq org-cite-export-processors '((latex biblatex)))
 ;; (setq org-latex-pdf-process
 ;;     '("latexmk -pdf -interaction=nonstopmode -output-directory=%o %f"))
 
@@ -84,11 +84,11 @@
 (use-package org-roam-ui)
 
 (use-package org-roam-bibtex
-  :after org-roam
-  :config
-  (setq bibtex-completion-bibliography org-cite-global-bibliography)
-  (setq orb-roam-ref-format 'org-cite)
-  (org-roam-bibtex-mode))
+:after org-roam
+:config
+(setq bibtex-completion-bibliography org-cite-global-bibliography)
+(setq orb-roam-ref-format 'org-cite)
+(org-roam-bibtex-mode))
 
 (use-package elfeed
   :bind ("C-x w" . elfeed)
@@ -129,14 +129,26 @@
 
 (bind-key "C-z" #'yank)
 
+(use-package gleam-ts-mode
+  :mode ("\\.gleam\\'" . gleam-ts-mode)
+  :config
+  (with-eval-after-load 'eglot
+    (add-to-list 'eglot-server-programs
+  		 '(gleam-ts-mode . ("gleam" "lsp")))))
+
 (use-package nix-ts-mode
   :mode ("\\.nix\\'" . nix-ts-mode))
 
-(use-package eglot-java)
+(use-package eglot-java
+  :defer t)
 
+(use-package indent-bars
+  :hook (python-ts-mode . indent-bars-mode))
+
+;;;###autoload
 (defun felix/rust-ts--apply-rustfmt-config (rustfmt-data)
   "Apply settings from RUSTFMT-DATA to the current buffer.
-RUSTFMT-DATA is an alist parsed from rustfmt.toml."
+  RUSTFMT-DATA is an alist parsed from rustfmt.toml."
   (let ((hard-tabs (alist-get "hard_tabs" rustfmt-data nil nil #'equal))
         (tab-spaces (alist-get "tab_spaces" rustfmt-data nil nil #'equal)))
     (message "rustfmt config: hard_tabs: %s; tab_spaces: %s" hard-tabs tab-spaces)
@@ -145,82 +157,29 @@ RUSTFMT-DATA is an alist parsed from rustfmt.toml."
     (if tab-spaces
         (setq-local tab-width tab-spaces)
       (setq-local tab-width 4))))
-
+;;;###autoload
 (defun felix/rust-ts--find-and-apply-rustfmt-config ()
   (interactive)
   "Look for a rustfmt.toml file in the current project tree and apply its settings."
   (let ((root (locate-dominating-file default-directory "rustfmt.toml")))
     (if (not(eql root nil))
-	(let ((rustfmt-file (expand-file-name "rustfmt.toml" root)))
-	  (message "using rustfmt.toml file: %s" rustfmt-file)
-	  (use-package toml)
-	  (condition-case err
-	      (let ((data (toml:read-from-file rustfmt-file)))
-		(message "data: %s" data)
-		(felix/rust-ts--apply-rustfmt-config data))
-	    (error (message "error: %s" err))))
+  	(let ((rustfmt-file (expand-file-name "rustfmt.toml" root)))
+  	  (message "using rustfmt.toml file: %s" rustfmt-file)
+  	  (use-package toml)
+  	  (condition-case err
+  	      (let ((data (toml:read-from-file rustfmt-file)))
+  		(message "data: %s" data)
+  		(felix/rust-ts--apply-rustfmt-config data))
+  	    (error (message "error: %s" err))))
       (message "no rustfmt-file found"))))
 
 (add-hook 'rust-ts-mode-hook #'felix/rust-ts--find-and-apply-rustfmt-config)
 
-(require 'tramp)
-(setq tramp-remote-process-environment
-      (append
-       (list (concat "PATH="
-                     "/run/wrappers/bin" ":"
-                     "/home/admin/.nix-profile/bin" ":"
-                     "/nix/profile/bin" ":"
-                     "/home/admin/.local/state/nix/profile/bin" ":"
-                     "/etc/profiles/per-user/admin/bin" ":"
-                     "/nix/var/nix/profiles/default/bin" ":"
-                     "/run/current-system/sw/bin" ":"
-                     "/bin" ":" "/usr/bin")) ; Match terminal PATH
-       tramp-remote-process-environment))
-
-(defun felix/hexl-hex-string-to-integer (hex-string)
-  "Return decimal integer for HEX-STRING.
- Accepts optional 0x or 0X prefix."
-  (interactive "sHex number: ")
-  (when (string-match "\\`0[xX]\\(.+\\)" hex-string)
-    (setq hex-string (match-string 1 hex-string)))
-  (let ((hex-num 0))
-    (while (not (equal hex-string ""))
-      (setq hex-num (+ (* hex-num 16)
-                       (hexl-hex-char-to-integer (string-to-char hex-string))))
-      (setq hex-string (substring hex-string 1)))
-    hex-num))
-
-(require 'calc)
-
-(defun felix/hexl-goto-hex-address (expr)
-  "Goto address in hexl-mode.
- - Accepts hex literals (0x...).
- - Accepts arithmetic (e.g. 0x20 + 10).
- - Supports relative jumps with +N / -N.
-
- Examples:
-   0x20       → absolute 0x20
-   0x100 + 7  → absolute 0x107
-   +0x10      → move forward 0x10 bytes
-   -32        → move back 32 bytes"
-  (interactive "sHex Address (expression): ")
-  (let* ((cur (hexl-current-address))
-         (relative (string-match-p "\\`[+-]" expr))
-         ;; turn 0x... into decimal literals for calc
-         (expr (replace-regexp-in-string
-		"0x[0-9A-Fa-f]+"
-		(lambda (s) (format "(%d)" (string-to-number (substring s 2) 16)))
-		;; "0x[0-9A-Fa-f]+\\>"
-		;; (lambda (s)
-		;;   (format "(%d)"(string-to-number (replace-regexp-in-string "\\`0[xX]" "" s) 16)))
-		expr))
-         (val (string-to-number (calc-eval expr)))
-         (addr (if relative (+ cur val) val)))
-    (hexl-goto-address addr)))
+(use-package gptel)
 
 (setq auth-sources '("secrets:default" default))
 
-(require 'smtpmail)
+;; (use-package smtpmail)
 (setq message-send-mail-function 'smtpmail-send-it
       smtpmail-smtp-server "smtp.mailbox.org"
       smtpmail-smtp-service 465
@@ -230,4 +189,3 @@ RUSTFMT-DATA is an alist parsed from rustfmt.toml."
 ;; (setq auth-nsource-debug t)
 ;; (setq smtpmail-debug-info t
 ;;       smtpmail-debug-verb t)
-(put 'dired-find-alternate-file 'disabled nil)
