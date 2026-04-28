@@ -1,3 +1,6 @@
 [submodule "complete-alias"]
 	path = complete-alias
 	url = https://github.com/cykerway/complete-alias.git
+[submodule "vlc/.local/share/vlc/lua/extensions/vlsub-opensubtitles-com"]
+	path = vlc/.local/share/vlc/lua/extensions/vlsub-opensubtitles-com
+	url = https://github.com/opensubtitles/vlsub-opensubtitles-com.git

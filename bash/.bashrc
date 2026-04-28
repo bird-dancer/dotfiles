@@ -13,7 +13,8 @@ alias cleat='clear'
 
 alias gcleanup='sudo guix system delete-generations; guix package -d; guix gc'
 
-alias nup='nix-channel --update; nix-env -u'
+# alias nup='nix-channel --update; nix-env -u'
+alias nup='nix-channel --update; nix profile upgrade --all'
 alias nclean='nix-env --delete-generations +1; nix-collect-garbage'
 alias nse='nix search nixpkgs'
 alias nls='nix-env -q --installed'
@@ -120,6 +121,7 @@ fi
 
 export NIX_PATH=nixpkgs=channel:nixos-unstable
 export NIX_CONFIG="experimental-features = nix-command flakes"
+source $HOME/.nix-profile/etc/profile.d/nix.sh
 
 export GHIDRA_INSTALL_DIR=/lib64/ghidra/
 

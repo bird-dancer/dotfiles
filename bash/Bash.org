@@ -86,7 +86,8 @@ shorten my most used =pacman= commands
 #+end_src
 **** nix
 #+begin_src bash
-  alias nup='nix-channel --update; nix-env -u'
+  # alias nup='nix-channel --update; nix-env -u'
+  alias nup='nix-channel --update; nix profile upgrade --all'
   alias nclean='nix-env --delete-generations +1; nix-collect-garbage'
   alias nse='nix search nixpkgs'
   alias nls='nix-env -q --installed'
@@ -286,6 +287,7 @@ set locale format to =en_us utf-8=
 #+begin_src bash
   export NIX_PATH=nixpkgs=channel:nixos-unstable
   export NIX_CONFIG="experimental-features = nix-command flakes"
+  source $HOME/.nix-profile/etc/profile.d/nix.sh
 #+end_src
 ** ghidra
 #+begin_src bash
