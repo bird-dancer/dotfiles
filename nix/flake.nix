@@ -1,3 +1,4 @@
+# -*- compile-command: "nix-channel --update; nix profile upgrade --all"; -*-
 {
   description = "Felixs Flake";
 
@@ -6,8 +7,10 @@
   };
 
   outputs = { self, nixpkgs }:
-  let
-    pkgs = nixpkgs.legacyPackages.x86_64-linux;
+  let pkgs = import nixpkgs {
+    system = "x86_64-linux";
+    config.allowUnfree = true;
+  };
   in {
     packages.x86_64-linux.default = pkgs.buildEnv {
       name = "my-packages";
