@@ -18,7 +18,10 @@
         gleam
         erlang
 	rebar3
+	inotify-tools
+
 	pwntools
+
 	vbindiff
       ];
     };
