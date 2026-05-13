@@ -1,7 +1,6 @@
 [[ -r /etc/bash.bashrc ]] && . /etc/bash.bashrc
 
-alias docker_stop='[ -n "$(sudo docker ps -a -q)" ] && sudo docker stop $(sudo docker ps -a -q) || echo "No containers to stop"'
-alias docker_rm='[ -n "$(sudo docker ps -a -q)" ] && sudo docker rm $(sudo docker ps -a -q) || echo "No containers to remove"'
+alias docker='podman'
 
 alias em='emacs -nw'
 

@@ -47,8 +47,12 @@ because the aliases are used in the rest of the config they are first
       . ~/.bash_aliases
   fi
 #+end_src
-*** docker
+*** podman
 #+begin_src bash
+  alias docker='podman'
+#+end_src
+*** docker
+#+begin_src bash :tangle no
   alias docker_stop='[ -n "$(sudo docker ps -a -q)" ] && sudo docker stop $(sudo docker ps -a -q) || echo "No containers to stop"'
   alias docker_rm='[ -n "$(sudo docker ps -a -q)" ] && sudo docker rm $(sudo docker ps -a -q) || echo "No containers to remove"'
 #+end_src
