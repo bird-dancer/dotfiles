@@ -22,6 +22,7 @@
         gleam
         erlang
 	rebar3
+	erlang-language-platform
 	inotify-tools
 
 	vagrant
@@ -30,6 +31,9 @@
 	python314Packages.ropper
 
 	vbindiff
+
+	bun
+	tailwindcss_4
       ] ++
       [pwndbgPkg];
     };
