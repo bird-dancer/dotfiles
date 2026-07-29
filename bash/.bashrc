@@ -1,6 +1,7 @@
 [[ -r /etc/bash.bashrc ]] && . /etc/bash.bashrc
 
-alias docker='podman'
+alias docker_stop='[ -n "$(docker ps -a -q)" ] && docker stop $(docker ps -a -q) || echo "No containers to stop"'
+alias docker_rm='[ -n "$(docker ps -a -q)" ] && docker rm $(docker ps -a -q) || echo "No containers to remove"'
 
 alias em='emacs -nw'
 
@@ -13,7 +14,9 @@ alias cleat='clear'
 alias gcleanup='sudo guix system delete-generations; guix package -d; guix gc'
 
 # alias nup='nix-channel --update; nix-env -u'
-alias nup='nix-channel --update; nix profile upgrade --all'
+# alias nup='nix-channel --update; nix profile upgrade --all'
+export NIX_FLAKE_DIR=$HOME/.dotfiles/nix/
+alias nup="nix flake update --flake $NIX_FLAKE_DIR"
 alias nclean='nix-env --delete-generations +1; nix-collect-garbage'
 alias nse='nix search nixpkgs'
 alias nls='nix-env -q --installed'
@@ -35,7 +38,8 @@ alias build='rm -rf build && cmake -B build -DCMAKE_BUILD_TYPE=Debug -DCMAKE_EXP
 
 alias make='make -j $(nproc)'
 
-alias comp='gcc -std=c17 -Wall -Wextra -fstack-protector -g3 -lm'
+alias comp='gcc -std=c23 -Wall -Wextra -Wconversion -Wformat -g3 -lm -fstack-protector -fsanitize=undefined -fsanitize=address'
+alias comp_thread='gcc -std=c23 -Wall -Wextra -Wconversion -Wformat -g3 -lm -fstack-protector -fsanitize=undefined -fsanitize=thread'
 
 alias b='cd ..'
 
@@ -118,11 +122,14 @@ if [ -d "$GUIX_PROFILE/lib" ]; then
     export "LD_LIBRARY_PATH=$GUIX_PROFILE/lib:$LD_LIBRARY_PATH"
 fi
 
+export NIXPKGS_ALLOW_UNFREE=1
 export NIX_PATH=nixpkgs=channel:nixos-unstable
 export NIX_CONFIG="experimental-features = nix-command flakes"
 source $HOME/.nix-profile/etc/profile.d/nix.sh
 
 export GHIDRA_INSTALL_DIR=/lib64/ghidra/
+
+export DISABLE_TELEMETRY=1
 
 if [ -d "$HOME/.cargo" ] ; then
     export PATH="$HOME/.cargo/bin:$PATH"

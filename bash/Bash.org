@@ -47,14 +47,10 @@ because the aliases are used in the rest of the config they are first
       . ~/.bash_aliases
   fi
 #+end_src
-*** podman
-#+begin_src bash
-  alias docker='podman'
-#+end_src
 *** docker
-#+begin_src bash :tangle no
-  alias docker_stop='[ -n "$(sudo docker ps -a -q)" ] && sudo docker stop $(sudo docker ps -a -q) || echo "No containers to stop"'
-  alias docker_rm='[ -n "$(sudo docker ps -a -q)" ] && sudo docker rm $(sudo docker ps -a -q) || echo "No containers to remove"'
+#+begin_src bash
+  alias docker_stop='[ -n "$(docker ps -a -q)" ] && docker stop $(docker ps -a -q) || echo "No containers to stop"'
+  alias docker_rm='[ -n "$(docker ps -a -q)" ] && docker rm $(docker ps -a -q) || echo "No containers to remove"'
 #+end_src
 *** emacs
 #+begin_src bash
@@ -91,7 +87,9 @@ shorten my most used =pacman= commands
 **** nix
 #+begin_src bash
   # alias nup='nix-channel --update; nix-env -u'
-  alias nup='nix-channel --update; nix profile upgrade --all'
+  # alias nup='nix-channel --update; nix profile upgrade --all'
+  export NIX_FLAKE_DIR=$HOME/.dotfiles/nix/
+  alias nup="nix flake update --flake $NIX_FLAKE_DIR"
   alias nclean='nix-env --delete-generations +1; nix-collect-garbage'
   alias nse='nix search nixpkgs'
   alias nls='nix-env -q --installed'
@@ -124,7 +122,8 @@ clear build directory and build with debug flags enabled
 **** gcc
 =comp= compiles gcc code for optimal debugging, bug reduction and security
 #+begin_src bash
-  alias comp='gcc -std=c17 -Wall -Wextra -fstack-protector -g3 -lm'
+  alias comp='gcc -std=c23 -Wall -Wextra -Wconversion -Wformat -g3 -lm -fstack-protector -fsanitize=undefined -fsanitize=address'
+  alias comp_thread='gcc -std=c23 -Wall -Wextra -Wconversion -Wformat -g3 -lm -fstack-protector -fsanitize=undefined -fsanitize=thread'
 #+end_src
 *** =b= for =cd ..=
 =b= to go back one directory
@@ -289,6 +288,7 @@ set locale format to =en_us utf-8=
 #+end_src
 ** nix
 #+begin_src bash
+  export NIXPKGS_ALLOW_UNFREE=1
   export NIX_PATH=nixpkgs=channel:nixos-unstable
   export NIX_CONFIG="experimental-features = nix-command flakes"
   source $HOME/.nix-profile/etc/profile.d/nix.sh
@@ -296,6 +296,10 @@ set locale format to =en_us utf-8=
 ** ghidra
 #+begin_src bash
   export GHIDRA_INSTALL_DIR=/lib64/ghidra/
+#+end_src
+** privacy
+#+begin_src bash
+  export DISABLE_TELEMETRY=1
 #+end_src
 ** path
 #+begin_src bash
