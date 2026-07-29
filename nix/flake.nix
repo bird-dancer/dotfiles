@@ -1,4 +1,4 @@
-# -*- compile-command: "nix-channel --update; nix profile upgrade --all"; -*-
+# -*- compile-command: "nix flake update && nix profile upgrade --all"; -*-
 {
   description = "Felixs Flake";
 
@@ -14,28 +14,49 @@
       inherit system;
       config.allowUnfree = true;
     };
-    pwndbgPkg = pwndbg.packages.${system}.default;
   in {
     packages.x86_64-linux.default = pkgs.buildEnv {
       name = "my-packages";
       paths = with pkgs; [
+
+	# erlang
         gleam
-        erlang
-	rebar3
+        beamPackages.erlang
+	beamPackages.rebar3
 	erlang-language-platform
 	inotify-tools
 
-	vagrant
 
+	# binary
 	pwntools
 	python314Packages.ropper
-
 	vbindiff
+	one_gadget
 
+	# other
+	pgcli
+
+	# web
 	bun
 	tailwindcss_4
-      ] ++
-      [pwndbgPkg];
+	typescript-language-server
+
+	# slop
+	antigravity-ide
+	antigravity-cli
+	# claude-code
+	# claude-code-router
+	opencode
+
+	# emacs
+	emacsPackages.pdf-tools
+	emacsPackages.ghostel
+
+
+	# sway
+	# swaysettings
+	# swayfx
+      ];
     };
   };
 }
