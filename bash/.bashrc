@@ -88,7 +88,7 @@ export HISTCONTROL=ignoreboth:erasedups
 bind '"\e[A": history-search-backward'
 bind '"\e[B": history-search-forward'
 
-source ~/.dotfiles/complete-alias/complete_alias
+source ~/.dotfiles/packages/complete-alias/complete_alias
 complete -F _complete_alias "${!BASH_ALIASES[@]}"
 
 bind "set completion-ignore-case on"

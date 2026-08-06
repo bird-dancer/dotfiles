@@ -213,7 +213,7 @@ enabled by default
 #+end_src
 *** auto complete aliases
 #+begin_src bash
-  source ~/.dotfiles/complete-alias/complete_alias
+  source ~/.dotfiles/packages/complete-alias/complete_alias
   complete -F _complete_alias "${!BASH_ALIASES[@]}"
 #+end_src
 *** ignore case on auto completion
