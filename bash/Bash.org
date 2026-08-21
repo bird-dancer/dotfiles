@@ -241,12 +241,6 @@ enabled by default
   export CC=gcc CXX=g++
   export GCC_COLORS='error=01;31:warning=01;35:note=01;36:caret=01;32:locus=01:quote=01'
 #+end_src
-*** rust (sccache)
-#+begin_src bash :tangle no
-  if [ -z "$(which sccache)" ] ; then
-      export RUSTC_WRAPPER=sccache
-  fi
-#+end_src
 *** java
 #+begin_src bash :tangle no
   if [ -d "/usr/lib/jvm/default" ] ; then
