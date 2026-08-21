@@ -109,11 +109,17 @@ see what packages are loaded at startup (*only have it enabled when debugging!*)
   ;; (when (display-graphic-p)
   ;; (set-frame-font "Comic Shanns Mono 14" nil t)
   (set-frame-font "Comic Code Ligatures 13" nil t)
-  ;;(setq-default line-spacing 0.08)
+
+  ;; (use-package white-sand-theme
+  ;;   :init
+  ;;   (load-theme 'white-sand))
+  (load-theme 'modus-operandi-tinted)
+  ;; (setq-default line-spacing 0.08)
   ;; (use-package ef-themes)
   ;; (use-package doric-themes)
+
   ;; (load-theme 'modus-operandi)
-  ;; (load-theme 'modus-operandi-tinted)
+
   ;; (load-theme 'ef-day)
   ;; (load-theme 'doric-wind)
   ;; (load-theme 'doric-earth)
@@ -127,7 +133,6 @@ see what packages are loaded at startup (*only have it enabled when debugging!*)
 
   ;; dark
   ;; (load-theme 'ef-autumn)
-  ;; )
   ;; (set-face-attribute hl-line-face nil :underline t)
 #+end_src
 ** more color stuff
@@ -180,6 +185,11 @@ for emacs 30:
             (lambda (&rest _) (set-face-foreground
                                'vertical-border (face-background 'default))))
 #+end_src
+* other
+#+begin_src emacs-lisp
+  (auto-save-visited-mode 1)
+  (setq custom-safe-themes t)
+#+end_src
 * user specific
 #+begin_src emacs-lisp
   ;; user info
@@ -191,18 +201,100 @@ for emacs 30:
           "~/uni/notes/personal.org"))
 #+end_src
 * org
+** code blocks
+Give code blocks syntax highlighting when exporting to latex.
+#+begin_src emacs-lisp
+  (setq org-src-fontify-natively t
+        org-src-tab-acts-natively t
+        org-startup-with-inline-images nil)
+#+end_src
+
 #+begin_src emacs-lisp
   (setq org-export-in-background t)
+  (with-eval-after-load 'ox-latex
+  					;(add-to-list 'org-latex-minted-langs '(gleam-ts "gleam"))
+  					;(add-to-list 'org-latex-minted-langs '(erlang-ts "erlang"))
+    ;; Default packages for all LaTeX exports
+    (add-to-list 'org-latex-packages-alist '("" "tabularx" t))
+    (add-to-list 'org-latex-packages-alist '("" "float" t))
+    (add-to-list 'org-latex-packages-alist '("table" "xcolor" t))
+    (add-to-list 'org-latex-packages-alist '("htt" "hyphenat" t))
+    (add-to-list 'org-latex-packages-alist '("" "xurl" t))
+    ;; Breakable inline code (=...= and ~...~) at slashes, dots, hyphens, and underscores
+    (add-to-list 'org-latex-packages-alist
+                 "\\makeatletter
+  \\DeclareRobustCommand{\\texttt}[1]{{\\ttfamily\\hyphenchar\\font=45\\spaceskip=0.33em plus 0.2em minus 0.1em\\relax\\let\\orig@underscore\\_\\def\\_{\\orig@underscore\\allowbreak}\\catcode`/=\\active\\catcode`.=\\active\\catcode`-=\\active\\scantokens{#1\\noexpand}}}
+  \\begingroup\\catcode`/=\\active \\gdef/{\\char`/\\allowbreak}\\catcode`.=\\active \\gdef.{\\char`.\\allowbreak}\\catcode`-=\\active \\gdef-{\\char`-\\allowbreak}\\endgroup
+  \\makeatother"
+                 t))
 #+end_src
+
+#+begin_src emacs-lisp
+  (use-package engrave-faces
+    :after org
+    :config
+    (setq org-latex-src-block-backend 'engraved)
+    (setq org-latex-engraved-preamble
+          "\\usepackage{fvextra}
+  [FVEXTRA-SETUP]
+  \\fvset{breaklines=true,breakanywhere=true}
+  \\renewcommand\\theFancyVerbLine{\\footnotesize\\color{black!40!white}\\arabic{FancyVerbLine}}
+  \\usepackage{xcolor}
+  \\providecolor{EfD}{HTML}{f7f7f7}
+  \\providecolor{EFD}{HTML}{28292e}
+  \\usepackage[breakable,xparse]{tcolorbox}
+  \\DeclareTColorBox[]{Code}{o}%
+  {colback=EfD!98!EFD, colframe=EfD!90!EFD,
+    fontupper=\\footnotesize\\setlength{\\fboxsep}{0pt},
+    colupper=EFD,
+    boxsep=3pt, arc=2pt, outer arc=2pt,
+    boxrule=0.5pt, left=4pt, right=4pt, top=3pt, bottom=3pt,
+    unbreakable}
+  [LISTINGS-SETUP]"))
+#+end_src
+
+#+begin_src emacs-lisp
+  (with-eval-after-load 'org
+    (modify-syntax-entry ?< "." org-mode-syntax-table)
+    (modify-syntax-entry ?> "." org-mode-syntax-table))
+#+end_src
+
+#+begin_src emacs-lisp :tangle no
+  (setq org-latex-src-block-backend 'minted)
+  (with-eval-after-load 'org
+    (add-to-list 'org-latex-packages-alist '("" "minted")))
+  (setq org-latex-minted-options
+        '(("breaklines" "true")          ;; Enables line wrapping
+          ;; ("breakanywhere" "true")       ;; Allows breaking in the middle of long strings/hex values
+          ;; ("style" "tango")              ;; A clean, readable color theme (or try "colorful", "monokai")
+          ;; ("fontsize" "\\footnotesize")  ;; Slightly smaller font to fit more code
+  	("xleftmargin" "-35pt")  ;; Pushes the left border outward (or use negative like "-10pt" to pull it into the margin)
+  	("xrightmargin" "-35pt") ;; Pushes the right border outward
+          ("frame" "single")             ;; Adds a neat box around the code block
+  	;; ("linenos" "true")
+  	;; ("numberstyle" "\\normalsize\\ttfamily")
+  	;; ("numbersep" "10pt")
+  	))
+  ;; Optional: Adds line numbers
+#+end_src
+
 ** bibliography
+#+begin_src emacs-lisp :tangle no
+  (use-package citeproc
+    :ensure t)
+  (setq org-cite-export-processors
+        '((html . (basic))
+  	(latex . (biblatex))
+  	(t . (basic))))
+#+end_src
 #+begin_src emacs-lisp
   ;; (setq org-highlight-latex-and-related '(latex script entities))
   (with-eval-after-load 'org
     (setq org-cite-global-bibliography '("~/Zotero/better-bibtex/My Library.bib")))
 
   ;; (setq org-cite-export-processors '((latex biblatex)))
-  ;; (setq org-latex-pdf-process
-  ;;     '("latexmk -pdf -interaction=nonstopmode -output-directory=%o %f"))
+  (setq org-latex-pdf-process
+        '("latexmk -pdf -interaction=nonstopmode -output-directory=%o %f"))
 #+end_src
 ** org-roam
 #+begin_src emacs-lisp
@@ -260,22 +352,23 @@ subscribe to rss-feeds
     :config
     (setq elfeed-feeds
           '("http://nullprogram.com/feed/"
-  	  "https://grapheneos.org/releases.atom"
+  	  ;; "https://grapheneos.org/releases.atom"
   	  "https://mjg59.dreamwidth.org/data/rss"
   	  "https://nixos.org/blog/announcements-rss.xml"
   	  "https://rosenzweig.io/feed.xml"
   	  ;; "https://www.schneier.com/feed/atom/"
   	  "https://systemcrafters.net/rss/"
   	  "http://www.polyomica.com/feed/"
+  	  "https://www.rahuljuliato.com/rss.xml"
             "https://mccd.space/feed.xml"
             "https://dthompson.us/feed.xml"
   	  "https://smallcultfollowing.com/babysteps//atom.xml"
             ;; "https://planet.emacslife.com/atom.xml"
   	  "https://guix.gnu.org/feeds/blog.atom"
-  	  "https://chrismaiorana.com/feed/"
+  	  ;; "https://chrismaiorana.com/feed/"
   	  "https://blog.hansenpartnership.com/feed/"
             ;; "https://news.opensuse.org/feed.xml"
-            "https://irreal.org/blog/?feed=rss2"
+            ;; "https://irreal.org/blog/?feed=rss2"
             "https://protesilaos.com/keeb.xml"
             "https://protesilaos.com/codelog.xml"
             "https://protesilaos.com/news.xml"
@@ -286,6 +379,7 @@ subscribe to rss-feeds
             "https://robert.kra.hn/feed.xml"
             "https://lambdaland.org/index.xml"
   	  "https://cjohansen.no/atom.xml"
+  	  "https://gleam.run/feed.xml"
             ;; "https://archlinux.org/feeds/news/"
             "https://blogs.kde.org/index.xml")))
 #+end_src
@@ -294,11 +388,6 @@ subscribe to rss-feeds
 =C-x C-b= same as =C-x b= because that's what i always want
 #+begin_src emacs-lisp
   (bind-key "C-x C-b" #'switch-to-buffer)
-#+end_src
-** compile-mode
-#+begin_src emacs-lisp :tangle no
-  (bind-key "C-c c c" #'compile)
-  (bind-key "C-c c r" #'recompile)
 #+end_src
 ** yank (paste) when pressing C-z
 because it is very confusing when switching between qwerty and qwertz and the window gets minimized
@@ -311,10 +400,6 @@ because it is very confusing when switching between qwerty and qwertz and the wi
   (use-package gleam-ts-mode
     :load-path "/home/felix/gleam-mode/"
     :mode ("\\.gleam\\'" . gleam-ts-mode))
-
-  (with-eval-after-load 'eglot
-    (add-to-list 'eglot-server-programs
-         	       '(gleam-ts-mode . ("gleam" "lsp"))))
 #+end_src
 #+begin_src emacs-lisp :tangle no
   (use-package eldoc-box
@@ -448,11 +533,31 @@ because it is very confusing when switching between qwerty and qwertz and the wi
                          "/bin" ":" "/usr/bin")) ; Match terminal PATH
   	 tramp-remote-process-environment)))
 #+end_src
+* compile-mode
+#+begin_src emacs-lisp :tangle no
+  (bind-key "C-c c c" #'compile)
+  (bind-key "C-c c r" #'recompile)
+#+end_src
+* compile
+#+begin_src emacs-lisp
+  (use-package compile
+    :ensure nil
+    :bind(("C-c c c" . compile)
+  	("C-c c r" . recompile))
+    :config
+    (setq compilation-scroll-output 1))
+#+end_src
+* project
+#+begin_src emacs-lisp :tangle no
+  (use-package project
+    :ensure nil
+    :bind (("C-c c c" . project-compile)
+  	 ("C-c c C-r" . project-recompile)))
+#+end_src
 * dired
 #+begin_src emacs-lisp
   (defun my/copy-current-path ()
-    "Copy the current buffer file path or Dired path to the kill ring.
-  Works in normal buffers and in Dired."
+    "Copy the current buffer file path or Dired path to the kill ring. Works in normal buffers and in Dired."
     (interactive)
     (let ((path
            (cond
@@ -467,8 +572,7 @@ because it is very confusing when switching between qwerty and qwertz and the wi
              (expand-file-name (buffer-file-name)))
 
             ;; Fallback
-            (t
-             (error "No file associated with this buffer")))))
+            (t (error "No file associated with this buffer")))))
       (kill-new path)
       (message "Copied path: %s" path)))
 #+end_src
@@ -484,16 +588,16 @@ because it is very confusing when switching between qwerty and qwertz and the wi
 ** ghostel
 #+begin_src emacs-lisp
   (use-package ghostel
-    :bind(("C-c c c" . ghostel-compile)
-        	("C-c C-c c" . ghostel-compile)
-        	("C-c C-c r" . ghostel-recompile)
-        	("C-c C-c d" . ghostel-compile-debug)
+    :bind(
+  	;; ("C-c c c" . ghostel-compile)
+        	;; ("C-c C-c c" . ghostel-compile)
+        	;; ("C-c C-c r" . ghostel-recompile)
   	("C-M-<return>" . ghostel))
     :init
     (setq ghostel-module-directory "~/.emacs.d/ghostel/")
     :config
-    (setq ghostel-progress-function #'ghostel-spinner-progress)
-    ;; (setq ghostel-progress-function #'ghostel-default-progress)
+    ;; (setq ghostel-progress-function #'ghostel-spinner-progress)
+    (setq ghostel-progress-function #'ghostel-default-progress)
     (setq ghostel-spinner-type 'horizontal-moving)
     ;; make cursor bar
     (setq ghostel-ignore-cursor-change t)
@@ -509,9 +613,9 @@ because it is very confusing when switching between qwerty and qwertz and the wi
   (setq
    gptel-model 'mistral:latest
    gptel-backend (gptel-make-ollama "Ollama"
-                   :host "localhost:11434"
-                   :stream t
-                   :models '(mistral:latest)))
+  				  :host "localhost:11434"
+  				  :stream t
+  				  :models '(mistral:latest)))
 #+end_src
 * email
 #+begin_src emacs-lisp
