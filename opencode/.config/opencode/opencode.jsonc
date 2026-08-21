@@ -1,0 +1,19 @@
+{
+  "$schema": "https://opencode.ai/config.json",
+  "lsp": true,
+  "permission": {
+    "external_directory": "deny",
+  },
+  "mcp": {
+    "ghidra-mcp": {
+      "type": "local",
+      "command": [ "uv", "run", "/home/felix/.gemini/bridge_mcp_ghidra.py" ],
+      "enabled": true,
+    },
+    "gdb": {
+      "type": "local",
+      "command": [ "uv", "--directory", "/home/felix/Documents/mcp/gdb-mcp/src/gdb_mcp/", "run", "gdb-mcp-server" ],
+      "enabled": true,
+    },
+  }
+}
