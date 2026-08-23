@@ -96,6 +96,12 @@ shorten my most used =pacman= commands
   alias nrm='nix-env --uninstall'
 #+end_src
 **** zypper
+***** parallel downloads
+#+begin_src bash
+  export ZYPP_PCK_PRELOAD=1
+  export ZYPP_CURL2=1
+#+end_src
+***** aliases
 #+begin_src bash
   alias zinf='zypper info --provides --recommends --requires --suggests'
   alias zse='zypper search'

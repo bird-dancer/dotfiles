@@ -22,6 +22,9 @@ alias nse='nix search nixpkgs'
 alias nls='nix-env -q --installed'
 alias nrm='nix-env --uninstall'
 
+export ZYPP_PCK_PRELOAD=1
+export ZYPP_CURL2=1
+
 alias zinf='zypper info --provides --recommends --requires --suggests'
 alias zse='zypper search'
 alias zin='sudo zypper install'
